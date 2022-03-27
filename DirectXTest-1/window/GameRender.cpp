@@ -2,12 +2,14 @@
 #include "utils/pch.hpp"
 #include "Game.hpp"
 
+#include <format>
+
 // ImGui
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
 
 
-static void Enum_GPUAdapters(ID3D11Device* d3ddevice);
+static void Enum_GPUAdapters(DX::DeviceResources* deviceres);
 
 
 // Draws the scene.
@@ -65,6 +67,7 @@ void Game::RenderImGui()
 	static bool resolution = true, demo = false;
 	if (ImGui::Begin("##Toggles"))
 	{
+		ImGui::Text("Press Alt+Enter to toggle pseudo-fullscreen mode");
 		ImGui::Checkbox("Resolution Manager", &resolution);
 		ImGui::Checkbox("Open demo", &demo);
 	}
@@ -75,7 +78,7 @@ void Game::RenderImGui()
 	if (resolution)
 	{
 		if (ImGui::Begin("Resoltuion", &resolution))
-			Enum_GPUAdapters(m_deviceResources->GetD3DDevice());
+			Enum_GPUAdapters(m_deviceResources.get());
 		ImGui::End();
 	}
 
@@ -90,7 +93,7 @@ void Game::RenderImGui()
 	}
 }
 
-void Enum_GPUAdapters(ID3D11Device* d3ddevice)
+void Enum_GPUAdapters(DX::DeviceResources* deviceres)
 {
 	using Microsoft::WRL::ComPtr;
 	static bool once = false;
@@ -104,7 +107,7 @@ void Enum_GPUAdapters(ID3D11Device* d3ddevice)
 		
 		ComPtr<IDXGIDevice> dxgi_device;
 		DX::ThrowIfFailed(
-			d3ddevice->QueryInterface(IID_PPV_ARGS(dxgi_device.GetAddressOf()))
+			deviceres->GetD3DDevice()->QueryInterface(IID_PPV_ARGS(dxgi_device.GetAddressOf()))
 		);
 
 		ComPtr<IDXGIAdapter> dxgi_adapter;
@@ -137,11 +140,40 @@ void Enum_GPUAdapters(ID3D11Device* d3ddevice)
 					dxgi_modes.data() + cur_pos
 				)
 			);
+
+			bool even_switch = !(cur_pos % 2);
+			auto iter = std::remove_if(
+				dxgi_modes.begin() + cur_pos,
+				dxgi_modes.end(),
+				[even_switch](const auto&) mutable
+				{
+					even_switch = !even_switch;
+					return !even_switch;
+				}
+			);
+
+			if (iter != dxgi_modes.end())
+				dxgi_modes.erase(iter, dxgi_modes.end());
 		}
 	}
 
-	for (auto& desc : dxgi_modes)
+	// Later, add way to toggle current resolutions
+	
+	if (ImGui::BeginCombo("##Resoltuions", ""))
 	{
-		ImGui::Text("[%i x %i ] :: [ Refresh rate : %i ]", desc.Width, desc.Height, desc.RefreshRate.Numerator / desc.RefreshRate.Denominator);
+		for (auto& desc : dxgi_modes)
+		{
+			if (ImGui::Selectable(
+				std::format("[{} x {}] (Refresh rate: {})", desc.Width, desc.Height, desc.RefreshRate.Numerator / desc.RefreshRate.Denominator).c_str(),
+				(deviceres->GetOutputSize().right - deviceres->GetOutputSize().left) == static_cast<int>(desc.Width) &&
+				(deviceres->GetOutputSize().bottom - deviceres->GetOutputSize().top) == static_cast<int>(desc.Height)
+			))
+			{
+				deviceres->SetWindowSize(desc.Width, desc.Height);
+				SetWindowPos(deviceres->GetWindow(), HWND_TOP, 0, 0, desc.Width, desc.Height, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+			}
+		}
+		ImGui::EndCombo();
 	}
+	
 }

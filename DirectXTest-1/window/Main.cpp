@@ -24,7 +24,7 @@ namespace
 }
 
 static constexpr LPCWSTR s_AppTitleName = L"DirectX Test";
-static constexpr LPCWSTR s_AppClassName = L"DirectX Test";
+static constexpr LPCWSTR s_AppClassName = L"DirectX_Test";
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void ExitGame() noexcept;
@@ -76,7 +76,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
         AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
-        hwnd = CreateWindowExW(0, s_AppClassName, s_AppTitleName, WS_OVERLAPPEDWINDOW,
+        hwnd = CreateWindowExW(0, s_AppClassName, s_AppTitleName, WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME,
             CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance,
             nullptr);
         // TODO: Change to CreateWindowExW(WS_EX_TOPMOST, L"DirectXTest_1WindowClass", g_szAppName, WS_POPUP,

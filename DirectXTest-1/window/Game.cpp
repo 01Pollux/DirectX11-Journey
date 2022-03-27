@@ -20,7 +20,6 @@ Game::~Game()
 {
 	UninitializeImGui();
 	DestroyWindow(m_deviceResources->GetWindow());
-	m_deviceResources = nullptr;
 }
 
 
@@ -131,7 +130,7 @@ void Game::OnWindowSizeChanged(int width, int height)
 void Game::GetDefaultSize(int& width, int& height) const noexcept
 {
 	// TODO: Change to desired default window size (note minimum size is 320x200).
-	width = 1060;
-	height = 600;
+	width = m_deviceResources->GetWindowSize()[0];
+	height = m_deviceResources->GetWindowSize()[1];
 }
 #pragma endregion
