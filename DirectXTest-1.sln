@@ -5,12 +5,16 @@ VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTest-1", "DirectXTest-1\DirectXTest-1.vcxproj", "{D8CBD502-F6F4-49A4-B4BF-B8A4841EAEC0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "ImGui\ImGui.vcxproj", "{C0FF640D-2C14-8DBE-F595-301E616989EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
+		RelWithDebInfo|x64 = RelWithDebInfo|x64
+		RelWithDebInfo|x86 = RelWithDebInfo|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D8CBD502-F6F4-49A4-B4BF-B8A4841EAEC0}.Debug|x64.ActiveCfg = Debug|x64
@@ -21,6 +25,22 @@ Global
 		{D8CBD502-F6F4-49A4-B4BF-B8A4841EAEC0}.Release|x64.Build.0 = Release|x64
 		{D8CBD502-F6F4-49A4-B4BF-B8A4841EAEC0}.Release|x86.ActiveCfg = Release|Win32
 		{D8CBD502-F6F4-49A4-B4BF-B8A4841EAEC0}.Release|x86.Build.0 = Release|Win32
+		{D8CBD502-F6F4-49A4-B4BF-B8A4841EAEC0}.RelWithDebInfo|x64.ActiveCfg = Release|x64
+		{D8CBD502-F6F4-49A4-B4BF-B8A4841EAEC0}.RelWithDebInfo|x64.Build.0 = Release|x64
+		{D8CBD502-F6F4-49A4-B4BF-B8A4841EAEC0}.RelWithDebInfo|x86.ActiveCfg = Release|Win32
+		{D8CBD502-F6F4-49A4-B4BF-B8A4841EAEC0}.RelWithDebInfo|x86.Build.0 = Release|Win32
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.Debug|x64.ActiveCfg = Debug|x64
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.Debug|x64.Build.0 = Debug|x64
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.Debug|x86.ActiveCfg = Debug|Win32
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.Debug|x86.Build.0 = Debug|Win32
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.Release|x64.ActiveCfg = Release|x64
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.Release|x64.Build.0 = Release|x64
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.Release|x86.ActiveCfg = Release|Win32
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.Release|x86.Build.0 = Release|Win32
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|Win32
+		{C0FF640D-2C14-8DBE-F595-301E616989EF}.RelWithDebInfo|x86.Build.0 = RelWithDebInfo|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

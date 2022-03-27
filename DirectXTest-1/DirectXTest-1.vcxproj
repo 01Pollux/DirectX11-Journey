@@ -172,12 +172,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="directx\DeviceResources.hpp" />
+    <ClInclude Include="imgui\imgui.hpp" />
+    <ClInclude Include="imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="imgui\imgui_impl_win32.h" />
     <ClInclude Include="window\Game.hpp" />
     <ClInclude Include="utils\pch.hpp" />
     <ClInclude Include="utils\StepTimer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="directx\DeviceResources.cpp" />
+    <ClCompile Include="imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="imgui\imgui_impl_win32.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="window\Game.cpp" />
     <ClCompile Include="window\Main.cpp" />
     <ClCompile Include="utils\pch.cpp">
@@ -196,6 +203,11 @@
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ImGui\ImGui.vcxproj">
+      <Project>{c0ff640d-2c14-8dbe-f595-301e616989ef}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

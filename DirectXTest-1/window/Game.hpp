@@ -13,7 +13,6 @@
 class Game final : public DX::IDeviceNotify
 {
 public:
-
 	Game();
 	~Game() = default;
 
@@ -29,10 +28,6 @@ public:
 	// Basic game loop
 	void Tick();
 
-	// IDeviceNotify
-	void OnDeviceLost() override;
-	void OnDeviceRestored() override;
-
 	// Messages
 	void OnActivated();
 	void OnDeactivated();
@@ -45,15 +40,15 @@ public:
 	void GetDefaultSize(int& width, int& height) const noexcept;
 
 private:
-
 	void Update(DX::StepTimer const& timer);
 	void Render();
 
 	void Clear();
 
-	void CreateDeviceDependentResources();
-	void CreateWindowSizeDependentResources();
+	void InitializeImGui();
+	void UninitializeImGui();
 
+private:
 	// Device resources.
 	std::unique_ptr<DX::DeviceResources>    m_deviceResources;
 

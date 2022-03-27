@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="imcxx">
+      <UniqueIdentifier>{6E87A80F-DA9B-D0C0-A31D-74200FF1CCF1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imcxx\misc">
+      <UniqueIdentifier>{096F3C05-F526-7E52-5E2E-57AE4A051943}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imcxx\misc\notifications">
+      <UniqueIdentifier>{3229E17F-1E4E-3000-4799-1590331D2F1E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imcxx\misc\shortcuts">
+      <UniqueIdentifier>{A7468322-93D5-0CEC-3CF4-20E728621D92}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="imconfig.h" />
+    <ClInclude Include="imcxx\all_in_one.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\button.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\checkbox.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\colors.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\combobox.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\disabled.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\drag.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\drag_drop.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\frames.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\input.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\layout.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\listbox.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\menuitem.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\misc\notification.hpp">
+      <Filter>imcxx\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\misc\shortcut.hpp">
+      <Filter>imcxx\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\nodes.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\override.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\popup.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\scopes.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\slider.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\tabitem.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\tables.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\text.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\tooltip.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\viewports.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\window.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imcxx\window_capture.hpp">
+      <Filter>imcxx</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui.h" />
+    <ClInclude Include="imgui_internal.h" />
+    <ClInclude Include="imstb_rectpack.h" />
+    <ClInclude Include="imstb_textedit.h" />
+    <ClInclude Include="imstb_truetype.h" />
+    <ClInclude Include="stb_sprintf.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="imcxx\misc\notifications\notification.cpp">
+      <Filter>imcxx\misc\notifications</Filter>
+    </ClCompile>
+    <ClCompile Include="imcxx\misc\notifications\notification_demo.cpp">
+      <Filter>imcxx\misc\notifications</Filter>
+    </ClCompile>
+    <ClCompile Include="imcxx\misc\shortcuts\shortcut_demo.cpp">
+      <Filter>imcxx\misc\shortcuts</Filter>
+    </ClCompile>
+    <ClCompile Include="imcxx\misc\shortcuts\shortcuts.cpp">
+      <Filter>imcxx\misc\shortcuts</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp" />
+    <ClCompile Include="imgui_demo.cpp" />
+    <ClCompile Include="imgui_draw.cpp" />
+    <ClCompile Include="imgui_tables.cpp" />
+    <ClCompile Include="imgui_widgets.cpp" />
+  </ItemGroup>
+</Project>
