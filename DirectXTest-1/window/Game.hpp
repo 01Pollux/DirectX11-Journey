@@ -14,7 +14,7 @@ class Game final : public DX::IDeviceNotify
 {
 public:
 	Game();
-	~Game() = default;
+	~Game();
 
 	Game(Game&&) = default;
 	Game& operator= (Game&&) = default;
@@ -46,6 +46,7 @@ private:
 	void Clear();
 
 	void InitializeImGui();
+	void RenderImGui();
 	void UninitializeImGui();
 
 private:

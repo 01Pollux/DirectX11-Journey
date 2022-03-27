@@ -10,17 +10,19 @@
 #include "imgui/imgui_impl_win32.h"
 
 
-extern void ExitGame() noexcept;
-
-using namespace DirectX;
-
-using Microsoft::WRL::ComPtr;
-
 Game::Game()
 {
 	m_deviceResources = std::make_unique<DX::DeviceResources>();
 	m_deviceResources->RegisterDeviceNotify(this);
 }
+
+Game::~Game()
+{
+	UninitializeImGui();
+	DestroyWindow(m_deviceResources->GetWindow());
+	m_deviceResources = nullptr;
+}
+
 
 // Initialize the Direct3D resources required to run.
 void Game::Initialize(HWND window, int width, int height)
@@ -46,10 +48,7 @@ void Game::Initialize(HWND window, int width, int height)
 // Executes the basic game loop.
 void Game::Tick()
 {
-	m_timer.Tick([&]()
-		{
-			Update(m_timer);
-		});
+	m_timer.Tick([this]() { Update(m_timer); });
 
 	Render();
 }
@@ -61,71 +60,6 @@ void Game::Update(DX::StepTimer const& timer)
 
 	// TODO: Add your game logic here.
 }
-#pragma endregion
-
-
-#pragma region Frame Render
-// Draws the scene.
-void Game::Render()
-{
-	// Don't try to render anything before the first Update.
-	if (m_timer.GetFrameCount() == 0)
-	{
-		return;
-	}
-
-	Clear();
-
-	m_deviceResources->PIXBeginEvent(L"Render");
-	[[maybe_unused]] auto d3dcontext = m_deviceResources->GetD3DDeviceContext();
-
-	// TODO: Add your rendering code here.
-
-	{
-		ImGui_ImplDX11_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
-
-		ImGui::ShowDemoWindow();
-
-		ImGui::Render();
-		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-		}
-	}
-
-
-	m_deviceResources->PIXEndEvent();
-
-	// Show the new frame.
-	m_deviceResources->Present();
-}
-
-// Helper method to clear the back buffers.
-void Game::Clear()
-{
-	m_deviceResources->PIXBeginEvent(L"Clear");
-
-	// Clear the views.
-	auto d3dcontext = m_deviceResources->GetD3DDeviceContext();
-	auto renderTarget = m_deviceResources->GetRenderTargetView();
-	auto depthStencil = m_deviceResources->GetDepthStencilView();
-
-	d3dcontext->ClearRenderTargetView(renderTarget, Colors::CornflowerBlue);
-	d3dcontext->ClearDepthStencilView(depthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-	d3dcontext->OMSetRenderTargets(1, &renderTarget, depthStencil);
-
-	// Set the viewport.
-	auto viewport = m_deviceResources->GetScreenViewport();
-	d3dcontext->RSSetViewports(1, &viewport);
-
-	m_deviceResources->PIXEndEvent();
-}
-
 #pragma endregion
 
 

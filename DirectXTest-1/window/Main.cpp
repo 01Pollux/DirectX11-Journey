@@ -20,10 +20,11 @@ using namespace DirectX;
 
 namespace
 {
-    std::unique_ptr<Game> g_game;
+    static Game* s_GameInst;
 }
 
-LPCWSTR g_szAppName = L"DirectX Test";
+static constexpr LPCWSTR s_AppTitleName = L"DirectX Test";
+static constexpr LPCWSTR s_AppClassName = L"DirectX Test";
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void ExitGame() noexcept;
@@ -48,7 +49,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     if (FAILED(hr))
         return 1;
 
-    g_game = std::make_unique<Game>();
+    s_GameInst = new Game;
+    HWND hwnd;
 
     // Register class and create window
     {
@@ -61,20 +63,20 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         wcex.hIcon = LoadIconW(hInstance, L"IDI_ICON");
         wcex.hCursor = LoadCursorW(nullptr, IDC_ARROW);
         wcex.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
-        wcex.lpszClassName = L"DirectX_Test";
+        wcex.lpszClassName = s_AppClassName;
         wcex.hIconSm = LoadIconW(wcex.hInstance, L"IDI_ICON");
         if (!RegisterClassExW(&wcex))
             return 1;
 
         // Create window
         int w, h;
-        g_game->GetDefaultSize(w, h);
+        s_GameInst->GetDefaultSize(w, h);
 
         RECT rc = { 0, 0, static_cast<LONG>(w), static_cast<LONG>(h) };
 
         AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
-        HWND hwnd = CreateWindowExW(0, L"DirectX_Test", g_szAppName, WS_OVERLAPPEDWINDOW,
+        hwnd = CreateWindowExW(0, s_AppClassName, s_AppTitleName, WS_OVERLAPPEDWINDOW,
             CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance,
             nullptr);
         // TODO: Change to CreateWindowExW(WS_EX_TOPMOST, L"DirectXTest_1WindowClass", g_szAppName, WS_POPUP,
@@ -86,27 +88,28 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         ShowWindow(hwnd, nCmdShow);
         // TODO: Change nCmdShow to SW_SHOWMAXIMIZED to default to fullscreen.
 
-        SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(g_game.get()) );
+        SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(s_GameInst) );
 
         GetClientRect(hwnd, &rc);
 
-        g_game->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top);
+        s_GameInst->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top);
     }
 
     // Main message loop
     MSG msg = {};
     while (WM_QUIT != msg.message)
     {
-        while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
-
-        g_game->Tick();
+        else s_GameInst->Tick();
     }
 
-    g_game.reset();
+    delete s_GameInst;
+
+    UnregisterClass(s_AppClassName, hInstance);
 
     CoUninitialize();
 
@@ -237,10 +240,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 SetWindowLongPtr(hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
                 SetWindowLongPtr(hWnd, GWL_EXSTYLE, 0);
 
-                int width = 800;
-                int height = 600;
-                if (game)
-                    game->GetDefaultSize(width, height);
+                int width, height;
+                game->GetDefaultSize(width, height);
 
                 ShowWindow(hWnd, SW_SHOWNORMAL);
 

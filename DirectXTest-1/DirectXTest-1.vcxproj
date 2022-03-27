@@ -186,6 +186,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="window\Game.cpp" />
+    <ClCompile Include="window\GameRender.cpp" />
     <ClCompile Include="window\Main.cpp" />
     <ClCompile Include="utils\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

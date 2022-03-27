@@ -529,7 +529,6 @@ void DeviceResources::CreateFactory()
 
 	if (!debugDXGI)
 #endif
-
 		ThrowIfFailed(CreateDXGIFactory1(IID_PPV_ARGS(m_dxgiFactory.ReleaseAndGetAddressOf())));
 }
 
