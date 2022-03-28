@@ -53,6 +53,7 @@
 #include <dxgidebug.h>
 #endif
 
+
 namespace DX
 {
     // Helper class for COM exceptions

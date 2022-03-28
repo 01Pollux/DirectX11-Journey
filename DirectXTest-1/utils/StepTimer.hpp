@@ -9,13 +9,13 @@
 #include <exception>
 
 
-namespace DX
+namespace Pleiades
 {
     // Helper class for animation and simulation timing.
     class StepTimer
     {
     public:
-        StepTimer() noexcept(false) :
+        StepTimer() :
             m_elapsedTicks(0),
             m_totalTicks(0),
             m_leftOverTicks(0),

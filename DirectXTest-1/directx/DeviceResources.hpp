@@ -17,6 +17,9 @@ namespace DX
 		virtual void OnDeviceWindowSizeChanged() {};
 	};
 
+	template<typename _Ty>
+	using ComPtr = Microsoft::WRL::ComPtr<_Ty>;
+
 	// Controls all the DirectX device resources.
 	class DeviceResources
 	{
@@ -51,6 +54,7 @@ namespace DX
 		RECT GetOutputSize() const noexcept					{ return m_outputSize; }
 		auto GetWindowSize() const noexcept					{ return m_windowSize; }
 		void SetWindowSize(uint32_t w, uint32_t h) noexcept { m_windowSize[0] = w; m_windowSize[1] = h; }
+		float GetAspectRatio() const noexcept				{ return static_cast<float>(m_windowSize[1]) / m_windowSize[0]; }
 		
         // Direct3D Accessors.
         auto                    GetD3DDevice() const noexcept           { return m_d3dDevice.Get(); }

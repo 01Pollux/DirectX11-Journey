@@ -8,6 +8,9 @@
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
 
+// Sandboxes
+#include "utils/sandbox.hpp"
+
 
 static void Enum_GPUAdapters(DX::DeviceResources* deviceres);
 
@@ -16,45 +19,45 @@ static void Enum_GPUAdapters(DX::DeviceResources* deviceres);
 void Game::Render()
 {
 	// Don't try to render anything before the first Update.
-	if (m_timer.GetFrameCount() == 0)
-	{
+	if (m_Timer.GetFrameCount() == 0)
 		return;
-	}
 
 	Clear();
 
-	m_deviceResources->PIXBeginEvent(L"Render");
-	[[maybe_unused]] auto d3dcontext = m_deviceResources->GetD3DDeviceContext();
+	m_DeviceResources->PIXBeginEvent(L"Render");
+	[[maybe_unused]] auto d3dcontext = m_DeviceResources->GetD3DDeviceContext();
 
 	// TODO: Add your rendering code here.
 
+	m_Sandboxes.OnFrame(m_Timer.GetElapsedTicks());
 	RenderImGui();
 
-	m_deviceResources->PIXEndEvent();
+	m_DeviceResources->PIXEndEvent();
 
 	// Show the new frame.
-	m_deviceResources->Present();
+	m_DeviceResources->Present();
 }
+
 
 // Helper method to clear the back buffers.
 void Game::Clear()
 {
-	m_deviceResources->PIXBeginEvent(L"Clear");
+	m_DeviceResources->PIXBeginEvent(L"Clear");
 
 	// Clear the views.
-	auto d3dcontext = m_deviceResources->GetD3DDeviceContext();
-	auto renderTarget = m_deviceResources->GetRenderTargetView();
-	auto depthStencil = m_deviceResources->GetDepthStencilView();
+	auto d3dcontext = m_DeviceResources->GetD3DDeviceContext();
+	auto renderTarget = m_DeviceResources->GetRenderTargetView();
+	auto depthStencil = m_DeviceResources->GetDepthStencilView();
 
 	d3dcontext->ClearRenderTargetView(renderTarget, DirectX::Colors::CornflowerBlue);
 	d3dcontext->ClearDepthStencilView(depthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	d3dcontext->OMSetRenderTargets(1, &renderTarget, depthStencil);
 
 	// Set the viewport.
-	auto viewport = m_deviceResources->GetScreenViewport();
+	auto viewport = m_DeviceResources->GetScreenViewport();
 	d3dcontext->RSSetViewports(1, &viewport);
 
-	m_deviceResources->PIXEndEvent();
+	m_DeviceResources->PIXEndEvent();
 }
 
 
@@ -74,11 +77,12 @@ void Game::RenderImGui()
 	ImGui::End();
 
 
+	m_Sandboxes.OnImGuiDraw();
 	ImGui::ShowDemoWindow(&demo);
 	if (resolution)
 	{
 		if (ImGui::Begin("Resoltuion", &resolution))
-			Enum_GPUAdapters(m_deviceResources.get());
+			Enum_GPUAdapters(m_DeviceResources.get());
 		ImGui::End();
 	}
 
@@ -92,6 +96,7 @@ void Game::RenderImGui()
 		ImGui::RenderPlatformWindowsDefault();
 	}
 }
+
 
 void Enum_GPUAdapters(DX::DeviceResources* deviceres)
 {

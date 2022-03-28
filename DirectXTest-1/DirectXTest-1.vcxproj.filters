@@ -21,6 +21,9 @@
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
     <ClInclude Include="imgui\imgui_impl_win32.h" />
     <ClInclude Include="imgui\imgui.hpp" />
+    <ClInclude Include="utils\sandbox.hpp" />
+    <ClInclude Include="sandbox\manyshapes\shapes.hpp" />
+    <ClInclude Include="sandbox\manyshapes\cube3d.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -32,6 +35,9 @@
     <ClCompile Include="imgui\imgui_impl_dx11.cpp" />
     <ClCompile Include="imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="window\GameRender.cpp" />
+    <ClCompile Include="utils\sandbox.cpp" />
+    <ClCompile Include="sandbox\manyshapes\shapes.cpp" />
+    <ClCompile Include="sandbox\manyshapes\cube3d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -45,5 +51,9 @@
     <Manifest Include="settings.manifest">
       <Filter>Assets</Filter>
     </Manifest>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="resources\manyshapes\cube3d_ps.hlsl" />
+    <FxCompile Include="resources\manyshapes\cube3d_vs.hlsl" />
   </ItemGroup>
 </Project>

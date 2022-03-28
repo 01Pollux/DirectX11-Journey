@@ -9,7 +9,6 @@
 using namespace DirectX;
 using namespace DX;
 
-using Microsoft::WRL::ComPtr;
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"

@@ -12,25 +12,25 @@
 
 Game::Game()
 {
-	m_deviceResources = std::make_unique<DX::DeviceResources>();
-	m_deviceResources->RegisterDeviceNotify(this);
+	m_DeviceResources = std::make_unique<DX::DeviceResources>();
+	m_DeviceResources->RegisterDeviceNotify(this);
 }
 
 Game::~Game()
 {
 	UninitializeImGui();
-	DestroyWindow(m_deviceResources->GetWindow());
+	DestroyWindow(m_DeviceResources->GetWindow());
 }
 
 
 // Initialize the Direct3D resources required to run.
 void Game::Initialize(HWND window, int width, int height)
 {
-	m_deviceResources->SetWindow(window, width, height);
+	m_DeviceResources->SetWindow(window, width, height);
 
-	m_deviceResources->CreateDeviceResources();
+	m_DeviceResources->CreateDeviceResources();
 
-	m_deviceResources->CreateWindowSizeDependentResources();
+	m_DeviceResources->CreateWindowSizeDependentResources();
 
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
 	// e.g. for 60 FPS fixed timestep update logic, call:
@@ -38,6 +38,8 @@ void Game::Initialize(HWND window, int width, int height)
 	m_timer.SetFixedTimeStep(true);
 	m_timer.SetTargetElapsedSeconds(1.0 / 60);
 	*/
+
+	m_Sandboxes.Init(m_DeviceResources.get());
 
 	InitializeImGui();
 }
@@ -47,13 +49,13 @@ void Game::Initialize(HWND window, int width, int height)
 // Executes the basic game loop.
 void Game::Tick()
 {
-	m_timer.Tick([this]() { Update(m_timer); });
+	m_Timer.Tick([this]() { Update(m_Timer); });
 
 	Render();
 }
 
 // Updates the world.
-void Game::Update(DX::StepTimer const& timer)
+void Game::Update(const Pleiades::StepTimer& timer)
 {
 	[[maybe_unused]] float elapsedTime = float(timer.GetElapsedSeconds());
 
@@ -74,10 +76,10 @@ void Game::InitializeImGui()
 		ImGuiConfigFlags_ViewportsEnable;
 
 	// Setup Platform/Renderer backends
-	ImGui_ImplWin32_Init(m_deviceResources->GetWindow());
+	ImGui_ImplWin32_Init(m_DeviceResources->GetWindow());
 	ImGui_ImplDX11_Init(
-		m_deviceResources->GetD3DDevice(),
-		m_deviceResources->GetD3DDeviceContext()
+		m_DeviceResources->GetD3DDevice(),
+		m_DeviceResources->GetD3DDeviceContext()
 	);
 }
 
@@ -109,20 +111,20 @@ void Game::OnSuspending()
 
 void Game::OnResuming()
 {
-	m_timer.ResetElapsedTime();
+	m_Timer.ResetElapsedTime();
 
 	// TODO: Game is being power-resumed (or returning from minimize).
 }
 
 void Game::OnWindowMoved()
 {
-	auto r = m_deviceResources->GetOutputSize();
-	m_deviceResources->WindowSizeChanged(r.right, r.bottom);
+	auto r = m_DeviceResources->GetOutputSize();
+	m_DeviceResources->WindowSizeChanged(r.right, r.bottom);
 }
 
 void Game::OnWindowSizeChanged(int width, int height)
 {
-	m_deviceResources->WindowSizeChanged(width, height);
+	m_DeviceResources->WindowSizeChanged(width, height);
 	// TODO: Game window is being resized.
 }
 
@@ -130,7 +132,7 @@ void Game::OnWindowSizeChanged(int width, int height)
 void Game::GetDefaultSize(int& width, int& height) const noexcept
 {
 	// TODO: Change to desired default window size (note minimum size is 320x200).
-	width = m_deviceResources->GetWindowSize()[0];
-	height = m_deviceResources->GetWindowSize()[1];
+	width = m_DeviceResources->GetWindowSize()[0];
+	height = m_DeviceResources->GetWindowSize()[1];
 }
 #pragma endregion

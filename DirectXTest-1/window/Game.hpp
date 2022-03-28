@@ -6,6 +6,7 @@
 
 #include "directx/DeviceResources.hpp"
 #include "utils/StepTimer.hpp"
+#include "utils/sandbox.hpp"
 
 
 // A basic game implementation that creates a D3D11 device and
@@ -40,7 +41,7 @@ public:
 	void GetDefaultSize(int& width, int& height) const noexcept;
 
 private:
-	void Update(DX::StepTimer const& timer);
+	void Update(const Pleiades::StepTimer& timer);
 	void Render();
 
 	void Clear();
@@ -51,8 +52,11 @@ private:
 
 private:
 	// Device resources.
-	std::unique_ptr<DX::DeviceResources>    m_deviceResources;
+	std::unique_ptr<DX::DeviceResources>    m_DeviceResources;
 
 	// Rendering loop timer.
-	DX::StepTimer                           m_timer;
+	Pleiades::StepTimer                     m_Timer;
+	
+	// Samples for sandboxes
+	Pleiades::SandboxHolder					m_Sandboxes;
 };
