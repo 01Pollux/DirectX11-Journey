@@ -10,7 +10,9 @@
 #include "imgui/imgui_impl_win32.h"
 
 
-Game::Game()
+Game::Game(bool fullscreen) :
+	// Setting m_IsFullscreen to the opposite of the wanted state, just so we can swap it back later in Game::Initialize
+	m_IsFullscreen(!fullscreen)
 {
 	m_DeviceResources = std::make_unique<DX::DeviceResources>();
 	m_DeviceResources->RegisterDeviceNotify(this);
@@ -31,6 +33,8 @@ void Game::Initialize(HWND window, int width, int height)
 	m_DeviceResources->CreateDeviceResources();
 
 	m_DeviceResources->CreateWindowSizeDependentResources();
+
+	ToggleFullscreen(!m_IsFullscreen);
 
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
 	// e.g. for 60 FPS fixed timestep update logic, call:
@@ -135,4 +139,41 @@ void Game::GetDefaultSize(int& width, int& height) const noexcept
 	width = m_DeviceResources->GetWindowSize()[0];
 	height = m_DeviceResources->GetWindowSize()[1];
 }
+
+void Game::ToggleFullscreen(bool state) noexcept
+{
+	if (m_IsFullscreen == state)
+		return;
+	
+	m_IsFullscreen = state;
+	HWND hWnd = m_DeviceResources->GetWindow();
+	// Implements the classic ALT+ENTER fullscreen toggle
+	if (state)
+	{
+		SetWindowLongPtr(hWnd, GWL_STYLE, WS_POPUP);
+		SetWindowLongPtr(hWnd, GWL_EXSTYLE, WS_EX_TOPMOST);
+
+		SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+
+		ShowWindow(hWnd, SW_SHOWMAXIMIZED);
+	}
+	else
+	{
+		SetWindowLongPtr(hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
+		SetWindowLongPtr(hWnd, GWL_EXSTYLE, 0);
+
+		int width, height;
+		GetDefaultSize(width, height);
+
+		ShowWindow(hWnd, SW_SHOWNORMAL);
+
+		SetWindowPos(hWnd, HWND_TOP, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+	}
+}
+
+bool Game::IsFullscreen() const noexcept
+{
+	return m_IsFullscreen;
+}
+
 #pragma endregion

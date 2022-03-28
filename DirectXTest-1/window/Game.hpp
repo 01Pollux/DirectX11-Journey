@@ -14,7 +14,7 @@
 class Game final : public DX::IDeviceNotify
 {
 public:
-	Game();
+	Game(bool fullscreen);
 	~Game();
 
 	Game(Game&&) = default;
@@ -22,6 +22,9 @@ public:
 
 	Game(Game const&) = delete;
 	Game& operator= (Game const&) = delete;
+
+	static void Exit() noexcept;
+	static Game* Get() noexcept;
 
 	// Initialization and management
 	void Initialize(HWND window, int width, int height);
@@ -39,6 +42,9 @@ public:
 
 	// Properties
 	void GetDefaultSize(int& width, int& height) const noexcept;
+
+	void ToggleFullscreen(bool state) noexcept;
+	bool IsFullscreen() const noexcept;
 
 private:
 	void Update(const Pleiades::StepTimer& timer);
@@ -59,4 +65,6 @@ private:
 	
 	// Samples for sandboxes
 	Pleiades::SandboxHolder					m_Sandboxes;
+
+	bool									m_IsFullscreen;
 };

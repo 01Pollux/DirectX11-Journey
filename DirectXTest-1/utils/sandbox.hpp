@@ -23,6 +23,11 @@ namespace Pleiades
 		virtual void OnFrame(uint64_t) { }
 		virtual void OnImGuiDraw() {}
 
+		static const char* GetName() noexcept
+		{
+			return nullptr;
+		}
+
 		[[nodiscard]]
 		DX::DeviceResources* GetDeviceResources() noexcept
 		{

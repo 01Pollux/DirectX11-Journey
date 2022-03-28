@@ -24,6 +24,7 @@
     <ClInclude Include="utils\sandbox.hpp" />
     <ClInclude Include="sandbox\manyshapes\shapes.hpp" />
     <ClInclude Include="sandbox\manyshapes\cube3d.hpp" />
+    <ClInclude Include="sandbox\resolution_changer\resolution_changer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -38,6 +39,7 @@
     <ClCompile Include="utils\sandbox.cpp" />
     <ClCompile Include="sandbox\manyshapes\shapes.cpp" />
     <ClCompile Include="sandbox\manyshapes\cube3d.cpp" />
+    <ClCompile Include="sandbox\resolution_changer\resolution_changer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

@@ -4,7 +4,7 @@
 #include "imgui/imgui.hpp"
 
 #include "sandbox/manyshapes/shapes.hpp"
-
+#include "sandbox/resolution_changer/resolution_changer.hpp"
 
 namespace Pleiades
 {
@@ -13,6 +13,7 @@ namespace Pleiades
 		m_DeviceRes = res;
 
 		AddSample<Sandbox::ManyShapes>();
+		AddSample<Sandbox::ResolutionCChanger_ImGui>();
 
 		Set(Sandbox::ManyShapes::GetName());
 	}
