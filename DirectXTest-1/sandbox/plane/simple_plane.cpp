@@ -2,6 +2,7 @@
 #include "utils/pch.hpp"
 #include "simple_plane.hpp"
 
+#include "imgui/imgui.hpp"
 #include "window/Game.hpp"
 
 #include <d3dcompiler.h>
@@ -37,6 +38,23 @@ namespace Pleiades::Sandbox
 		UpdateScene();
 
 		d3dcontext->DrawIndexed(static_cast<uint32_t>(m_PlaneMesh.indicies.size()), 0, 0);
+	}
+
+
+	void SimplePlane::OnImGuiDraw()
+	{
+		if (ImGui::Button("Update"))
+		{
+			BuildPlaneMesh();
+
+			InitializeBuffers();
+			InitializeShaders();
+		}
+
+		ImGui::DragFloat3("Draw offset", m_DrawOffset);
+		ImGui::DragFloat3("Rotation offset", m_RotationOffset);
+		ImGui::DragFloat2("Width/Height", m_PlaneSize);
+		ImGui::DragInt2("Col/Rows", m_RowCols);
 	}
 
 
@@ -126,6 +144,16 @@ namespace Pleiades::Sandbox
 			d3dcontext,
 			{
 				DirectX::XMMatrixTranspose(
+					DX::XMMatrixRotationRollPitchYaw(
+						m_RotationOffset[0],
+						m_RotationOffset[1],
+						m_RotationOffset[2]
+					) *
+					DX::XMMatrixTranslation(
+						m_DrawOffset[0],
+						m_DrawOffset[1],
+						m_DrawOffset[2]
+					) *
 					DirectX::XMMatrixPerspectiveLH(
 						0.25f * 3.14f, GetDeviceResources()->GetAspectRatio(), 1.f, 1000.f
 					)

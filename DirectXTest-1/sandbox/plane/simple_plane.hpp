@@ -19,6 +19,7 @@ namespace Pleiades::Sandbox
 		SimplePlane(DX::DeviceResources* d3dres);
 
 		void OnFrame(uint64_t) override;
+		void OnImGuiDraw() override;
 
 		static const char* GetName() noexcept
 		{
@@ -41,6 +42,10 @@ namespace Pleiades::Sandbox
 			return .3f * (z * std::sinf(x * .1f) + x * std::cosf(z * .1f));
 		}
 
+		float m_RotationOffset[3]{ -0.41f, 0.06f, 0.f, };
+		float m_DrawOffset[3]{ 0.f, -32.f, 367.f };
+		float m_PlaneSize[2]{ 160.f, 160.f };
+		int32_t m_RowCols[2]{ 50, 50 };
 		MeshData_t m_PlaneMesh;
 
 		DX::ComPtr<ID3D11Buffer>		m_PlaneIndicies, m_PlaneVerticies;

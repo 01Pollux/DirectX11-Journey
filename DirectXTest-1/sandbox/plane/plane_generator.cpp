@@ -47,23 +47,17 @@ namespace Pleiades::Sandbox
 
 	void SimplePlane::BuildPlaneVertices()
 	{
-		constexpr float plane_width = 160.f;
-		constexpr float plane_height = 160.f;
-
-		constexpr size_t columns = 50;
-		constexpr size_t rows = 50;
-
 		//size_t vertex_count = (columns - 1) * (rows - 1);
 		//size_t triangle_count = vertex_count * 2;
 
-		float x_step = 1.f / columns;
-		float z_step = 1.f / rows;
+		float x_step = 1.f / m_RowCols[1];
+		float z_step = 1.f / m_RowCols[0];
 
-		float dx = plane_width * x_step;
-		float dz = plane_height * z_step;
+		float dx = m_PlaneSize[0] * x_step;
+		float dz = m_PlaneSize[1] * z_step;
 
-		float neg_half_width = plane_width * -0.5f;
-		float half_height = plane_height * 0.5f;
+		float neg_half_width = m_PlaneSize[0] * -0.5f;
+		float half_height = m_PlaneSize[1] * 0.5f;
 
 		/*
 						Z = height
@@ -82,58 +76,38 @@ namespace Pleiades::Sandbox
 		*/
 
 		m_PlaneMesh.vertices.clear();
-		m_PlaneMesh.vertices.reserve(rows * columns);
+		m_PlaneMesh.vertices.reserve(m_RowCols[0] * m_RowCols[1]);
 
-		for (size_t x = 0; x < rows; x++)
+		for (size_t z = 0; z < m_RowCols[0]; z++)
 		{
-			float cur_x = neg_half_width + x * dx;
-			for (size_t z = 0; z < columns; z++)
+			float cur_z = half_height - z * dz;
+			for (size_t x = 0; x < m_RowCols[1]; x++)
 			{
-				float cur_z = half_height - z * dz;
-				m_PlaneMesh.vertices.emplace_back(DX::XMFLOAT3(cur_x, 0.f, cur_z) , DX::XMFLOAT4{});
+				float cur_x = neg_half_width + x * dx;
+				m_PlaneMesh.vertices.emplace_back(DX::XMFLOAT3{ cur_x, 0.f, cur_z }, DX::XMFLOAT4{});
 			}
 		}
 	}
 
 	void SimplePlane::BuildPlaneIndicies()
 	{
-		constexpr size_t columns = 50;
-		constexpr size_t rows = 50;
-
 		m_PlaneMesh.indicies.clear();
-		m_PlaneMesh.indicies.reserve(6 * (rows - 1) * (columns - 1));
 
-		for (uint16_t x = 0; x < rows - 1; x++)
+		uint32_t cols = m_RowCols[1], rows = m_RowCols[0];
+		m_PlaneMesh.indicies.reserve(6 * (cols - 1) * (rows - 1));
+
+		for (uint16_t y = 0; y < rows - 1; y++)
 		{
-			for (uint16_t y = 0; y < columns - 1; y++)
+			for (uint16_t x = 0; x < cols - 1; x++)
 			{
-				m_PlaneMesh.indicies.push_back(x * columns + y);
-				m_PlaneMesh.indicies.push_back(x * columns + y + 1);
-				m_PlaneMesh.indicies.push_back((x + 1) * columns + y);
+				m_PlaneMesh.indicies.push_back(static_cast<uint16_t>(y * cols			+ x));
+				m_PlaneMesh.indicies.push_back(static_cast<uint16_t>(y * cols			+ x + 1));
+				m_PlaneMesh.indicies.push_back(static_cast<uint16_t>((y + 1) * cols		+ x));
 
-				m_PlaneMesh.indicies.push_back((x + 1) * columns + y);
-				m_PlaneMesh.indicies.push_back(x * columns + y + 1);
-				m_PlaneMesh.indicies.push_back((x + 1) * columns + y + 1);
+				m_PlaneMesh.indicies.push_back(static_cast<uint16_t>((y + 1) * cols		+ x));
+				m_PlaneMesh.indicies.push_back(static_cast<uint16_t>(y * cols			+ x + 1));
+				m_PlaneMesh.indicies.push_back(static_cast<uint16_t>((y + 1) * cols		+ x + 1));
 			}
 		}
-
-		/*
-			meshData.indicies.resize(faceCount * 3); // 3 indices per face
-// Iterate over each quad and compute indices.
-			UINT k = 0;
-			for (UINT i = 0; i < m - 1; ++i)
-			{
-				for (UINT j = 0; j < n - 1; ++j)
-				{
-					meshData.indicies[k] = i * n + j;
-					meshData.indicies[k + 1] = i * n + j + 1;
-					meshData.indicies[k + 2] = (i + 1) * n + j;
-					meshData.indicies[k + 3] = (i + 1) * n + j;
-					meshData.indicies[k + 4] = i * n + j + 1;
-					meshData.indicies[k + 5] = (i + 1) * n + j + 1;
-					k += 6; // next quad
-				}
-			}
-			*/
 	}
 }
