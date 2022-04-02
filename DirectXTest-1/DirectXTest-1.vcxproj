@@ -177,6 +177,7 @@
     <ClInclude Include="imgui\imgui_impl_win32.h" />
     <ClInclude Include="sandbox\manyshapes\cube3d.hpp" />
     <ClInclude Include="sandbox\manyshapes\shapes.hpp" />
+    <ClInclude Include="sandbox\plane\simple_plane.hpp" />
     <ClInclude Include="sandbox\resolution_changer\resolution_changer.hpp" />
     <ClInclude Include="utils\sandbox.hpp" />
     <ClInclude Include="window\Game.hpp" />
@@ -191,6 +192,7 @@
     </ClCompile>
     <ClCompile Include="sandbox\manyshapes\cube3d.cpp" />
     <ClCompile Include="sandbox\manyshapes\shapes.cpp" />
+    <ClCompile Include="sandbox\plane\simple_plane.cpp" />
     <ClCompile Include="sandbox\resolution_changer\resolution_changer.cpp" />
     <ClCompile Include="utils\sandbox.cpp" />
     <ClCompile Include="window\Game.cpp" />

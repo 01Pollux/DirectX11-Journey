@@ -6,6 +6,9 @@
 
 #include <vector>
 
+#include <DirectXTK/BufferHelpers.h>
+#include <DirectXTK/VertexTypes.h>
+
 namespace DX
 {
 	// Provides an interface for an application that owns DeviceResources to be notified of the device being lost or created.

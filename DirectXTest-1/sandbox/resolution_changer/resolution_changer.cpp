@@ -93,7 +93,6 @@ namespace Pleiades::Sandbox
 						desc.Height, 
 						SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED | (is_fullscreen ? WS_POPUP : 0)
 					);
-
 				}
 			}
 			ImGui::EndCombo();
