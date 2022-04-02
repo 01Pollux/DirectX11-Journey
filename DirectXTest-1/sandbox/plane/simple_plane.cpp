@@ -12,14 +12,11 @@ namespace Pleiades::Sandbox
 	SimplePlane::SimplePlane(DX::DeviceResources* d3dres) : 
 		ISandbox(d3dres)
 	{
+		BuildPlaneMesh();
+
 	}
 
 	void SimplePlane::OnFrame(uint64_t)
 	{
 	}
-
-	void SimplePlane::BuildPlane()
-	{
-	}
-
 }

@@ -192,6 +192,7 @@
     </ClCompile>
     <ClCompile Include="sandbox\manyshapes\cube3d.cpp" />
     <ClCompile Include="sandbox\manyshapes\shapes.cpp" />
+    <ClCompile Include="sandbox\plane\plane_generator.cpp" />
     <ClCompile Include="sandbox\plane\simple_plane.cpp" />
     <ClCompile Include="sandbox\resolution_changer\resolution_changer.cpp" />
     <ClCompile Include="utils\sandbox.cpp" />

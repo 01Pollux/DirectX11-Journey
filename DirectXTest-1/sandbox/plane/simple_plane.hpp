@@ -4,14 +4,12 @@
 
 namespace Pleiades::Sandbox
 {
-	
-
 	class SimplePlane : public ISandbox
 	{
 	public:
 		struct MeshData_t
 		{
-			std::vector<DirectX::VertexPosition> vertices;
+			std::vector<DX::VertexPositionColor> vertices;
 			std::vector<unsigned short> indicies;
 		};
 
@@ -25,8 +23,15 @@ namespace Pleiades::Sandbox
 		}
 
 	private:
-		void BuildPlane();
+		void BuildPlaneMesh();
+		void BuildPlaneVertices();
+		void BuildPlaneIndicies();
 
-		MeshData_t m_MeshData;
+		static constexpr float GetHeight(float x, float z) noexcept
+		{
+			return .3f * (z * std::sinf(x * .1f) + x * std::cosf(z * .1f));
+		}
+
+		MeshData_t m_PlaneMesh;
 	};
 }
