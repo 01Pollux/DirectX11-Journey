@@ -127,7 +127,7 @@ namespace Pleiades::Sandbox
 			{
 				DirectX::XMMatrixTranspose(
 					DirectX::XMMatrixPerspectiveLH(
-						1.f, GetDeviceResources()->GetAspectRatio(), 1.f, 120.f
+						0.25f * 3.14f, GetDeviceResources()->GetAspectRatio(), 1.f, 1000.f
 					)
 				)
 			}
