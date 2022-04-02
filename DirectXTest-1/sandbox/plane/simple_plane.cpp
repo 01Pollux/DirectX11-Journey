@@ -27,7 +27,7 @@ namespace Pleiades::Sandbox
 		d3dcontext->IASetInputLayout(m_PlaneInputLayout.Get());
 		d3dcontext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		uint32_t strides[]{ sizeof(MeshData_t::verticies_type) };
+		uint32_t strides[]{ sizeof(GeometryFactory::MeshData_t::verticies_type) };
 		uint32_t offsets[]{ 0 };
 
 		d3dcontext->IASetVertexBuffers(0, 1, m_PlaneVerticies.GetAddressOf(), strides, offsets);
@@ -46,9 +46,7 @@ namespace Pleiades::Sandbox
 		if (ImGui::Button("Update"))
 		{
 			BuildPlaneMesh();
-
 			InitializeBuffers();
-			InitializeShaders();
 		}
 
 		ImGui::DragFloat3("Draw offset", m_DrawOffset);
@@ -57,6 +55,49 @@ namespace Pleiades::Sandbox
 		ImGui::DragInt2("Col/Rows", m_RowCols);
 	}
 
+
+	void SimplePlane::BuildPlaneMesh()
+	{
+		GeometryFactory::CreatePlane(
+			m_PlaneMesh,
+			m_RowCols[0],
+			m_RowCols[1],
+			m_PlaneSize[0],
+			m_PlaneSize[1]
+		);
+
+		// build colors
+		for (auto& mesh : m_PlaneMesh.vertices)
+		{
+			float y = mesh.position.y = GeometryFactory::GetHeight(mesh.position.x, mesh.position.z);
+
+			if (y < -10.0f)
+			{
+				// Sandy beach color.
+				mesh.color = DX::XMFLOAT4(1.0f, 0.96f, 0.62f, 1.0f);
+			}
+			else if (y < 5.0f)
+			{
+				// Light yellow-green.
+				mesh.color = DX::XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
+			}
+			else if (y < 12.0f)
+			{
+				// Dark yellow-green.
+				mesh.color = DX::XMFLOAT4(0.1f, 0.48f, 0.19f, 1.0f);
+			}
+			else if (y < 20.0f)
+			{
+				// Dark brown.
+				mesh.color = DX::XMFLOAT4(0.45f, 0.39f, 0.34f, 1.0f);
+			}
+			else
+			{
+				// White snow.
+				mesh.color = DX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			}
+		}
+	}
 
 	void SimplePlane::InitializeBuffers()
 	{
@@ -126,8 +167,8 @@ namespace Pleiades::Sandbox
 		// create input layout
 		DX::ThrowIfFailed(
 			d3ddevice->CreateInputLayout(
-				MeshData_t::verticies_type::InputElements,
-				MeshData_t::verticies_type::InputElementCount,
+				GeometryFactory::MeshData_t::verticies_type::InputElements,
+				GeometryFactory::MeshData_t::verticies_type::InputElementCount,
 				shader_blob->GetBufferPointer(),
 				static_cast<uint32_t>(shader_blob->GetBufferSize()),
 				m_PlaneInputLayout.GetAddressOf()
