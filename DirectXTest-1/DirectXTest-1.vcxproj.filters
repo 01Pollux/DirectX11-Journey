@@ -60,5 +60,7 @@
   <ItemGroup>
     <FxCompile Include="resources\manyshapes\cube3d_ps.hlsl" />
     <FxCompile Include="resources\manyshapes\cube3d_vs.hlsl" />
+    <FxCompile Include="resources\plane\simple_ps.hlsl" />
+    <FxCompile Include="resources\plane\simple_vs.hlsl" />
   </ItemGroup>
 </Project>

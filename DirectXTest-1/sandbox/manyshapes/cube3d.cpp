@@ -108,7 +108,7 @@ namespace Pleiades::Sandbox
 		// Create constant buffer for color
 		{
 			D3D11_BUFFER_DESC buffer_desc{};
-			buffer_desc.Usage = D3D11_USAGE_DEFAULT;
+			buffer_desc.Usage = D3D11_USAGE_IMMUTABLE;
 			buffer_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 			buffer_desc.ByteWidth = sizeof(colors);
 			buffer_desc.StructureByteStride = sizeof(colors[0]);

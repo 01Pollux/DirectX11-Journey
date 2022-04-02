@@ -90,7 +90,7 @@ namespace Pleiades::Sandbox
 			for (size_t z = 0; z < columns; z++)
 			{
 				float cur_z = z * dz;
-				m_PlaneMesh.vertices.emplace_back(DX::XMFLOAT3(neg_half_width + cur_x, 0.f, half_height - cur_z));
+				m_PlaneMesh.vertices.emplace_back(DX::XMFLOAT3(neg_half_width + cur_x, 0.f, half_height - cur_z) , DX::XMFLOAT4{});
 			}
 		}
 	}
