@@ -44,8 +44,7 @@ namespace Pleiades
 			float height
 		)
 		{
-			CreateCylinderVertices(mesh, slices, stacks, bottomn_radius, top_radius, height);
-			CreateCylinderIndicies(mesh, slices, stacks);
+			CreateCylinderVerticesAndIndicies(mesh, slices, stacks, bottomn_radius, top_radius, height);
 		}
 
 		static float GetHeight(float x, float z) noexcept
@@ -69,12 +68,27 @@ namespace Pleiades
 		);
 
 
-		static void CreateCylinderVertices(
+		static void CreateCylinderVerticesAndIndicies(
 			MeshData_t& mesh,
 			uint32_t slices,
 			uint32_t stacks,
 			float bottomn_radius,
 			float top_radius,
+			float height
+		);
+		
+		static void CreateCylinderTopFace(
+			MeshData_t& mesh,
+			uint32_t slices,
+			float top_radius,
+			float height
+		);
+		
+		
+		static void CreateCylinderBottomFace(
+			MeshData_t& mesh,
+			uint32_t slices,
+			float bottomn_radius,
 			float height
 		);
 

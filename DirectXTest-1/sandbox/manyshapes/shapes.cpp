@@ -29,7 +29,7 @@ namespace Pleiades::Sandbox
 
 			m_Shapes.emplace_back(
 				std::make_unique<RenderableCylinder>(d3dres, "Cylinder"),
-				false
+				true
 			);
 		}
 	}

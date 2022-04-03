@@ -17,7 +17,7 @@ namespace Pleiades
 		AddSample<Sandbox::ResolutionCChanger_ImGui>();
 		AddSample<Sandbox::SimplePlane>();
 
-		Set(Sandbox::SimplePlane::GetName());
+		Set(Sandbox::ManyShapes::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

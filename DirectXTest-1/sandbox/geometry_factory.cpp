@@ -64,58 +64,153 @@ namespace Pleiades
 	)
 	{
 		mesh.indicies.clear();
+		mesh.indicies.reserve(static_cast<size_t>(columns - 1) * (rows - 1) * 6);
 
-		mesh.indicies.reserve(6u * (columns - 1) * (rows - 1));
-
-		for (uint16_t y = 0; y < rows - 1; y++)
+		for (uint16_t i = 0; i < rows - 1; i++)
 		{
-			for (uint16_t x = 0; x < columns - 1; x++)
+			for (uint16_t j = 0; j < columns - 1; j++)
 			{
-				mesh.indicies.push_back(static_cast<uint16_t>(y * columns + x));
-				mesh.indicies.push_back(static_cast<uint16_t>(y * columns + x + 1));
-				mesh.indicies.push_back(static_cast<uint16_t>((y + 1) * columns + x));
+				mesh.indicies.push_back(static_cast<uint16_t>(i * columns + j));
+				mesh.indicies.push_back(static_cast<uint16_t>(i * columns + j + 1));
+				mesh.indicies.push_back(static_cast<uint16_t>((i+ 1) * columns + j));
 
-				mesh.indicies.push_back(static_cast<uint16_t>((y + 1) * columns + x));
-				mesh.indicies.push_back(static_cast<uint16_t>(y * columns + x + 1));
-				mesh.indicies.push_back(static_cast<uint16_t>((y + 1) * columns + x + 1));
+				mesh.indicies.push_back(static_cast<uint16_t>((i + 1) * columns + j));
+				mesh.indicies.push_back(static_cast<uint16_t>(i * columns + j + 1));
+				mesh.indicies.push_back(static_cast<uint16_t>((i + 1) * columns + j + 1));
 			}
 		}
 	}
 
 
 
-	void GeometryFactory::CreateCylinderVertices(
+	void GeometryFactory::CreateCylinderVerticesAndIndicies(
 		MeshData_t& mesh, 
 		uint32_t slices, 
 		uint32_t stacks, 
-		float bottomn_radius, 
+		float bottom_radius,
 		float top_radius, 
 		float height
 	)
 	{
 		const float stack_height = height / stacks;
-		const float radius_step = (top_radius - bottomn_radius) / stacks;
+		const float radius_step = (top_radius - bottom_radius) / stacks;
 
 		const float theta = DX::XM_2PI / slices;
 
 		mesh.vertices.clear();
-		mesh.vertices.reserve(static_cast<size_t>(stacks - 1) * slices);
+		mesh.vertices.reserve(static_cast<size_t>(stacks + 1) * (slices + 1));
 
-		for (uint32_t i = 0; i < stacks; i++)
+		for (uint32_t i = 0; i <= stacks; i++)
 		{
-			float cur_y = -height / 2 + i * stack_height;
-			float cur_radius = bottomn_radius + i * radius_step;
+			const float cur_y = -height * 0.5f + i * stack_height;
+			const float cur_radius = bottom_radius + i * radius_step;
 
 			for (uint32_t j = 0; j <= slices; j++)
 			{
-				const float c = std::cosf(j * theta);
-				const float s = std::sinf(j * theta);
+				float c, s;
+				DX::XMScalarSinCos(&s, &c, j * theta);
 
 				mesh.vertices.emplace_back(
 					DX::XMFLOAT3{ c * cur_radius, cur_y, s * cur_radius },
 					DX::XMFLOAT4(DX::Colors::Magenta)
 				);
 			}
+		}
+
+		CreateCylinderIndicies(
+			mesh,
+			slices,
+			stacks
+		);
+
+		CreateCylinderTopFace(
+			mesh,
+			slices,
+			top_radius,
+			height
+		);
+
+		CreateCylinderBottomFace(
+			mesh,
+			slices,
+			bottom_radius,
+			height
+		);
+	}
+
+	void GeometryFactory::CreateCylinderTopFace(
+		MeshData_t& mesh,
+		uint32_t slices,
+		float top_radius,
+		float height
+	)
+	{
+		const uint32_t base_i = static_cast<uint32_t>(mesh.vertices.size()) + 1;
+
+		const float theta = DX::XM_2PI / slices;
+		const float y = height * 0.5f;
+
+		mesh.vertices.reserve(mesh.vertices.size() + slices + 2);
+
+		mesh.vertices.emplace_back(
+			DX::XMFLOAT3{ 0, y, 0 },
+			DX::XMFLOAT4(DX::Colors::Magenta)
+		);
+
+		for (uint32_t i = 0; i <= slices; i++)
+		{
+			float x, z;
+			DX::XMScalarSinCos(&z, &x, i * theta);
+
+			mesh.vertices.emplace_back(
+				DX::XMFLOAT3{ top_radius * x, y, top_radius * z },
+				DX::XMFLOAT4(DX::Colors::Magenta)
+			);
+		}
+
+		for (uint16_t i = 0; i < slices; i++)
+		{
+			mesh.indicies.push_back(static_cast<uint16_t>(base_i - 1));
+			mesh.indicies.push_back(static_cast<uint16_t>(base_i + i + 1));
+			mesh.indicies.push_back(static_cast<uint16_t>(base_i + i));
+		}
+	}
+
+	void GeometryFactory::CreateCylinderBottomFace(
+		MeshData_t& mesh, 
+		uint32_t slices, 
+		float bottom_radius, 
+		float height
+	)
+	{
+		const uint32_t base_i = static_cast<uint32_t>(mesh.vertices.size()) + 1;
+
+		const float theta = DX::XM_2PI / slices;
+		const float y = height * -0.5f;
+
+		mesh.vertices.reserve(mesh.vertices.size() + slices + 2);
+
+		mesh.vertices.emplace_back(
+			DX::XMFLOAT3{ 0, y, 0 },
+			DX::XMFLOAT4(DX::Colors::Magenta)
+		);
+
+		for (uint32_t i = 0; i <= slices; i++)
+		{
+			float x, z;
+			DX::XMScalarSinCos(&z, &x, i * theta);
+
+			mesh.vertices.emplace_back(
+				DX::XMFLOAT3{ bottom_radius * x, y, bottom_radius * z },
+				DX::XMFLOAT4(DX::Colors::Magenta)
+			);
+		}
+
+		for (uint16_t i = 0; i < slices; i++)
+		{
+			mesh.indicies.push_back(static_cast<uint16_t>(base_i - 1));
+			mesh.indicies.push_back(static_cast<uint16_t>(base_i + i));
+			mesh.indicies.push_back(static_cast<uint16_t>(base_i + i + 1));
 		}
 	}
 
@@ -126,7 +221,7 @@ namespace Pleiades
 	)
 	{
 		mesh.indicies.clear();
-		mesh.indicies.reserve(static_cast<size_t>(stacks - 1) * slices);
+		mesh.indicies.reserve(static_cast<size_t>(stacks) * slices + mesh.indicies.size());
 
 		const uint32_t ring_count = slices + 1;
 
