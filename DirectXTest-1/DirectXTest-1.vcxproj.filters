@@ -67,4 +67,10 @@
     <FxCompile Include="resources\manyshapes\cylinder_ps.hlsl" />
     <FxCompile Include="resources\manyshapes\cylinder_vs.hlsl" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="sandbox\test_house\Scene.fbx">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="sandbox\test_house\Shader1.dgsl" />
+  </ItemGroup>
 </Project>

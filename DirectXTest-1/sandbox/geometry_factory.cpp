@@ -102,7 +102,7 @@ namespace Pleiades
 
 		for (uint32_t i = 0; i <= stacks; i++)
 		{
-			const float cur_y = -height * 0.5f + i * stack_height;
+			const float cur_y = height * -0.5f + i * stack_height;
 			const float cur_radius = bottom_radius + i * radius_step;
 
 			for (uint32_t j = 0; j <= slices; j++)
