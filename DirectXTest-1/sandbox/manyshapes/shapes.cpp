@@ -9,7 +9,7 @@
 
 // shapes
 #include "cube3d.hpp"
-
+#include "cylinder.hpp"
 
 namespace Pleiades::Sandbox
 {
@@ -24,6 +24,11 @@ namespace Pleiades::Sandbox
 
 			m_Shapes.emplace_back(
 				std::make_unique<RenderableCube3D>(d3dres, "Cube 3D #2"),
+				false
+			);
+
+			m_Shapes.emplace_back(
+				std::make_unique<RenderableCylinder>(d3dres, "Cylinder"),
 				false
 			);
 		}

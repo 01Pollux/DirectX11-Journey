@@ -4,51 +4,6 @@
 
 namespace Pleiades::Sandbox
 {
-	class GeometryFactory
-	{
-	public:
-		struct MeshData_t
-		{
-			using verticies_type = DX::VertexPositionColor;
-			using indicies_type = uint16_t;
-
-			std::vector<verticies_type> vertices;
-			std::vector<indicies_type> indicies;
-		};
-
-		static void CreatePlane(
-			MeshData_t& mesh,
-			uint32_t rows,
-			uint32_t columns,
-			float width,
-			float height
-		)
-		{
-			CreatePlaneVertices(mesh, rows, columns, width, height);
-			CreatePlaneIndicies(mesh, rows, columns);
-		}
-
-		static float GetHeight(float x, float z) noexcept
-		{
-			return .3f * (z * std::sinf(x * .1f) + x * std::cosf(z * .1f));
-		}
-
-	private:
-		static void CreatePlaneVertices(
-			MeshData_t& mesh,
-			uint32_t rows,
-			uint32_t columns,
-			float width,
-			float height
-		);
-
-		static void CreatePlaneIndicies(
-			MeshData_t& mesh,
-			uint32_t rows,
-			uint32_t columns
-		);
-	};
-
 	class SimplePlane : public ISandbox
 	{
 	public:
