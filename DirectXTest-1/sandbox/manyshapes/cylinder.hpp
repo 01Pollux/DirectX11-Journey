@@ -3,6 +3,8 @@
 #include "utils/pch.hpp"
 #include "shapes.hpp"
 
+#include "sandbox/geometry_factory.hpp"
+
 namespace Pleiades::Sandbox
 {
 	class RenderableCylinder : public IRenderableShape
@@ -31,8 +33,6 @@ namespace Pleiades::Sandbox
 
 	private:
 		void BuildCylinderMesh();
-		void InitializeBuffers();
-		void InitializeShaders();
 		
 		void UpdateScene();
 
@@ -42,13 +42,6 @@ namespace Pleiades::Sandbox
 		int32_t m_SlicesStacks[2]{ 20, 20 };
 		float m_CylinderHeight = 3.f;
 
-		GeometryFactory::MeshData_t		m_CylinderMesh;
-
-		DX::ComPtr<ID3D11Buffer>		m_CylinderIndicies, m_CylinderVerticies;
-		DX::ConstantBuffer<DX::XMMATRIX>m_CylinderConstants_WRP;
-
-		DX::ComPtr<ID3D11InputLayout>	m_CylinderInputLayout;
-		DX::ComPtr<ID3D11VertexShader>	m_CylinderVtxShader;
-		DX::ComPtr<ID3D11PixelShader>	m_CylinderPxlShader;
+		std::unique_ptr<GeometryInstance> m_Cylinder;
 	};
 }

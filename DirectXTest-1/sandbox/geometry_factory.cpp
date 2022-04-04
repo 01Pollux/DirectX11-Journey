@@ -1,6 +1,8 @@
 
 #include "utils/pch.hpp"
-#include "utils/sandbox.hpp"
+#include "geometry_factory.hpp"
+
+#include <d3dcompiler.h>
 
 namespace Pleiades
 {
@@ -239,4 +241,99 @@ namespace Pleiades
 			}
 		}
 	}
+
+
+	void GeometryInstance::CreateBuffers(ID3D11Device* d3ddevice)
+	{
+		// Create vertex buffer
+		DX::ThrowIfFailed(
+			DX::CreateStaticBuffer(
+				d3ddevice,
+				Mesh.vertices,
+				D3D11_BIND_VERTEX_BUFFER,
+				d3dVerticies.ReleaseAndGetAddressOf()
+			)
+		);
+
+		// Create index buffer
+		DX::ThrowIfFailed(
+			DX::CreateStaticBuffer(
+				d3ddevice,
+				Mesh.indicies,
+				D3D11_BIND_INDEX_BUFFER,
+				d3dIndicies.ReleaseAndGetAddressOf()
+			)
+		);
+
+		// Create constant buffer for position
+		d3dConstants_WRP.Create(d3ddevice);
+	}
+
+
+	void GeometryInstance::CreateShaders(ID3D11Device* d3ddevice)
+	{
+		DX::ComPtr<ID3DBlob> shader_blob;
+		// Create pixel shader
+		{
+			DX::ThrowIfFailed(
+				D3DReadFileToBlob(L"resources/geometry_default_ps.cso", shader_blob.GetAddressOf())
+			);
+
+			DX::ThrowIfFailed(
+				d3ddevice->CreatePixelShader(
+					shader_blob->GetBufferPointer(),
+					shader_blob->GetBufferSize(),
+					nullptr,
+					d3dPxlShader.GetAddressOf()
+				)
+			);
+		}
+
+		// Create vertex shader
+		{
+			DX::ThrowIfFailed(
+				D3DReadFileToBlob(L"resources/geometry_default_vs.cso", shader_blob.ReleaseAndGetAddressOf())
+			);
+
+			DX::ThrowIfFailed(
+				d3ddevice->CreateVertexShader(
+					shader_blob->GetBufferPointer(),
+					shader_blob->GetBufferSize(),
+					nullptr,
+					d3dVtxShader.GetAddressOf()
+				)
+			);
+		}
+
+		// create input layout
+		DX::ThrowIfFailed(
+			d3ddevice->CreateInputLayout(
+				GeometryFactory::MeshData_t::verticies_type::InputElements,
+				GeometryFactory::MeshData_t::verticies_type::InputElementCount,
+				shader_blob->GetBufferPointer(),
+				static_cast<uint32_t>(shader_blob->GetBufferSize()),
+				d3dInputLayout.GetAddressOf()
+			)
+		);
+	}
+
+
+	void GeometryInstance::Bind(ID3D11DeviceContext* d3dcontext)
+	{
+		d3dcontext->IASetIndexBuffer(d3dIndicies.Get(), DXGI_FORMAT_R16_UINT, 0);
+		d3dcontext->IASetInputLayout(d3dInputLayout.Get());
+		d3dcontext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		uint32_t strides[]{ sizeof(MeshData_t::verticies_type) };
+		uint32_t offsets[]{ 0 };
+
+		d3dcontext->IASetVertexBuffers(0, 1, d3dVerticies.GetAddressOf(), strides, offsets);
+
+		d3dcontext->VSSetShader(d3dVtxShader.Get(), nullptr, 0);
+		ID3D11Buffer* buffer[] = { d3dConstants_WRP.GetBuffer() };
+		d3dcontext->VSSetConstantBuffers(0, 1, buffer);
+
+		d3dcontext->PSSetShader(d3dPxlShader.Get(), nullptr, 0);
+	}
+
 }

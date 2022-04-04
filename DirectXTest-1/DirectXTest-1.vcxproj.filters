@@ -27,6 +27,7 @@
     <ClInclude Include="sandbox\resolution_changer\resolution_changer.hpp" />
     <ClInclude Include="sandbox\plane\simple_plane.hpp" />
     <ClInclude Include="sandbox\manyshapes\cylinder.hpp" />
+    <ClInclude Include="sandbox\geometry_factory.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -62,10 +63,8 @@
   <ItemGroup>
     <FxCompile Include="resources\manyshapes\cube3d_ps.hlsl" />
     <FxCompile Include="resources\manyshapes\cube3d_vs.hlsl" />
-    <FxCompile Include="resources\plane\simple_ps.hlsl" />
-    <FxCompile Include="resources\plane\simple_vs.hlsl" />
-    <FxCompile Include="resources\manyshapes\cylinder_ps.hlsl" />
-    <FxCompile Include="resources\manyshapes\cylinder_vs.hlsl" />
+    <FxCompile Include="resources\geometry_default_ps.hlsl" />
+    <FxCompile Include="resources\geometry_default_vs.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">

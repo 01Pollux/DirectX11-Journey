@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utils/sandbox.hpp"
+#include "sandbox/geometry_factory.hpp"
 
 namespace Pleiades::Sandbox
 {
@@ -19,8 +20,6 @@ namespace Pleiades::Sandbox
 
 	private:
 		void BuildPlaneMesh();
-		void InitializeBuffers();
-		void InitializeShaders();
 
 		void UpdateScene();
 
@@ -30,13 +29,6 @@ namespace Pleiades::Sandbox
 		float m_PlaneSize[2]{ 160.f, 160.f };
 		int32_t m_RowCols[2]{ 50, 50 };
 
-		GeometryFactory::MeshData_t		m_PlaneMesh;
-
-		DX::ComPtr<ID3D11Buffer>		m_PlaneIndicies, m_PlaneVerticies;
-		DX::ConstantBuffer<DX::XMMATRIX>m_PlaneConstants_WRP;
-
-		DX::ComPtr<ID3D11InputLayout>	m_PlaneInputLayout;
-		DX::ComPtr<ID3D11VertexShader>	m_PlaneVtxShader;
-		DX::ComPtr<ID3D11PixelShader>	m_PlanePxlShader;
+		std::unique_ptr<GeometryInstance> m_Plane;
 	};
 }
