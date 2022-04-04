@@ -253,25 +253,35 @@ namespace Pleiades
 		mesh.vertices.clear();
 		mesh.vertices.reserve(static_cast<size_t>(slices) * stacks);
 
-		float theta_step = DX::XM_PI / stacks;
-		float phi_step = DX::XM_2PI / slices;
+		float phi_step = DX::XM_PI / stacks;
+		float theta_step = DX::XM_2PI / slices;
 
-		for (uint32_t i = 0; i <= stacks; i++)
+		mesh.vertices.emplace_back(
+			DX::XMFLOAT3(0.f, radius, 0.f),
+			DX::XMFLOAT4(DX::Colors::Magenta)
+		);
+
+		for (uint32_t i = 0; i < stacks; i++)
 		{
-			float sin_theta, cos_theta;
-			DX::XMScalarSinCos(&sin_theta, &cos_theta, i * theta_step);
+			float sin_phi, cos_phi;
+			DX::XMScalarSinCos(&sin_phi, &cos_phi, i * phi_step);
 
 			for (uint32_t j = 0; j <= slices; j++)
 			{
-				float sin_phi, cos_phi;
-				DX::XMScalarSinCos(&sin_phi, &cos_phi, j * phi_step);
-				
+				float sin_theta, cos_theta;
+				DX::XMScalarSinCos(&sin_theta, &cos_theta, j * theta_step);
+
 				mesh.vertices.emplace_back(
 					DX::XMFLOAT3(radius * cos_phi * sin_theta, radius * cos_theta, radius * sin_phi * sin_theta),
 					DX::XMFLOAT4(DX::Colors::Magenta)
 				);
 			}
 		}
+
+		mesh.vertices.emplace_back(
+			DX::XMFLOAT3(0.f, -radius, 0.f),
+			DX::XMFLOAT4(DX::Colors::Magenta)
+		);
 	}
 
 
@@ -287,22 +297,22 @@ namespace Pleiades
 		for (uint16_t i = 0; i < slices; i++)
 		{
 			mesh.indicies.push_back(static_cast<uint16_t>(0));
-			mesh.indicies.push_back(static_cast<uint16_t>(i));
 			mesh.indicies.push_back(static_cast<uint16_t>(i + 1));
+			mesh.indicies.push_back(static_cast<uint16_t>(i));
 		}
 
-		size_t base_i = 1, ring_count = slices;
-		for (uint16_t i = 0; i < stacks - 2; i++)
+		size_t base_i = 1, ring_count = slices + 1;
+		for (uint16_t i = 0; i < stacks; i++)
 		{
 			for (uint16_t j = 0; j < slices; j++)
 			{
-				mesh.indicies.push_back(static_cast<uint16_t>(base_i + (i + 1) * ring_count + j));
-				mesh.indicies.push_back(static_cast<uint16_t>(base_i + (i + 1) * ring_count + j	));
-				mesh.indicies.push_back(static_cast<uint16_t>(base_i + i * ring_count + j + 1));
-
 				mesh.indicies.push_back(static_cast<uint16_t>(base_i + i * ring_count + j));
 				mesh.indicies.push_back(static_cast<uint16_t>(base_i + i * ring_count + j + 1));
 				mesh.indicies.push_back(static_cast<uint16_t>(base_i + (i + 1) * ring_count + j));
+
+				mesh.indicies.push_back(static_cast<uint16_t>(base_i + (i + 1) * ring_count + j));
+				mesh.indicies.push_back(static_cast<uint16_t>(base_i + i * ring_count + j + 1));
+				mesh.indicies.push_back(static_cast<uint16_t>(base_i + (i + 1) * ring_count + j + 1));
 			}
 		}
 

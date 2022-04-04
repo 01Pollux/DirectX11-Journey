@@ -6,11 +6,11 @@
 
 namespace Pleiades::Sandbox
 {
-	RenderableSphere::RenderableSphere(DX::DeviceResources* d3dres, const char* name) : 
+	RenderableSphere::RenderableSphere(DX::DeviceResources* d3dres, const char* name) :
 		IRenderableShape(name, { 0.f, 0.5f, 20.f }, d3dres)
 	{
 		BuildCylinderMesh();
-		
+
 		m_Sphere->CreateBuffers(GetDeviceResources()->GetD3DDevice());
 		m_Sphere->CreateShaders(GetDeviceResources()->GetD3DDevice());
 	}
@@ -38,12 +38,38 @@ namespace Pleiades::Sandbox
 
 	void RenderableSphere::BuildCylinderMesh()
 	{
-		 GeometryFactory::CreateSphere(
+		GeometryFactory::CreateSphere(
 			m_Sphere,
 			m_SlicesStacks[0],
 			m_SlicesStacks[1],
 			m_SphereRadius
 		);
+
+		size_t size = m_Sphere->Mesh.vertices.size(), counted = 0;
+		size_t i = 0;
+		
+		for (auto& vertex : m_Sphere->Mesh.vertices)
+		{
+			if (++counted > size / 2)
+			{
+				counted = 0;
+				++i;
+			}
+
+			switch (i)
+			{
+			case 0:
+			{
+				vertex.color = DX::XMFLOAT4(DX::Colors::Aqua);
+				break;
+			}
+			case 1:
+			{
+				vertex.color = DX::XMFLOAT4(DX::Colors::BlueViolet);
+				break;
+			}
+			}
+		}
 	}
 
 	void RenderableSphere::UpdateScene()
