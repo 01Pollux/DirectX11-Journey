@@ -10,6 +10,7 @@
 // shapes
 #include "cube3d.hpp"
 #include "cylinder.hpp"
+#include "sphere.hpp"
 
 namespace Pleiades::Sandbox
 {
@@ -29,6 +30,10 @@ namespace Pleiades::Sandbox
 
 			m_Shapes.emplace_back(
 				std::make_unique<RenderableCylinder>(d3dres, "Cylinder"),
+				false
+			);
+			m_Shapes.emplace_back(
+				std::make_unique<RenderableSphere>(d3dres, "Sphere"),
 				true
 			);
 		}

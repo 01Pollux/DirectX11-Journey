@@ -44,7 +44,8 @@ namespace Pleiades::Sandbox
 
 	void SimplePlane::BuildPlaneMesh()
 	{
-		m_Plane = GeometryFactory::CreatePlane(
+		GeometryFactory::CreatePlane(
+			m_Plane,
 			m_RowCols[0],
 			m_RowCols[1],
 			m_PlaneSize[0],

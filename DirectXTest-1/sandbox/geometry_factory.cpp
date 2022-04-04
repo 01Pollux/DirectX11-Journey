@@ -243,6 +243,90 @@ namespace Pleiades
 	}
 
 
+	void GeometryFactory::CreateSphereVertices(
+		MeshData_t& mesh,
+		uint32_t slices, 
+		uint32_t stacks, 
+		float radius
+	)
+	{
+		mesh.vertices.clear();
+		mesh.vertices.reserve(static_cast<size_t>(slices) * stacks);
+
+		float theta_step = DX::XM_PI / stacks;
+		float phi_step = DX::XM_2PI / slices;
+
+		for (uint32_t i = 0; i <= stacks; i++)
+		{
+			float sin_theta, cos_theta;
+			DX::XMScalarSinCos(&sin_theta, &cos_theta, i * theta_step);
+
+			for (uint32_t j = 0; j <= slices; j++)
+			{
+				float sin_phi, cos_phi;
+				DX::XMScalarSinCos(&sin_phi, &cos_phi, j * phi_step);
+				
+				mesh.vertices.emplace_back(
+					DX::XMFLOAT3(radius * cos_phi * sin_theta, radius * cos_theta, radius * sin_phi * sin_theta),
+					DX::XMFLOAT4(DX::Colors::Magenta)
+				);
+			}
+		}
+	}
+
+
+	void GeometryFactory::CreateSphereIndicies(
+		MeshData_t& mesh,
+		uint32_t slices, 
+		uint32_t stacks
+	)
+	{
+		mesh.indicies.clear();
+		mesh.indicies.reserve(static_cast<size_t>(slices) * stacks * 3);
+
+		for (uint16_t i = 0; i < slices; i++)
+		{
+			mesh.indicies.push_back(static_cast<uint16_t>(0));
+			mesh.indicies.push_back(static_cast<uint16_t>(i));
+			mesh.indicies.push_back(static_cast<uint16_t>(i + 1));
+		}
+
+		size_t base_i = 1, ring_count = slices;
+		for (uint16_t i = 0; i < stacks - 2; i++)
+		{
+			for (uint16_t j = 0; j < slices; j++)
+			{
+				mesh.indicies.push_back(static_cast<uint16_t>(base_i + (i + 1) * ring_count + j));
+				mesh.indicies.push_back(static_cast<uint16_t>(base_i + (i + 1) * ring_count + j	));
+				mesh.indicies.push_back(static_cast<uint16_t>(base_i + i * ring_count + j + 1));
+
+				mesh.indicies.push_back(static_cast<uint16_t>(base_i + i * ring_count + j));
+				mesh.indicies.push_back(static_cast<uint16_t>(base_i + i * ring_count + j + 1));
+				mesh.indicies.push_back(static_cast<uint16_t>(base_i + (i + 1) * ring_count + j));
+			}
+		}
+
+		base_i = mesh.vertices.size() - 1 - ring_count;
+
+		for (uint16_t i = 0; i < slices; i++)
+		{
+			mesh.indicies.push_back(static_cast<uint16_t>(mesh.vertices.size() - 1));
+			mesh.indicies.push_back(static_cast<uint16_t>(base_i + i));
+			mesh.indicies.push_back(static_cast<uint16_t>(base_i + i + 1));
+		}
+	}
+
+
+	GeometryInstance::GeometryInstance(GeometryInstance* geometry)
+	{
+		if (geometry)
+		{
+			this->d3dVtxShader = std::move(geometry->d3dVtxShader);
+			this->d3dPxlShader = std::move(geometry->d3dPxlShader);
+			this->d3dInputLayout = std::move(geometry->d3dInputLayout);
+		}
+	}
+
 	void GeometryInstance::CreateBuffers(ID3D11Device* d3ddevice)
 	{
 		// Create vertex buffer
@@ -276,7 +360,7 @@ namespace Pleiades
 		// Create pixel shader
 		{
 			DX::ThrowIfFailed(
-				D3DReadFileToBlob(L"resources/geometry_default_ps.cso", shader_blob.GetAddressOf())
+				D3DReadFileToBlob(L"resources/geometry_default_ps.cso", shader_blob.ReleaseAndGetAddressOf())
 			);
 
 			DX::ThrowIfFailed(
@@ -284,7 +368,7 @@ namespace Pleiades
 					shader_blob->GetBufferPointer(),
 					shader_blob->GetBufferSize(),
 					nullptr,
-					d3dPxlShader.GetAddressOf()
+					d3dPxlShader.ReleaseAndGetAddressOf()
 				)
 			);
 		}
@@ -300,7 +384,7 @@ namespace Pleiades
 					shader_blob->GetBufferPointer(),
 					shader_blob->GetBufferSize(),
 					nullptr,
-					d3dVtxShader.GetAddressOf()
+					d3dVtxShader.ReleaseAndGetAddressOf()
 				)
 			);
 		}
@@ -308,11 +392,11 @@ namespace Pleiades
 		// create input layout
 		DX::ThrowIfFailed(
 			d3ddevice->CreateInputLayout(
-				GeometryFactory::MeshData_t::verticies_type::InputElements,
-				GeometryFactory::MeshData_t::verticies_type::InputElementCount,
+				MeshData_t::verticies_type::InputElements,
+				MeshData_t::verticies_type::InputElementCount,
 				shader_blob->GetBufferPointer(),
 				static_cast<uint32_t>(shader_blob->GetBufferSize()),
-				d3dInputLayout.GetAddressOf()
+				d3dInputLayout.ReleaseAndGetAddressOf()
 			)
 		);
 	}

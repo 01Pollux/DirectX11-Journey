@@ -28,6 +28,7 @@
     <ClInclude Include="sandbox\plane\simple_plane.hpp" />
     <ClInclude Include="sandbox\manyshapes\cylinder.hpp" />
     <ClInclude Include="sandbox\geometry_factory.hpp" />
+    <ClInclude Include="sandbox\manyshapes\sphere.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -46,6 +47,7 @@
     <ClCompile Include="sandbox\plane\simple_plane.cpp" />
     <ClCompile Include="sandbox\manyshapes\cylinder.cpp" />
     <ClCompile Include="sandbox\geometry_factory.cpp" />
+    <ClCompile Include="sandbox\manyshapes\sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

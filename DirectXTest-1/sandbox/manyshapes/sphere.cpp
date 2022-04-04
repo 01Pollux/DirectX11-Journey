@@ -1,59 +1,56 @@
 
 #include "utils/pch.hpp"
-#include "cylinder.hpp"
+#include "sphere.hpp"
 
 #include "imgui/imgui.hpp"
 
 namespace Pleiades::Sandbox
 {
-	RenderableCylinder::RenderableCylinder(DX::DeviceResources* d3dres, const char* name) : 
+	RenderableSphere::RenderableSphere(DX::DeviceResources* d3dres, const char* name) : 
 		IRenderableShape(name, { 0.f, 0.5f, 20.f }, d3dres)
 	{
 		BuildCylinderMesh();
 		
-		m_Cylinder->CreateBuffers(GetDeviceResources()->GetD3DDevice());
-		m_Cylinder->CreateShaders(GetDeviceResources()->GetD3DDevice());
+		m_Sphere->CreateBuffers(GetDeviceResources()->GetD3DDevice());
+		m_Sphere->CreateShaders(GetDeviceResources()->GetD3DDevice());
 	}
 
-	void RenderableCylinder::Render(uint64_t)
+	void RenderableSphere::Render(uint64_t)
 	{
-		m_Cylinder->Bind(GetDeviceResources()->GetD3DDeviceContext());
+		m_Sphere->Bind(GetDeviceResources()->GetD3DDeviceContext());
 		UpdateScene();
-		m_Cylinder->Draw(GetDeviceResources()->GetD3DDeviceContext());
+		m_Sphere->Draw(GetDeviceResources()->GetD3DDeviceContext());
 	}
 
-	void RenderableCylinder::ImGuiRender()
+	void RenderableSphere::ImGuiRender()
 	{
 		if (ImGui::Button("Update"))
 		{
 			BuildCylinderMesh();
-			m_Cylinder->CreateBuffers(GetDeviceResources()->GetD3DDevice());
+			m_Sphere->CreateBuffers(GetDeviceResources()->GetD3DDevice());
 		}
 
 		ImGui::DragFloat3("Draw offset", m_DrawOffset.data());
 		ImGui::DragFloat3("Rotation offset", m_RotationOffset);
-		ImGui::DragFloat2("Bottom / Top radius", m_CylinderRadius);
+		ImGui::DragFloat("radius", &m_SphereRadius);
 		ImGui::DragInt2("Slices/Stacks", m_SlicesStacks);
-		ImGui::DragFloat("Height", &m_CylinderHeight);
 	}
 
-	void RenderableCylinder::BuildCylinderMesh()
+	void RenderableSphere::BuildCylinderMesh()
 	{
-		GeometryFactory::CreateCylinder(
-			m_Cylinder,
+		 GeometryFactory::CreateSphere(
+			m_Sphere,
 			m_SlicesStacks[0],
 			m_SlicesStacks[1],
-			m_CylinderRadius[0],
-			m_CylinderRadius[1],
-			m_CylinderHeight
+			m_SphereRadius
 		);
 	}
 
-	void RenderableCylinder::UpdateScene()
+	void RenderableSphere::UpdateScene()
 	{
 		auto d3dcontext = GetDeviceResources()->GetD3DDeviceContext();
 
-		m_Cylinder->d3dConstants_WRP.SetData(
+		m_Sphere->d3dConstants_WRP.SetData(
 			d3dcontext,
 			{
 				DirectX::XMMatrixTranspose(

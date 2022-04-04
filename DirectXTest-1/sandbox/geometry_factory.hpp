@@ -26,6 +26,8 @@ namespace Pleiades
 		DX::ComPtr<ID3D11VertexShader>	d3dVtxShader;
 		DX::ComPtr<ID3D11PixelShader>	d3dPxlShader;
 
+		GeometryInstance(GeometryInstance*);
+
 		void CreateBuffers(ID3D11Device* d3ddevice);
 		
 		void CreateShaders(ID3D11Device* d3ddevice);
@@ -43,22 +45,22 @@ namespace Pleiades
 	public:
 		using MeshData_t = GeometryInstance::MeshData_t;
 
-		static std::unique_ptr<GeometryInstance> CreatePlane(
+		static void CreatePlane(
+			std::unique_ptr<GeometryInstance>& geometry,
 			uint32_t rows,
 			uint32_t columns,
 			float width,
 			float height
 		)
 		{
-			std::unique_ptr<GeometryInstance> geometry = std::make_unique<GeometryInstance>();
+			geometry = std::make_unique<GeometryInstance>(geometry.get());
 
 			CreatePlaneVertices(geometry->Mesh, rows, columns, width, height);
 			CreatePlaneIndicies(geometry->Mesh, rows, columns);
-
-			return geometry;
 		}
 
-		static std::unique_ptr<GeometryInstance> CreateCylinder(
+		static void CreateCylinder(
+			std::unique_ptr<GeometryInstance>& geometry,
 			uint32_t slices,
 			uint32_t stacks,
 			float bottomn_radius,
@@ -66,12 +68,25 @@ namespace Pleiades
 			float height
 		)
 		{
-			std::unique_ptr<GeometryInstance> geometry = std::make_unique<GeometryInstance>();
+			geometry = std::make_unique<GeometryInstance>(geometry.get());
 
 			CreateCylinderVerticesAndIndicies(geometry->Mesh, slices, stacks, bottomn_radius, top_radius, height);
-
-			return geometry;
 		}
+
+
+		static void CreateSphere(
+			std::unique_ptr<GeometryInstance>& geometry,
+			uint32_t slices,
+			uint32_t stacks,
+			float height
+		)
+		{
+			geometry = std::make_unique<GeometryInstance>(geometry.get());
+
+			CreateSphereVertices(geometry->Mesh, slices, stacks, height);
+			CreateSphereIndicies(geometry->Mesh, slices, stacks);
+		}
+
 
 		static float GetHeight(float x, float z) noexcept
 		{
@@ -123,6 +138,18 @@ namespace Pleiades
 			uint32_t slices,
 			uint32_t stacks
 		);
-	};
 
+		static void CreateSphereVertices(
+			MeshData_t& mesh,
+			uint32_t slices,
+			uint32_t stacks,
+			float radius
+		);
+
+		static void CreateSphereIndicies(
+			MeshData_t& mesh,
+			uint32_t slices,
+			uint32_t stacks
+		);
+	};
 }
