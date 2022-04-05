@@ -29,6 +29,7 @@
     <ClInclude Include="sandbox\manyshapes\cylinder.hpp" />
     <ClInclude Include="sandbox\geometry_factory.hpp" />
     <ClInclude Include="sandbox\manyshapes\sphere.hpp" />
+    <ClInclude Include="sandbox\manyshapes\geosphere.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -48,6 +49,7 @@
     <ClCompile Include="sandbox\manyshapes\cylinder.cpp" />
     <ClCompile Include="sandbox\geometry_factory.cpp" />
     <ClCompile Include="sandbox\manyshapes\sphere.cpp" />
+    <ClCompile Include="sandbox\manyshapes\geosphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

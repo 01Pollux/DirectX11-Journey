@@ -11,6 +11,7 @@
 #include "cube3d.hpp"
 #include "cylinder.hpp"
 #include "sphere.hpp"
+#include "geosphere.hpp"
 
 namespace Pleiades::Sandbox
 {
@@ -32,8 +33,14 @@ namespace Pleiades::Sandbox
 				std::make_unique<RenderableCylinder>(d3dres, "Cylinder"),
 				false
 			);
+
 			m_Shapes.emplace_back(
 				std::make_unique<RenderableSphere>(d3dres, "Sphere"),
+				false
+			);
+
+			m_Shapes.emplace_back(
+				std::make_unique<RenderableGeoSphere>(d3dres, "Geo-Sphere"),
 				true
 			);
 		}

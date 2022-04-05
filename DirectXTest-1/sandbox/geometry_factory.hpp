@@ -11,15 +11,15 @@ namespace Pleiades
 		struct MeshData_t
 		{
 			using verticies_type = DX::VertexPositionColor;
-			using indicies_type = uint16_t;
+			using indices_type = uint16_t;
 
 			std::vector<verticies_type> vertices;
-			std::vector<indicies_type> indicies;
+			std::vector<indices_type> indices;
 		};
 
 		MeshData_t Mesh;
 
-		DX::ComPtr<ID3D11Buffer>		 d3dIndicies, d3dVerticies;
+		DX::ComPtr<ID3D11Buffer>		 d3dIndices, d3dVerticies;
 		DX::ConstantBuffer<DX::XMMATRIX> d3dConstants_WRP;
 
 		DX::ComPtr<ID3D11InputLayout>	d3dInputLayout;
@@ -36,7 +36,7 @@ namespace Pleiades
 		
 		void Draw(ID3D11DeviceContext* d3dcontext)
 		{
-			d3dcontext->DrawIndexed(static_cast<uint32_t>(Mesh.indicies.size()), 0, 0);
+			d3dcontext->DrawIndexed(static_cast<uint32_t>(Mesh.indices.size()), 0, 0);
 		}
 	};
 
@@ -56,7 +56,7 @@ namespace Pleiades
 			geometry = std::make_unique<GeometryInstance>(geometry.get());
 
 			CreatePlaneVertices(geometry->Mesh, rows, columns, width, height);
-			CreatePlaneIndicies(geometry->Mesh, rows, columns);
+			CreatePlaneIndices(geometry->Mesh, rows, columns);
 		}
 
 		static void CreateCylinder(
@@ -70,7 +70,7 @@ namespace Pleiades
 		{
 			geometry = std::make_unique<GeometryInstance>(geometry.get());
 
-			CreateCylinderVerticesAndIndicies(geometry->Mesh, slices, stacks, bottomn_radius, top_radius, height);
+			CreateCylinderVerticesAndIndices(geometry->Mesh, slices, stacks, bottomn_radius, top_radius, height);
 		}
 
 
@@ -78,13 +78,25 @@ namespace Pleiades
 			std::unique_ptr<GeometryInstance>& geometry,
 			uint32_t slices,
 			uint32_t stacks,
-			float height
+			float radius
 		)
 		{
 			geometry = std::make_unique<GeometryInstance>(geometry.get());
 
-			CreateSphereVertices(geometry->Mesh, slices, stacks, height);
-			CreateSphereIndicies(geometry->Mesh, slices, stacks);
+			CreateSphereVertices(geometry->Mesh, slices, stacks, radius);
+			CreateSphereIndices(geometry->Mesh, slices, stacks);
+		}
+
+		
+		static void CreateGeoSphere(
+			std::unique_ptr<GeometryInstance>& geometry,
+			uint32_t num_divisions,
+			float radius
+		)
+		{
+			geometry = std::make_unique<GeometryInstance>(geometry.get());
+
+			CreateSphereVerticesAndIndices(geometry->Mesh, num_divisions, radius);
 		}
 
 
@@ -102,14 +114,14 @@ namespace Pleiades
 			float height
 		);
 
-		static void CreatePlaneIndicies(
+		static void CreatePlaneIndices(
 			MeshData_t& mesh,
 			uint32_t rows,
 			uint32_t columns
 		);
 
 
-		static void CreateCylinderVerticesAndIndicies(
+		static void CreateCylinderVerticesAndIndices(
 			MeshData_t& mesh,
 			uint32_t slices,
 			uint32_t stacks,
@@ -133,11 +145,12 @@ namespace Pleiades
 			float height
 		);
 
-		static void CreateCylinderIndicies(
+		static void CreateCylinderIndices(
 			MeshData_t& mesh,
 			uint32_t slices,
 			uint32_t stacks
 		);
+
 
 		static void CreateSphereVertices(
 			MeshData_t& mesh,
@@ -146,10 +159,19 @@ namespace Pleiades
 			float radius
 		);
 
-		static void CreateSphereIndicies(
+		static void CreateSphereIndices(
 			MeshData_t& mesh,
 			uint32_t slices,
 			uint32_t stacks
 		);
+
+
+		static void CreateSphereVerticesAndIndices(
+			MeshData_t& mesh,
+			uint32_t num_divisions,
+			float radius
+		);
+
+		static void SubdivideMesh(MeshData_t& mesh);
 	};
 }

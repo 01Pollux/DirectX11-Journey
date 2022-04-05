@@ -181,6 +181,7 @@
     <ClInclude Include="sandbox\manyshapes\shapes.hpp" />
     <ClInclude Include="sandbox\manyshapes\sphere.hpp" />
     <ClInclude Include="sandbox\plane\simple_plane.hpp" />
+    <ClInclude Include="sandbox\manyshapes\geosphere.hpp" />
     <ClInclude Include="sandbox\resolution_changer\resolution_changer.hpp" />
     <ClInclude Include="utils\sandbox.hpp" />
     <ClInclude Include="window\Game.hpp" />
@@ -199,6 +200,7 @@
     <ClCompile Include="sandbox\manyshapes\shapes.cpp" />
     <ClCompile Include="sandbox\manyshapes\sphere.cpp" />
     <ClCompile Include="sandbox\plane\simple_plane.cpp" />
+    <ClCompile Include="sandbox\manyshapes\geosphere.cpp" />
     <ClCompile Include="sandbox\resolution_changer\resolution_changer.cpp" />
     <ClCompile Include="utils\sandbox.cpp" />
     <ClCompile Include="window\Game.cpp" />
