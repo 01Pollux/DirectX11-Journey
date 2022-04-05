@@ -12,6 +12,7 @@ namespace Pleiades
 	void SandboxHolder::Init(DX::DeviceResources* res) noexcept
 	{
 		m_DeviceRes = res;
+		m_States = std::make_unique<DX::CommonStates>(res->GetD3DDevice());
 
 		AddSample<Sandbox::ManyShapes>();
 		AddSample<Sandbox::ResolutionCChanger_ImGui>();
@@ -26,6 +27,24 @@ namespace Pleiades
 		{
 			ImGui::End();
 			return;
+		}
+
+		static bool wire_frame = false;
+		if (ImGui::Button(wire_frame ? "Fill mode" : "Wire frame"))
+		{
+			wire_frame = !wire_frame;
+			if (wire_frame)
+			{
+				m_DeviceRes->GetD3DDeviceContext()->RSSetState(
+					m_States->Wireframe()
+				);
+			}
+			else
+			{
+				m_DeviceRes->GetD3DDeviceContext()->RSSetState(
+					m_States->CullClockwise()
+				);
+			}
 		}
 
 		if (m_CurrentSanbox)
@@ -47,9 +66,10 @@ namespace Pleiades
 		}
 		ImGui::End();
 	}
-
+	
 	void SandboxHolder::OnFrame(uint64_t ticks)
 	{
+		
 		if (m_CurrentSanbox)
 			m_CurrentSanbox->OnFrame(ticks);
 	}

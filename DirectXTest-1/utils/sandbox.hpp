@@ -7,6 +7,8 @@
 #include "directx/DeviceResources.hpp"
 #include "utils/StepTimer.hpp"
 
+#include <DirectXTK/CommonStates.h>
+
 namespace Pleiades
 {
 	class ISandbox
@@ -71,5 +73,7 @@ namespace Pleiades
 
 		sanbox_container_t m_SandboxFactory;
 		std::unique_ptr<ISandbox> m_CurrentSanbox{};
+		
+		std::unique_ptr<DX::CommonStates> m_States;
 	};
 }
