@@ -30,7 +30,6 @@ namespace Pleiades::Sandbox
 			m_Sphere->CreateBuffers(GetDeviceResources()->GetD3DDevice());
 		}
 
-		ImGui::DragFloat3("Draw offset", m_DrawOffset.data());
 		ImGui::DragFloat3("Rotation offset", m_RotationOffset);
 		ImGui::DragFloat("radius", &m_SphereRadius);
 		ImGui::DragInt2("Slices/Stacks", m_SlicesStacks);

@@ -30,7 +30,6 @@ namespace Pleiades::Sandbox
 			m_Cylinder->CreateBuffers(GetDeviceResources()->GetD3DDevice());
 		}
 
-		ImGui::DragFloat3("Draw offset", m_DrawOffset.data());
 		ImGui::DragFloat3("Rotation offset", m_RotationOffset);
 		ImGui::DragFloat2("Bottom / Top radius", m_CylinderRadius);
 		ImGui::DragInt2("Slices/Stacks", m_SlicesStacks);
