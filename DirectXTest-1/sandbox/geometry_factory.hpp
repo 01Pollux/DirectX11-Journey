@@ -17,7 +17,14 @@ namespace Pleiades
 			std::vector<indices_type> indices;
 		};
 
+		struct MeshOffset_t
+		{
+			size_t Vtx;
+			size_t Idx;
+		};
+
 		MeshData_t Mesh;
+		std::vector<MeshOffset_t> MeshSizes;
 
 		DX::ComPtr<ID3D11Buffer>		 d3dIndices, d3dVerticies;
 		DX::ConstantBuffer<DX::XMMATRIX> d3dConstants_WRP;
@@ -34,9 +41,61 @@ namespace Pleiades
 
 		void Bind(ID3D11DeviceContext* d3dcontext);
 		
+		void PushMesh(MeshData_t&& mesh)
+		{
+			MeshSizes.emplace_back(
+				mesh.vertices.size(),
+				mesh.indices.size()
+			);
+
+			Mesh.vertices.insert(
+				Mesh.vertices.end(),
+				std::make_move_iterator(mesh.vertices.begin()),
+				std::make_move_iterator(mesh.vertices.end())
+			);
+
+			Mesh.indices.insert(
+				Mesh.indices.end(),
+				std::make_move_iterator(mesh.indices.begin()),
+				std::make_move_iterator(mesh.indices.end())
+			);
+		}
+		
+		void PushMesh(const MeshData_t& mesh)
+		{
+			MeshSizes.emplace_back(
+				mesh.vertices.size(),
+				mesh.indices.size()
+			);
+
+			Mesh.vertices.insert(
+				Mesh.vertices.end(),
+				mesh.vertices.begin(),
+				mesh.vertices.end()
+			);
+
+
+			Mesh.indices.insert(
+				Mesh.indices.end(),
+				mesh.indices.begin(),
+				mesh.indices.end()
+			);
+		}
+
 		void Draw(ID3D11DeviceContext* d3dcontext)
 		{
-			d3dcontext->DrawIndexed(static_cast<uint32_t>(Mesh.indices.size()), 0, 0);
+			size_t vtx_offset{}, idx_offset{};
+			for (const auto& [vtx_size, idx_size] : MeshSizes)
+			{
+				d3dcontext->DrawIndexed(
+					static_cast<uint32_t>(idx_size),
+					static_cast<uint32_t>(idx_offset),
+					static_cast<uint32_t>(vtx_offset)
+				);
+
+				idx_offset += idx_size;
+				vtx_offset += vtx_size;
+			}
 		}
 	};
 
@@ -44,6 +103,19 @@ namespace Pleiades
 	{
 	public:
 		using MeshData_t = GeometryInstance::MeshData_t;
+
+		static MeshData_t CreatePlane(
+			uint32_t rows,
+			uint32_t columns,
+			float width,
+			float height
+		)
+		{
+			MeshData_t mesh;
+			CreatePlaneVertices(mesh, rows, columns, width, height);
+			CreatePlaneIndices(mesh, rows, columns);
+			return mesh;
+		}
 
 		static void CreatePlane(
 			std::unique_ptr<GeometryInstance>& geometry,
@@ -54,9 +126,21 @@ namespace Pleiades
 		)
 		{
 			geometry = std::make_unique<GeometryInstance>(geometry.get());
+			geometry->PushMesh(CreatePlane(rows, columns, width, height));
+		}
 
-			CreatePlaneVertices(geometry->Mesh, rows, columns, width, height);
-			CreatePlaneIndices(geometry->Mesh, rows, columns);
+
+		static MeshData_t CreateCylinder(
+			uint32_t slices,
+			uint32_t stacks,
+			float bottomn_radius,
+			float top_radius,
+			float height
+		)
+		{
+			MeshData_t mesh;
+			CreateCylinderVerticesAndIndices(mesh, slices, stacks, bottomn_radius, top_radius, height);
+			return mesh;
 		}
 
 		static void CreateCylinder(
@@ -69,10 +153,21 @@ namespace Pleiades
 		)
 		{
 			geometry = std::make_unique<GeometryInstance>(geometry.get());
-
-			CreateCylinderVerticesAndIndices(geometry->Mesh, slices, stacks, bottomn_radius, top_radius, height);
+			geometry->PushMesh(CreateCylinder(slices, stacks, bottomn_radius, top_radius, height));
 		}
 
+
+		static MeshData_t CreateSphere(
+			uint32_t slices,
+			uint32_t stacks,
+			float radius
+		)
+		{
+			MeshData_t mesh;
+			CreateSphereVertices(mesh, slices, stacks, radius);
+			CreateSphereIndices(mesh, slices, stacks);
+			return mesh;
+		}
 
 		static void CreateSphere(
 			std::unique_ptr<GeometryInstance>& geometry,
@@ -82,12 +177,20 @@ namespace Pleiades
 		)
 		{
 			geometry = std::make_unique<GeometryInstance>(geometry.get());
-
-			CreateSphereVertices(geometry->Mesh, slices, stacks, radius);
-			CreateSphereIndices(geometry->Mesh, slices, stacks);
+			geometry->PushMesh(CreateSphere(slices, stacks, radius));
 		}
 
-		
+
+		static MeshData_t CreateGeoSphere(
+			uint32_t num_divisions,
+			float radius
+		)
+		{
+			MeshData_t mesh;
+			CreateSphereVerticesAndIndices(mesh, num_divisions, radius);
+			return mesh;
+		}
+
 		static void CreateGeoSphere(
 			std::unique_ptr<GeometryInstance>& geometry,
 			uint32_t num_divisions,
@@ -95,8 +198,7 @@ namespace Pleiades
 		)
 		{
 			geometry = std::make_unique<GeometryInstance>(geometry.get());
-
-			CreateSphereVerticesAndIndices(geometry->Mesh, num_divisions, radius);
+			geometry->PushMesh(CreateGeoSphere(num_divisions, radius));
 		}
 
 

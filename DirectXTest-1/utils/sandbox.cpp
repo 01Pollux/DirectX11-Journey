@@ -6,6 +6,7 @@
 #include "sandbox/manyshapes/shapes.hpp"
 #include "sandbox/resolution_changer/resolution_changer.hpp"
 #include "sandbox/plane/simple_plane.hpp"
+#include "sandbox/plane/plane_and_sphere.hpp"
 
 namespace Pleiades
 {
@@ -17,8 +18,9 @@ namespace Pleiades
 		AddSample<Sandbox::ManyShapes>();
 		AddSample<Sandbox::ResolutionCChanger_ImGui>();
 		AddSample<Sandbox::SimplePlane>();
+		AddSample<Sandbox::PlaneAndSphere>();
 
-		Set(Sandbox::ManyShapes::GetName());
+		Set(Sandbox::PlaneAndSphere::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()
