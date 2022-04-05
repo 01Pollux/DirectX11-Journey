@@ -14,9 +14,6 @@ namespace Pleiades
 		float height
 	)
 	{
-		//size_t vertex_count = (columns - 1) * (rows - 1);
-		//size_t triangle_count = vertex_count * 2;
-
 		float x_step = 1.f / columns;
 		float z_step = 1.f / rows;
 
@@ -292,7 +289,7 @@ namespace Pleiades
 	)
 	{
 		mesh.indices.clear();
-		mesh.indices.reserve(static_cast<size_t>(slices) * stacks * 3);
+		mesh.indices.reserve((static_cast<size_t>(slices) * stacks + slices) * 6);
 
 		for (uint16_t i = 0; i < slices; i++)
 		{
