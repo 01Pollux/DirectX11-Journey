@@ -175,6 +175,7 @@
     <ClInclude Include="imgui\imgui.hpp" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
     <ClInclude Include="imgui\imgui_impl_win32.h" />
+    <ClInclude Include="sandbox\from_file\skull.hpp" />
     <ClInclude Include="sandbox\geometry_factory.hpp" />
     <ClInclude Include="sandbox\manyshapes\cube3d.hpp" />
     <ClInclude Include="sandbox\manyshapes\cylinder.hpp" />
@@ -195,6 +196,7 @@
     <ClCompile Include="imgui\imgui_impl_win32.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="sandbox\from_file\skull.cpp" />
     <ClCompile Include="sandbox\geometry_factory.cpp" />
     <ClCompile Include="sandbox\manyshapes\cube3d.cpp" />
     <ClCompile Include="sandbox\manyshapes\cylinder.cpp" />
@@ -279,6 +281,11 @@
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx" />
     <None Include="sandbox\test_house\Shader1.dgsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="E:\Dev\Introduction-to-3D-Game-Programming-With-DirectX11-master\Chapter 6 Drawing in Direct3D\Skull\Models\skull.txt" />
+    <Text Include="sandbox\from_file\car.txt" />
+    <Text Include="sandbox\from_file\skull.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

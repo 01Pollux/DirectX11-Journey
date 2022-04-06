@@ -34,6 +34,7 @@ namespace Pleiades
 		DX::ComPtr<ID3D11PixelShader>	d3dPxlShader;
 
 		GeometryInstance(GeometryInstance*);
+		GeometryInstance() = default;
 
 		void CreateBuffers(ID3D11Device* d3ddevice);
 		

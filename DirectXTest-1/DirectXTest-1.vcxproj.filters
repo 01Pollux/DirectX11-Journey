@@ -31,6 +31,7 @@
     <ClInclude Include="sandbox\manyshapes\sphere.hpp" />
     <ClInclude Include="sandbox\manyshapes\geosphere.hpp" />
     <ClInclude Include="sandbox\plane\plane_and_sphere.hpp" />
+    <ClInclude Include="sandbox\from_file\skull.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -52,6 +53,7 @@
     <ClCompile Include="sandbox\manyshapes\sphere.cpp" />
     <ClCompile Include="sandbox\manyshapes\geosphere.cpp" />
     <ClCompile Include="sandbox\plane\plane_and_sphere.cpp" />
+    <ClCompile Include="sandbox\from_file\skull.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -77,5 +79,10 @@
       <Filter>Assets</Filter>
     </None>
     <None Include="sandbox\test_house\Shader1.dgsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="E:\Dev\Introduction-to-3D-Game-Programming-With-DirectX11-master\Chapter 6 Drawing in Direct3D\Skull\Models\skull.txt" />
+    <Text Include="sandbox\from_file\car.txt" />
+    <Text Include="sandbox\from_file\skull.txt" />
   </ItemGroup>
 </Project>

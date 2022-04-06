@@ -7,6 +7,7 @@
 #include "sandbox/resolution_changer/resolution_changer.hpp"
 #include "sandbox/plane/simple_plane.hpp"
 #include "sandbox/plane/plane_and_sphere.hpp"
+#include "sandbox/from_file/skull.hpp"
 
 namespace Pleiades
 {
@@ -19,8 +20,9 @@ namespace Pleiades
 		AddSample<Sandbox::ResolutionCChanger_ImGui>();
 		AddSample<Sandbox::SimplePlane>();
 		AddSample<Sandbox::PlaneAndSphere>();
+		AddSample<Sandbox::SkullFromFile>();
 
-		Set(Sandbox::PlaneAndSphere::GetName());
+		Set(Sandbox::SkullFromFile::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()
