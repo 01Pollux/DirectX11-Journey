@@ -5,8 +5,6 @@
 #include "imgui/imgui.hpp"
 #include "window/Game.hpp"
 
-#include <d3dcompiler.h>
-
 namespace Pleiades::Sandbox
 {
 	SimplePlane::SimplePlane(DX::DeviceResources* d3dres) : 

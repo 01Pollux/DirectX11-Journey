@@ -5,7 +5,6 @@
 #include "shapes.hpp"
 
 #include "imgui/imgui.hpp"
-#include <d3dcompiler.h>
 
 // shapes
 #include "cube3d.hpp"
