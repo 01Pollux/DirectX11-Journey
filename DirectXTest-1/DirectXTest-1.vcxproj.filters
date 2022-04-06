@@ -32,6 +32,7 @@
     <ClInclude Include="sandbox\manyshapes\geosphere.hpp" />
     <ClInclude Include="sandbox\plane\plane_and_sphere.hpp" />
     <ClInclude Include="sandbox\from_file\skull.hpp" />
+    <ClInclude Include="sandbox\from_file\car.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -54,6 +55,7 @@
     <ClCompile Include="sandbox\manyshapes\geosphere.cpp" />
     <ClCompile Include="sandbox\plane\plane_and_sphere.cpp" />
     <ClCompile Include="sandbox\from_file\skull.cpp" />
+    <ClCompile Include="sandbox\from_file\car.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

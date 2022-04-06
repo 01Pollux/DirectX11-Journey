@@ -8,6 +8,7 @@
 #include "sandbox/plane/simple_plane.hpp"
 #include "sandbox/plane/plane_and_sphere.hpp"
 #include "sandbox/from_file/skull.hpp"
+#include "sandbox/from_file/car.hpp"
 
 namespace Pleiades
 {
@@ -21,8 +22,9 @@ namespace Pleiades
 		AddSample<Sandbox::SimplePlane>();
 		AddSample<Sandbox::PlaneAndSphere>();
 		AddSample<Sandbox::SkullFromFile>();
+		AddSample<Sandbox::CarFromFile>();
 
-		Set(Sandbox::SkullFromFile::GetName());
+		Set(Sandbox::CarFromFile::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()
