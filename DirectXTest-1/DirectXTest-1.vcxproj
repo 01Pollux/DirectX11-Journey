@@ -175,6 +175,7 @@
     <ClInclude Include="imgui\imgui.hpp" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
     <ClInclude Include="imgui\imgui_impl_win32.h" />
+    <ClInclude Include="sandbox\lights\light.hpp" />
     <ClInclude Include="sandbox\from_file\car.hpp" />
     <ClInclude Include="sandbox\from_file\skull.hpp" />
     <ClInclude Include="sandbox\geometry_factory.hpp" />
@@ -198,6 +199,7 @@
     <ClCompile Include="imgui\imgui_impl_win32.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="sandbox\lights\light.cpp" />
     <ClCompile Include="sandbox\from_file\car.cpp" />
     <ClCompile Include="sandbox\from_file\skull.cpp" />
     <ClCompile Include="sandbox\geometry_factory.cpp" />

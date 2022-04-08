@@ -36,9 +36,9 @@ namespace Pleiades
 		GeometryInstance(GeometryInstance*);
 		GeometryInstance() = default;
 
-		void CreateBuffers(ID3D11Device* d3ddevice);
+		void CreateBuffers(ID3D11Device* d3ddevice, bool custom_constants = false);
 		
-		void CreateShaders(ID3D11Device* d3ddevice);
+		void CreateShaders(ID3D11Device* d3ddevice, const wchar_t* vs_shader = L"resources/geometry_default_vs.cso", const wchar_t* ps_shader = L"resources/geometry_default_ps.cso");
 
 		void Bind(ID3D11DeviceContext* d3dcontext);
 		

@@ -527,7 +527,7 @@ namespace Pleiades
 		}
 	}
 
-	void GeometryInstance::CreateBuffers(ID3D11Device* d3ddevice)
+	void GeometryInstance::CreateBuffers(ID3D11Device* d3ddevice, bool custom_constants)
 	{
 		// Create vertex buffer
 		DX::ThrowIfFailed(
@@ -550,17 +550,18 @@ namespace Pleiades
 		);
 
 		// Create constant buffer for position
-		d3dConstants_WRP.Create(d3ddevice);
+		if (!custom_constants)
+			d3dConstants_WRP.Create(d3ddevice);
 	}
 
 
-	void GeometryInstance::CreateShaders(ID3D11Device* d3ddevice)
+	void GeometryInstance::CreateShaders(ID3D11Device* d3ddevice, const wchar_t* vs_shader, const wchar_t* ps_shader)
 	{
 		DX::ComPtr<ID3DBlob> shader_blob;
 		// Create pixel shader
 		{
 			DX::ThrowIfFailed(
-				D3DReadFileToBlob(L"resources/geometry_default_ps.cso", shader_blob.ReleaseAndGetAddressOf())
+				D3DReadFileToBlob(ps_shader, shader_blob.ReleaseAndGetAddressOf())
 			);
 
 			DX::ThrowIfFailed(
@@ -576,7 +577,7 @@ namespace Pleiades
 		// Create vertex shader
 		{
 			DX::ThrowIfFailed(
-				D3DReadFileToBlob(L"resources/geometry_default_vs.cso", shader_blob.ReleaseAndGetAddressOf())
+				D3DReadFileToBlob(vs_shader, shader_blob.ReleaseAndGetAddressOf())
 			);
 
 			DX::ThrowIfFailed(
@@ -614,8 +615,12 @@ namespace Pleiades
 		d3dcontext->IASetVertexBuffers(0, 1, d3dVerticies.GetAddressOf(), strides, offsets);
 
 		d3dcontext->VSSetShader(d3dVtxShader.Get(), nullptr, 0);
-		ID3D11Buffer* buffer[] = { d3dConstants_WRP.GetBuffer() };
-		d3dcontext->VSSetConstantBuffers(0, 1, buffer);
+
+		if (d3dConstants_WRP.GetBuffer())
+		{
+			ID3D11Buffer* buffer[] = { d3dConstants_WRP.GetBuffer() };
+			d3dcontext->VSSetConstantBuffers(0, 1, buffer);
+		}
 
 		d3dcontext->PSSetShader(d3dPxlShader.Get(), nullptr, 0);
 	}

@@ -4,23 +4,23 @@
 struct PSInput
 {
     float4 PosH : SV_Position;
-    float3 PosW : POSITION;
-    float3 Normal : NORMAL;
+    float3 PosW : Position;
+    float3 Normal : Normal;
 };
 
 struct VSInput
 {
-    float3 Position : POSITION;
-    float3 Normal : NORMAL;
+    float3 Position : SV_Position;
+    float3 Normal : Normal;
+    float2 TexCoord : TexCoord;
 };
-
 
 
 cbuffer WorldConstantBuffer : register(b0)
 {
+    matrix gWorldViewProj;
     matrix gWorld;
     matrix gWorldInvTranspose;
-    matrix gWorldViewProj;
     Material gMaterial;
 };
 

@@ -2,7 +2,7 @@
 
 #include "utils/pch.hpp"
 
-namespace Pleiade::Sandbox
+namespace Pleiades::Sandbox
 {
 	struct Material
 	{
