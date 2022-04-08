@@ -50,7 +50,8 @@ namespace Pleiades
 				float cur_x = neg_half_width + x * dx;
 				mesh.vertices.emplace_back(
 					DX::XMFLOAT3{ cur_x, 0.f, cur_z },
-					DX::XMFLOAT4(DX::Colors::Magenta)
+					DX::XMFLOAT3{ 0.f, 1.f, 0.f },
+					DX::XMFLOAT2{ x * x_step, z * z_step }
 				);
 			}
 		}
@@ -71,7 +72,7 @@ namespace Pleiades
 			{
 				mesh.indices.push_back(static_cast<uint16_t>(i * columns + j));
 				mesh.indices.push_back(static_cast<uint16_t>(i * columns + j + 1));
-				mesh.indices.push_back(static_cast<uint16_t>((i+ 1) * columns + j));
+				mesh.indices.push_back(static_cast<uint16_t>((i + 1) * columns + j));
 
 				mesh.indices.push_back(static_cast<uint16_t>((i + 1) * columns + j));
 				mesh.indices.push_back(static_cast<uint16_t>(i * columns + j + 1));
@@ -83,11 +84,11 @@ namespace Pleiades
 
 
 	void GeometryFactory::CreateCylinderVerticesAndIndices(
-		MeshData_t& mesh, 
-		uint32_t slices, 
-		uint32_t stacks, 
+		MeshData_t& mesh,
+		uint32_t slices,
+		uint32_t stacks,
 		float bottom_radius,
-		float top_radius, 
+		float top_radius,
 		float height
 	)
 	{
@@ -98,6 +99,8 @@ namespace Pleiades
 
 		mesh.vertices.clear();
 		mesh.vertices.reserve(static_cast<size_t>(stacks + 1) * (slices + 1));
+
+		const float dr = bottom_radius - top_radius;
 
 		for (uint32_t i = 0; i <= stacks; i++)
 		{
@@ -111,7 +114,35 @@ namespace Pleiades
 
 				mesh.vertices.emplace_back(
 					DX::XMFLOAT3{ c * cur_radius, cur_y, s * cur_radius },
-					DX::XMFLOAT4(DX::Colors::Magenta)
+					DX::XMFLOAT3{ },
+					DX::XMFLOAT2{ static_cast<float>(j) / slices, 1.f - static_cast<float>(i) / stacks }
+				);
+
+				// Cylinder can be parameterized as follows, where we introduce v
+				// parameter that goes in the same direction as the v tex-coord
+				// so that the bitangent goes in the same direction as the v tex-coord.
+				//   Let r0 be the bottom radius and let r1 be the top radius.
+				//   y(v) = h - hv for v in [0,1].
+				//   r(v) = r1 + (r0-r1)v
+				//
+				//   x(t, v) = r(v)*cos(t)
+				//   y(t, v) = h - hv
+				//   z(t, v) = r(v)*sin(t)
+				// 
+				//  dx/dt = -r(v)*sin(t)
+				//  dy/dt = 0
+				//  dz/dt = +r(v)*cos(t)
+				//
+				//  dx/dv = (r0-r1)*cos(t)
+				//  dy/dv = -h
+				//  dz/dv = (r0-r1)*sin(t)
+
+				DX::XMVECTOR tangentu = DX::XMVectorSet(-s, 0.f, c, 0.f);
+				DX::XMVECTOR tangentv = DX::XMVectorSet(dr * c, -height, dr * s, 0.f);
+
+				DX::XMStoreFloat3(
+					&mesh.vertices.back().normal,
+					DX::XMVector3Normalize(DX::XMVector3Cross(tangentu, tangentv))
 				);
 			}
 		}
@@ -153,7 +184,8 @@ namespace Pleiades
 
 		mesh.vertices.emplace_back(
 			DX::XMFLOAT3{ 0, y, 0 },
-			DX::XMFLOAT4(DX::Colors::Magenta)
+			DX::XMFLOAT3{ 0.f, 1.f, 0.f },
+			DX::XMFLOAT2{ .5f, .5f }
 		);
 
 		for (uint32_t i = 0; i <= slices; i++)
@@ -161,9 +193,15 @@ namespace Pleiades
 			float x, z;
 			DX::XMScalarSinCos(&z, &x, i * theta);
 
+			// Scale down by the height to try and make top cap texture coord area
+			// proportional to base.
+			float u = x / height + 0.5f;
+			float v = z / height + 0.5f;
+
 			mesh.vertices.emplace_back(
 				DX::XMFLOAT3{ top_radius * x, y, top_radius * z },
-				DX::XMFLOAT4(DX::Colors::Magenta)
+				DX::XMFLOAT3{ 0.f, 1.f, 0.f },
+				DX::XMFLOAT2{ u, v }
 			);
 		}
 
@@ -176,9 +214,9 @@ namespace Pleiades
 	}
 
 	void GeometryFactory::CreateCylinderBottomFace(
-		MeshData_t& mesh, 
-		uint32_t slices, 
-		float bottom_radius, 
+		MeshData_t& mesh,
+		uint32_t slices,
+		float bottom_radius,
 		float height
 	)
 	{
@@ -191,7 +229,8 @@ namespace Pleiades
 
 		mesh.vertices.emplace_back(
 			DX::XMFLOAT3{ 0, y, 0 },
-			DX::XMFLOAT4(DX::Colors::Magenta)
+			DX::XMFLOAT3{ 0.f, -1.f, 0.f },
+			DX::XMFLOAT2{ .5f, .5f }
 		);
 
 		for (uint32_t i = 0; i <= slices; i++)
@@ -199,9 +238,15 @@ namespace Pleiades
 			float x, z;
 			DX::XMScalarSinCos(&z, &x, i * theta);
 
+			// Scale down by the height to try and make top cap texture coord area
+			// proportional to base.
+			float u = x / height + 0.5f;
+			float v = z / height + 0.5f;
+
 			mesh.vertices.emplace_back(
 				DX::XMFLOAT3{ bottom_radius * x, y, bottom_radius * z },
-				DX::XMFLOAT4(DX::Colors::Magenta)
+				DX::XMFLOAT3{ 0.f, -1.f, 0.f },
+				DX::XMFLOAT2{ u, v }
 			);
 		}
 
@@ -214,8 +259,8 @@ namespace Pleiades
 	}
 
 	void GeometryFactory::CreateCylinderIndices(
-		MeshData_t& mesh, 
-		uint32_t slices, 
+		MeshData_t& mesh,
+		uint32_t slices,
 		uint32_t stacks
 	)
 	{
@@ -242,8 +287,8 @@ namespace Pleiades
 
 	void GeometryFactory::CreateSphereVertices(
 		MeshData_t& mesh,
-		uint32_t slices, 
-		uint32_t stacks, 
+		uint32_t slices,
+		uint32_t stacks,
 		float radius
 	)
 	{
@@ -254,37 +299,47 @@ namespace Pleiades
 		float theta_step = DX::XM_2PI / slices;
 
 		mesh.vertices.emplace_back(
-			DX::XMFLOAT3(0.f, radius, 0.f),
-			DX::XMFLOAT4(DX::Colors::Magenta)
+			DX::XMFLOAT3{ 0.f, radius, 0.f },
+			DX::XMFLOAT3{ 0.f, 1.f, 0.f },
+			DX::XMFLOAT2{ 0.f, 0.f }
 		);
 
 		for (uint32_t i = 0; i < stacks; i++)
 		{
+			float phi = i * phi_step;
 			float sin_phi, cos_phi;
-			DX::XMScalarSinCos(&sin_phi, &cos_phi, i * phi_step);
+			DX::XMScalarSinCos(&sin_phi, &cos_phi, phi);
 
 			for (uint32_t j = 0; j <= slices; j++)
 			{
+				float theta = j * theta_step;
 				float sin_theta, cos_theta;
-				DX::XMScalarSinCos(&sin_theta, &cos_theta, j * theta_step);
+				DX::XMScalarSinCos(&sin_theta, &cos_theta, theta);
 
 				mesh.vertices.emplace_back(
 					DX::XMFLOAT3(radius * cos_phi * sin_theta, radius * cos_theta, radius * sin_phi * sin_theta),
-					DX::XMFLOAT4(DX::Colors::Magenta)
+					DX::XMFLOAT3{},
+					DX::XMFLOAT2{ theta / DX::XM_2PI, phi / DX::XM_PI }
+				);
+
+				DX::XMStoreFloat3(
+					&mesh.vertices.back().normal,
+					DX::XMVector3Normalize(DX::XMLoadFloat3(&mesh.vertices.back().position))
 				);
 			}
 		}
 
 		mesh.vertices.emplace_back(
-			DX::XMFLOAT3(0.f, -radius, 0.f),
-			DX::XMFLOAT4(DX::Colors::Magenta)
+			DX::XMFLOAT3{ 0.f, -radius, 0.f },
+			DX::XMFLOAT3{ 0.f, -1.f, 0.f },
+			DX::XMFLOAT2{ 0.f, 1.f }
 		);
 	}
 
 
 	void GeometryFactory::CreateSphereIndices(
 		MeshData_t& mesh,
-		uint32_t slices, 
+		uint32_t slices,
 		uint32_t stacks
 	)
 	{
@@ -326,7 +381,7 @@ namespace Pleiades
 
 	void GeometryFactory::CreateSphereVerticesAndIndices(
 		MeshData_t& mesh,
-		uint32_t num_divisions, 
+		uint32_t num_divisions,
 		float radius
 	)
 	{
@@ -360,7 +415,7 @@ namespace Pleiades
 		mesh.indices.reserve(12);
 
 		for (const auto& pos : poses)
-			mesh.vertices.emplace_back(pos, DX::XMFLOAT4());
+			mesh.vertices.emplace_back(pos, DX::XMFLOAT3{}, DX::XMFLOAT2{});
 		for (auto idx : indices)
 			mesh.indices.emplace_back(idx);
 
@@ -369,15 +424,38 @@ namespace Pleiades
 
 		for (auto& vertex : mesh.vertices)
 		{
+			DX::XMVECTOR normal = DX::XMVector3Normalize(DX::XMLoadFloat3(&vertex.position));
+
 			DX::XMStoreFloat3(
 				&vertex.position,
 				DX::XMVectorScale(
-					DX::XMVector3Normalize(DX::XMLoadFloat3(&vertex.position)),
+					normal,
 					radius
 				)
 			);
 
-			vertex.color = DX::XMFLOAT4(DX::Colors::Magenta);
+			DX::XMStoreFloat3(
+				&vertex.normal,
+				normal
+			);
+
+			// Derive texture coordinates from spherical coordinates.
+			float theta = atanf(vertex.position.z / vertex.position.x); // in [-pi/2, +pi/2]
+
+			// Quadrant I or IV
+			if (vertex.position.x >= 0.0f)
+			{
+				// If x = 0, then atanf(y/x) = +pi/2 if y > 0
+				//                atanf(y/x) = -pi/2 if y < 0
+
+				if (theta < 0.0f)
+					theta += DX::XM_2PI; // in [0, 2*pi).
+			}
+
+			float phi = acosf(vertex.position.y / radius);
+
+			vertex.textureCoordinate.x = theta / DX::XM_2PI;
+			vertex.textureCoordinate.x = phi / DX::XM_PI;
 		}
 	}
 
@@ -385,7 +463,7 @@ namespace Pleiades
 	{
 
 		/*
-		      v1
+			  v1
 			  *
 			 / \
 			/   \
@@ -425,7 +503,7 @@ namespace Pleiades
 			new_mesh.indices.push_back(static_cast<uint16_t>(i * 6 + 5));
 			new_mesh.indices.push_back(static_cast<uint16_t>(i * 6 + 4));
 			new_mesh.indices.push_back(static_cast<uint16_t>(i * 6 + 2));
-			
+
 			new_mesh.indices.push_back(static_cast<uint16_t>(i * 6 + 3));
 			new_mesh.indices.push_back(static_cast<uint16_t>(i * 6 + 1));
 			new_mesh.indices.push_back(static_cast<uint16_t>(i * 6 + 4));

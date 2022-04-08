@@ -54,16 +54,17 @@ namespace Pleiades::Sandbox
 
 		while (vertex_count--)
 		{
-			float x, y, z;
-			file >> x >> y >> z;
-			std::getline(file, ignore);
+			float x, y, z, nx, ny, nz;
+			file >> x >> y >> z >> nx >> ny >> nz;
 
 			mesh.vertices.emplace_back(
-				DX::XMFLOAT3(x, y, z),
-				DX::XMFLOAT4(DX::Colors::Black)
+				DX::XMFLOAT3{ x, y, z },
+				DX::XMFLOAT3{ nx, ny, nz },
+				DX::XMFLOAT2{}
 			);
 		}
 
+		std::getline(file, ignore); // ""
 		std::getline(file, ignore); // }
 		std::getline(file, ignore); // TriangleList
 		std::getline(file, ignore); // {

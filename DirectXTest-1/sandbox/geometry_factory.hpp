@@ -10,7 +10,7 @@ namespace Pleiades
 	{
 		struct MeshData_t
 		{
-			using verticies_type = DX::VertexPositionColor;
+			using verticies_type = DX::VertexPositionNormalTexture;
 			using indices_type = uint16_t;
 
 			std::vector<verticies_type> vertices;

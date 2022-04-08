@@ -50,37 +50,37 @@ namespace Pleiades::Sandbox
 			m_PlaneSize[1]
 		);
 
-		// build colors
-		for (auto& mesh : m_Plane->Mesh.vertices)
-		{
-			float y = mesh.position.y = GeometryFactory::GetHeight(mesh.position.x, mesh.position.z);
+		//// build colors
+		//for (auto& mesh : m_Plane->Mesh.vertices)
+		//{
+		//	float y = mesh.position.y = GeometryFactory::GetHeight(mesh.position.x, mesh.position.z);
 
-			if (y < -10.0f)
-			{
-				// Sandy beach color.
-				mesh.color = DX::XMFLOAT4(1.0f, 0.96f, 0.62f, 1.0f);
-			}
-			else if (y < 5.0f)
-			{
-				// Light yellow-green.
-				mesh.color = DX::XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
-			}
-			else if (y < 12.0f)
-			{
-				// Dark yellow-green.
-				mesh.color = DX::XMFLOAT4(0.1f, 0.48f, 0.19f, 1.0f);
-			}
-			else if (y < 20.0f)
-			{
-				// Dark brown.
-				mesh.color = DX::XMFLOAT4(0.45f, 0.39f, 0.34f, 1.0f);
-			}
-			else
-			{
-				// White snow.
-				mesh.color = DX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-			}
-		}
+		//	if (y < -10.0f)
+		//	{
+		//		// Sandy beach color.
+		//		mesh.color = DX::XMFLOAT4(1.0f, 0.96f, 0.62f, 1.0f);
+		//	}
+		//	else if (y < 5.0f)
+		//	{
+		//		// Light yellow-green.
+		//		mesh.color = DX::XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
+		//	}
+		//	else if (y < 12.0f)
+		//	{
+		//		// Dark yellow-green.
+		//		mesh.color = DX::XMFLOAT4(0.1f, 0.48f, 0.19f, 1.0f);
+		//	}
+		//	else if (y < 20.0f)
+		//	{
+		//		// Dark brown.
+		//		mesh.color = DX::XMFLOAT4(0.45f, 0.39f, 0.34f, 1.0f);
+		//	}
+		//	else
+		//	{
+		//		// White snow.
+		//		mesh.color = DX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+		//	}
+		//}
 	}
 
 

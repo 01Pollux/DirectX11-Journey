@@ -42,32 +42,6 @@ namespace Pleiades::Sandbox
 			m_Tesselation,
 			m_SphereRadius
 		);
-
-		size_t size = m_Sphere->Mesh.vertices.size(), counted = 0;
-		size_t i = 0;
-		
-		for (auto& vertex : m_Sphere->Mesh.vertices)
-		{
-			if (++counted > size / 2)
-			{
-				counted = 0;
-				++i;
-			}
-
-			switch (i)
-			{
-			case 0:
-			{
-				vertex.color = DX::XMFLOAT4(DX::Colors::Aqua);
-				break;
-			}
-			case 1:
-			{
-				vertex.color = DX::XMFLOAT4(DX::Colors::BlueViolet);
-				break;
-			}
-			}
-		}
 	}
 
 	void RenderableGeoSphere::UpdateScene()
