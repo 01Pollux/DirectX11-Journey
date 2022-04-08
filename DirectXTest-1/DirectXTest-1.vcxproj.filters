@@ -33,6 +33,7 @@
     <ClInclude Include="sandbox\plane\plane_and_sphere.hpp" />
     <ClInclude Include="sandbox\from_file\skull.hpp" />
     <ClInclude Include="sandbox\from_file\car.hpp" />
+    <ClInclude Include="sandbox\lights\helper.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -75,12 +76,16 @@
     <FxCompile Include="resources\manyshapes\cube3d_vs.hlsl" />
     <FxCompile Include="resources\geometry_default_ps.hlsl" />
     <FxCompile Include="resources\geometry_default_vs.hlsl" />
+    <FxCompile Include="resources\lights\light_test_vs.hlsl" />
+    <FxCompile Include="resources\lights\light_test_ps.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">
       <Filter>Assets</Filter>
     </None>
     <None Include="sandbox\test_house\Shader1.dgsl" />
+    <None Include="resources\lights\helper.hlsli" />
+    <None Include="resources\lights\light_test.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="E:\Dev\Introduction-to-3D-Game-Programming-With-DirectX11-master\Chapter 6 Drawing in Direct3D\Skull\Models\skull.txt" />
