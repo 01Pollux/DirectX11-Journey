@@ -3,7 +3,7 @@
 
 float4 main(PSInput ps_input) : SV_Target
 {
-    ps_input.Normal = normalize(gWorldEyePosition - ps_input.PosW);
+    ps_input.Normal = normalize(ps_input.Normal);
     float3 position_normal = normalize(gWorldEyePosition - ps_input.PosW);
     
     LightRes light;
