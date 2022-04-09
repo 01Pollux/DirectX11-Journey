@@ -64,7 +64,7 @@ namespace Pleiades::Sandbox
 			);
 		}
 
-		std::getline(file, ignore); // ""
+		std::getline(file, ignore); // \n
 		std::getline(file, ignore); // }
 		std::getline(file, ignore); // TriangleList
 		std::getline(file, ignore); // {
