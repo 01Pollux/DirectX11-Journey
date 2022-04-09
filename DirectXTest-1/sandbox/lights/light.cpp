@@ -158,6 +158,28 @@ namespace Pleiades::Sandbox
 		bool update = ImGui::DragFloat3("Draw offset", m_DrawOffset);
 		update |= ImGui::DragFloat3("Rotation offset", m_RotationOffset);
 
+		ImGui::Separator();
+
+		for (auto& [name, color_vec] : {
+			std::pair{ "Ambient", &m_WorldConstantBuffer.Material.Ambient },
+			std::pair{ "Diffuse", &m_WorldConstantBuffer.Material.Diffuse },
+			std::pair{ "Specular", &m_WorldConstantBuffer.Material.Specular },
+			std::pair{ "Reflect", &m_WorldConstantBuffer.Material.Reflect }
+			})
+		{
+			float color_arr[]{
+					DX::XMVectorGetX(*color_vec),
+					DX::XMVectorGetY(*color_vec),
+					DX::XMVectorGetZ(*color_vec),
+					DX::XMVectorGetW(*color_vec)
+			};
+			if (ImGui::ColorEdit4(name, color_arr))
+			{
+				update = true;
+				*color_vec = DX::XMVectorSet(color_arr[0], color_arr[1], color_arr[2], color_arr[3]);
+			}
+		}
+
 		ImGui::PopID();
 
 		if (update)
@@ -202,18 +224,20 @@ namespace Pleiades::Sandbox
 		bool update = ImGui::DragFloat3("Draw offset", &m_LightConstantBuffer.WorldEyePosition.x);
 		update |= ImGui::DragInt("Type", reinterpret_cast<int*>(&m_LightConstantBuffer.LightType), 1.f, 0, 2);
 
+		ImGui::Separator();
+
 		for (auto& [type, name, color_vec] : {
-			std::tuple{ LightType::Directional, "Amboient", &m_LightConstantBuffer.DirLight.Ambient },
+			std::tuple{ LightType::Directional, "Ambient", &m_LightConstantBuffer.DirLight.Ambient },
 			std::tuple{ LightType::Directional, "Diffuse", &m_LightConstantBuffer.DirLight.Diffuse },
 			std::tuple{ LightType::Directional, "Specular", &m_LightConstantBuffer.DirLight.Specular },
 
 
-			std::tuple{ LightType::PointLight, "Amboient", &m_LightConstantBuffer.PtLight.Ambient },
+			std::tuple{ LightType::PointLight, "Ambient", &m_LightConstantBuffer.PtLight.Ambient },
 			std::tuple{ LightType::PointLight, "Diffuse", &m_LightConstantBuffer.PtLight.Diffuse },
 			std::tuple{ LightType::PointLight, "Specular", &m_LightConstantBuffer.PtLight.Specular },
 
 
-			std::tuple{ LightType::SpotLight, "Amboient", &m_LightConstantBuffer.SpLight.Ambient },
+			std::tuple{ LightType::SpotLight, "Ambient", &m_LightConstantBuffer.SpLight.Ambient },
 			std::tuple{ LightType::SpotLight, "Diffuse", &m_LightConstantBuffer.SpLight.Diffuse },
 			std::tuple{ LightType::SpotLight, "Specular", &m_LightConstantBuffer.SpLight.Specular }
 			})
@@ -232,6 +256,30 @@ namespace Pleiades::Sandbox
 					*color_vec = DX::XMVectorSet(color_arr[0], color_arr[1], color_arr[2], color_arr[3]);
 				}
 			}
+		}
+
+		switch (m_LightConstantBuffer.LightType)
+		{
+		case LightType::Directional:
+		{
+			update |= ImGui::DragFloat3("Direction", &m_LightConstantBuffer.DirLight.Direction.x);
+			break;
+		}
+		case LightType::PointLight:
+		{
+			update |= ImGui::DragFloat3("Position", &m_LightConstantBuffer.PtLight.Position.x);
+			update |= ImGui::DragFloat3("Attenuation", &m_LightConstantBuffer.PtLight.Attenuation.x);
+			update |= ImGui::DragFloat("Range", &m_LightConstantBuffer.PtLight.Range);
+			break;
+		}
+		case LightType::SpotLight:
+		{
+			update |= ImGui::DragFloat3("Position", &m_LightConstantBuffer.SpLight.Position.x);
+			update |= ImGui::DragFloat3("Attenuation", &m_LightConstantBuffer.SpLight.Attenuation.x);
+			update |= ImGui::DragFloat3("Direction", &m_LightConstantBuffer.SpLight.Direction.x);
+			update |= ImGui::DragFloat("Range", &m_LightConstantBuffer.SpLight.Range);
+			break;
+		}
 		}
 		
 		ImGui::PopID();
