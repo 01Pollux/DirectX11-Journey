@@ -55,8 +55,8 @@ namespace Pleiades::Sandbox
 		void RenderLightsEdit();
 
 	private:
-		float m_RotationOffset[3]{ -0.34f, 0.f, 300.f };
-		float m_DrawOffset[3]{ 0.43f, -1.22f, 28.11f };
+		float m_RotationOffset[3]{ -0.34f, 0.f, 0.f };
+		float m_DrawOffset[3]{ 0.43f, -1.22f, 300.f };
 
 		WorldConstantBuffer m_WorldConstantBuffer;
 		LightConstantBuffer m_LightConstantBuffer;
