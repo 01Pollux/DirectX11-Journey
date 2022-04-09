@@ -11,6 +11,12 @@ namespace Pleiades::Sandbox
 			.Ambient = { 0.48f, 0.77f, 0.46f, 1.0f },
 			.Diffuse = { 0.48f, 0.77f, 0.46f, 1.0f },
 			.Specular = { 0.2f, 0.2f, 0.2f, 16.0f },
+		},
+
+		m_SphereMat{
+			.Ambient = { 0.48f, 1.f, 0.46f, 1.0f },
+			.Diffuse = { 0.48f, 0.77f, 0.46f, 1.0f },
+			.Specular = { 0.2f, 0.2f, 0.2f, 16.0f },
 		}
 	{
 		m_LightConstantBuffer.DirLight = {
@@ -41,26 +47,8 @@ namespace Pleiades::Sandbox
 		m_LightConstantBuffer.WorldEyePosition = { -75.f, 25.f, -60.f };
 		m_LightConstantBuffer.LightType = LightType::Directional;
 
-
-		m_WorldConstantBuffer.WorldInvTranspose =
-			m_WorldConstantBuffer.WorldViewProj = DX::XMMatrixIdentity();
+		m_WorldConstantBuffer.WorldInvTranspose = m_WorldConstantBuffer.WorldViewProj = DX::XMMatrixIdentity();
 		m_WorldConstantBuffer.Material = m_LandMat;
-
-		m_WorldConstantBuffer.World = DirectX::XMMatrixTranspose(
-			DX::XMMatrixRotationRollPitchYaw(
-				m_RotationOffset[0],
-				m_RotationOffset[1],
-				m_RotationOffset[2]
-			) *
-			DX::XMMatrixTranslation(
-				m_DrawOffset[0],
-				m_DrawOffset[1],
-				m_DrawOffset[2]
-			) *
-			DirectX::XMMatrixPerspectiveLH(
-				0.25f * 3.14f, GetDeviceResources()->GetAspectRatio(), 1.f, 1000.f
-			)
-		);
 
 		BuildMeshes();
 		InitializeBuffers();
@@ -71,19 +59,26 @@ namespace Pleiades::Sandbox
 	{
 		auto d3dcontext = GetDeviceResources()->GetD3DDeviceContext();
 
+
+		SetMaterial(m_LandMat);
+		UpdateScene(true);
 		m_Land->Bind(d3dcontext);
-		UpdateScene();
 		m_Land->Draw(d3dcontext);
+
+		SetMaterial(m_SphereMat);
+		UpdateScene(false);
+		m_Sphere->Bind(d3dcontext);
+		m_Sphere->Draw(d3dcontext);
 	}
-	
-	
+
+
 	void LightDemo::OnImGuiDraw()
 	{
 		RenderWorldEdit();
 		RenderLightsEdit();
 	}
-	
-	
+
+
 	void LightDemo::BuildMeshes()
 	{
 		GeometryFactory::CreatePlane(
@@ -92,10 +87,20 @@ namespace Pleiades::Sandbox
 			160.f, 160.f
 		);
 
+		// TODO: use sphere
+		GeometryFactory::CreatePlane(
+			m_Sphere,
+			50, 50,
+			160.f, 160.f
+		);
+
 		auto d3ddevice = GetDeviceResources()->GetD3DDevice();
 
 		m_Land->CreateBuffers(d3ddevice, true);
 		m_Land->CreateShaders(d3ddevice, L"resources/lights/light_test_vs.cso", L"resources/lights/light_test_ps.cso");
+
+		m_Sphere->CreateBuffers(d3ddevice, true);
+		m_Sphere->CreateShaders(d3ddevice, L"resources/lights/light_test_vs.cso", L"resources/lights/light_test_ps.cso");
 	}
 
 	void LightDemo::InitializeBuffers()
@@ -110,7 +115,7 @@ namespace Pleiades::Sandbox
 
 		D3D11_SUBRESOURCE_DATA subres_data{};
 		subres_data.pSysMem = &m_LightConstantBuffer;
-		
+
 		DX::ThrowIfFailed(
 			d3ddevice->CreateBuffer(
 				&buffer_desc,
@@ -135,7 +140,8 @@ namespace Pleiades::Sandbox
 		);
 	}
 
-	void LightDemo::UpdateScene()
+
+	void LightDemo::UpdateScene(bool is_land)
 	{
 		auto d3dcontext = GetDeviceResources()->GetD3DDeviceContext();
 
@@ -147,6 +153,36 @@ namespace Pleiades::Sandbox
 		d3dcontext->PSSetConstantBuffers(
 			0, static_cast<uint32_t>(std::size(buffers)), buffers
 		);
+
+
+		size_t offset = is_land ? 0 : 1;
+
+		m_WorldConstantBuffer.World = DirectX::XMMatrixTranspose(
+			DX::XMMatrixRotationRollPitchYaw(
+				m_RotationOffset[offset][0],
+				m_RotationOffset[offset][1],
+				m_RotationOffset[offset][2]
+			) *
+			DX::XMMatrixTranslation(
+				m_DrawOffset[offset][0],
+				m_DrawOffset[offset][1],
+				m_DrawOffset[offset][2]
+			) *
+			DirectX::XMMatrixPerspectiveLH(
+				0.25f * 3.14f, GetDeviceResources()->GetAspectRatio(), 1.f, 1000.f
+			)
+		);
+
+		m_WorldConstantBuffer.WorldInvTranspose = DX::XMMatrixInverse(nullptr, m_WorldConstantBuffer.World);
+
+		d3dcontext->UpdateSubresource(
+			m_d3dWorldConstantBuffer.Get(),
+			0,
+			nullptr,
+			&m_WorldConstantBuffer,
+			sizeof(m_WorldConstantBuffer),
+			1
+		);
 	}
 
 
@@ -155,18 +191,28 @@ namespace Pleiades::Sandbox
 		ImGui::PushID("World");
 
 		ImGui::Text("World constants");
-		bool update = ImGui::DragFloat3("Draw offset", m_DrawOffset);
-		update |= ImGui::DragFloat3("Rotation offset", m_RotationOffset);
+		ImGui::DragFloat3("Draw offset (land)", m_DrawOffset[0]);
+		ImGui::DragFloat3("Draw offset (sphere)", m_DrawOffset[1]);
+		ImGui::DragFloat3("Rotation offset (land)", m_RotationOffset[0]);
+		ImGui::DragFloat3("Rotation offset (sphere)", m_RotationOffset[1]);
 
-		ImGui::Separator();
-
+		size_t i = 0;
 		for (auto& [name, color_vec] : {
-			std::pair{ "Ambient", &m_WorldConstantBuffer.Material.Ambient },
-			std::pair{ "Diffuse", &m_WorldConstantBuffer.Material.Diffuse },
-			std::pair{ "Specular", &m_WorldConstantBuffer.Material.Specular },
-			std::pair{ "Reflect", &m_WorldConstantBuffer.Material.Reflect }
+			std::pair{ "Ambient (land)", &m_LandMat.Ambient },
+			std::pair{ "Diffuse (land)", &m_LandMat.Diffuse },
+			std::pair{ "Specular (land)", &m_LandMat.Specular },
+			std::pair{ "Reflect (land)", &m_LandMat.Reflect },
+
+
+			std::pair{ "Ambient (sphere)", &m_SphereMat.Ambient },
+			std::pair{ "Diffuse (sphere)", &m_SphereMat.Diffuse },
+			std::pair{ "Specular (sphere)", &m_SphereMat.Specular },
+			std::pair{ "Reflect (sphere)", &m_SphereMat.Reflect }
 			})
 		{
+			if (!(i++ % 4))
+				ImGui::Separator();
+
 			float color_arr[]{
 					DX::XMVectorGetX(*color_vec),
 					DX::XMVectorGetY(*color_vec),
@@ -174,45 +220,10 @@ namespace Pleiades::Sandbox
 					DX::XMVectorGetW(*color_vec)
 			};
 			if (ImGui::ColorEdit4(name, color_arr))
-			{
-				update = true;
 				*color_vec = DX::XMVectorSet(color_arr[0], color_arr[1], color_arr[2], color_arr[3]);
-			}
 		}
 
 		ImGui::PopID();
-
-		if (update)
-		{
-			m_WorldConstantBuffer.World = DirectX::XMMatrixTranspose(
-				DX::XMMatrixRotationRollPitchYaw(
-					m_RotationOffset[0],
-					m_RotationOffset[1],
-					m_RotationOffset[2]
-				) *
-				DX::XMMatrixTranslation(
-					m_DrawOffset[0],
-					m_DrawOffset[1],
-					m_DrawOffset[2]
-				) *
-				DirectX::XMMatrixPerspectiveLH(
-					0.25f * 3.14f, GetDeviceResources()->GetAspectRatio(), 1.f, 1000.f
-				)
-			);
-
-			m_WorldConstantBuffer.WorldInvTranspose = DX::XMMatrixInverse(nullptr, m_WorldConstantBuffer.World);
-
-			auto d3dcontext = GetDeviceResources()->GetD3DDeviceContext();
-
-			d3dcontext->UpdateSubresource(
-				m_d3dWorldConstantBuffer.Get(),
-				0,
-				nullptr,
-				&m_WorldConstantBuffer,
-				sizeof(m_WorldConstantBuffer),
-				1
-			);
-		}
 	}
 
 
@@ -281,7 +292,7 @@ namespace Pleiades::Sandbox
 			break;
 		}
 		}
-		
+
 		ImGui::PopID();
 
 		if (update)
@@ -297,5 +308,21 @@ namespace Pleiades::Sandbox
 				1
 			);
 		}
+	}
+
+
+	void LightDemo::SetMaterial(const Material& material)
+	{
+		m_WorldConstantBuffer.Material = material;
+		auto d3dcontext = GetDeviceResources()->GetD3DDeviceContext();
+
+		d3dcontext->UpdateSubresource(
+			m_d3dWorldConstantBuffer.Get(),
+			0,
+			nullptr,
+			&m_WorldConstantBuffer,
+			sizeof(m_WorldConstantBuffer),
+			1
+		);
 	}
 }

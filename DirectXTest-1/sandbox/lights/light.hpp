@@ -49,14 +49,16 @@ namespace Pleiades::Sandbox
 		void BuildMeshes();
 		void InitializeBuffers();
 
-		void UpdateScene();
+		void UpdateScene(bool is_land);
 
 		void RenderWorldEdit();
 		void RenderLightsEdit();
 
+		void SetMaterial(const Material& material);
+
 	private:
-		float m_RotationOffset[3]{ -0.34f, 0.f, 0.f };
-		float m_DrawOffset[3]{ 0.43f, -1.22f, 300.f };
+		float m_RotationOffset[2][3]{ {-0.34f, 0.f, 0.f}, {-0.34f, 0.f, 0.f} };
+		float m_DrawOffset[2][3]{ {0.43f, -1.22f, 300.f}, {0.43f, 31.22f, 300.f} };
 
 		WorldConstantBuffer m_WorldConstantBuffer;
 		LightConstantBuffer m_LightConstantBuffer;
