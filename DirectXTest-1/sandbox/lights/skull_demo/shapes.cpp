@@ -25,24 +25,6 @@ namespace Pleiades::Sandbox
 			}
 		);
 
-
-		//// Create a sphere
-		//m_ShapesGeometry.PushMesh(
-		//	GeometryFactory::CreateSphere(
-		//		20, 20,
-		//		.5f
-		//	)
-		//);
-		//// Draw the sphere 4 times
-		//m_GeometryCallbacks.emplace_back(
-		//	4,
-		//	[this](size_t index)
-		//	{
-		//		m_Cylinder[index].Bind(GetDeviceResources(), m_Effects, m_ViewProjection);
-		//	}
-		//);
-
-
 		// Create a cylinder
 		m_ShapesGeometry.PushMesh(
 			GeometryFactory::CreateCylinder(
@@ -55,7 +37,7 @@ namespace Pleiades::Sandbox
 			4,
 			[this](size_t index)
 			{
-				m_Sphere[index].Bind(GetDeviceResources(), m_Effects, m_ViewProjection);
+				m_Cylinder[index].Bind(GetDeviceResources(), m_Effects, m_ViewProjection);
 			}
 		);
 	}
@@ -139,17 +121,16 @@ namespace Pleiades::Sandbox
 	{
 		UpdateViewProjection();
 		
-		m_Plane.World = XMMatrixIdentity();
+		m_Plane.World = XMMatrixTranslation(.0f, .5f, .0f);
 
-		m_Skull.World = XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(0.0f, 1.0f, 0.0f);
+		m_Skull.World = XMMatrixScaling(.5f, .5f, .5f) * XMMatrixTranslation(.0f, 0.5f, .0f);
 
 		for (size_t i = 0; i < std::size(m_Cylinder) / 2; i++)
 		{
-			m_Cylinder[i * 2 + 0].World = XMMatrixTranslation(-5.f, 1.5f, -10.f + i * 5);
-			m_Cylinder[i * 2 + 0].World = XMMatrixTranslation(+5.f, 1.5f, -10.f + i * 5);
-
-			m_Sphere[i * 2 + 0].World = XMMatrixTranslation(-5.f, 3.5f, -10.f + i * 5);
-			m_Sphere[i * 2 + 1].World = XMMatrixTranslation(+5.f, 3.5f, -10.f + i * 5);
+			// offset each cylinder by 0.5 + (max - min) / 2 
+			// 0.5 + (3.5 - 0) / 2 == 2.0
+			m_Cylinder[i * 2 + 0].World = XMMatrixTranslation(-5.f, 2.f, -10.f + i * 5);
+			m_Cylinder[i * 2 + 1].World = XMMatrixTranslation(+5.f, 2.f, -10.f + i * 5);
 		}
 
 
@@ -161,14 +142,7 @@ namespace Pleiades::Sandbox
 		m_Skull.Material.Diffuse = XMVectorSet(.8f, .8f, .8f, 1.f);
 		m_Skull.Material.Specular = XMVectorSet(.8f, .8f, .8f, 16.f);
 
-		for (auto& cylinder : m_Cylinder)
-		{
-			cylinder.Material.Ambient = XMVectorSet(.7f, .85f, .7f, 1.f);
-			cylinder.Material.Diffuse = XMVectorSet(.7f, .85f, .7f, 1.f);
-			cylinder.Material.Specular = XMVectorSet(.8f, .8f, .8f, 16.f);
-		}
-
-		for (auto& sphere : m_Sphere)
+		for (auto& sphere : m_Cylinder)
 		{
 			sphere.Material.Ambient = XMVectorSet(.1f, .2f, .3f, 1.f);
 			sphere.Material.Diffuse = XMVectorSet(.2f, .4f, .6f, 1.f);

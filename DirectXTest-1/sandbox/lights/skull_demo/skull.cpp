@@ -25,19 +25,19 @@ namespace Pleiades::Sandbox
 	{
 		auto d3dcontext = GetDeviceResources()->GetD3DDeviceContext();
 
-		//m_Effects.SetWorldEyePosition({ m_CamPosition[0], m_CamPosition[1], m_CamPosition[2] });
+		m_Effects.SetWorldEyePosition({ m_CamPosition[0], m_CamPosition[1], m_CamPosition[2] });
 
 		m_Effects.Bind(d3dcontext);
-		m_Effects.Update(d3dcontext);
+
+		m_SkullGeometry.Bind(d3dcontext);
+		m_Effects.SetMaterial(m_Skull.Material);
+		m_Skull.Bind(GetDeviceResources(), m_Effects, m_ViewProjection);
+		m_SkullGeometry.Draw(d3dcontext);
+
 
 		m_ShapesGeometry.Bind(d3dcontext);
 		// m_ShapesGeometry will call m_Shapes.Bind() on each registered shape
 		m_ShapesGeometry.Draw(d3dcontext, m_GeometryCallbacks);
-
-
-		m_SkullGeometry.Bind(d3dcontext);
-		m_Skull.Bind(GetDeviceResources(), m_Effects, m_ViewProjection);
-		m_SkullGeometry.Draw(d3dcontext, m_GeometryCallbacks);
 	}
 
 
@@ -48,6 +48,37 @@ namespace Pleiades::Sandbox
 
 		if (update)
 			UpdateViewProjection();
+
+		for (auto& material : {
+			&m_Plane.Material,
+			&m_Skull.Material,
+			&m_Cylinder[0].Material,
+			&m_Cylinder[1].Material,
+			&m_Cylinder[2].Material,
+			&m_Cylinder[3].Material
+			})
+		{
+			ImGui::PushID(material);
+
+			for (auto [name, vec_color] : {
+				std::pair{ "Ambient", &material->Ambient },
+				std::pair{ "Diffuse", &material->Diffuse },
+				std::pair{ "Specular", &material->Specular }
+				})
+			{
+				float color[4]{
+					DX::XMVectorGetX(*vec_color),
+					DX::XMVectorGetY(*vec_color),
+					DX::XMVectorGetZ(*vec_color),
+					DX::XMVectorGetW(*vec_color)
+				};
+				if (ImGui::ColorEdit4(name, color))
+					*vec_color = DX::XMVectorSet(color[0], color[1], color[2], color[3]);
+			}
+
+			ImGui::PopID();
+			ImGui::Separator();
+		}
 	}
 
 

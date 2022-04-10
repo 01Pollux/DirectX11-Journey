@@ -62,13 +62,12 @@ namespace Pleiades::Sandbox
 		GeometryInstance m_SkullGeometry;
 
 		EffectManager m_Effects;
-		float m_CamPosition[3]{ 0.f, -2.73f, 34.3f };
-		float m_CamRotation[3]{ -.33f, -.3f, 0.f };
+		float m_CamPosition[3]{ -1.5f, -2.55f, 30.39f };
+		float m_CamRotation[3]{ -.33f, -.49f, 0.01f };
 		DX::XMMATRIX m_ViewProjection;
 
 		GeoInfo_t m_Plane;
 		GeoInfo_t m_Skull;
 		GeoInfo_t m_Cylinder[4];
-		GeoInfo_t m_Sphere[4];
 	};
 }
