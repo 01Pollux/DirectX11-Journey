@@ -48,8 +48,8 @@ namespace Pleiades::Sandbox
 		void UpdateViewProjection()
 		{
 			m_ViewProjection =
-				DX::XMMatrixTranslation(m_CamPosition[0], m_CamPosition[1], m_CamPosition[2]) *
 				DX::XMMatrixRotationRollPitchYaw(m_CamRotation[0], m_CamRotation[1], m_CamRotation[2]) * 
+				DX::XMMatrixTranslation(m_CamPosition[0], m_CamPosition[1], m_CamPosition[2]) *
 				DX::XMMatrixPerspectiveLH(
 					DX::XM_PIDIV4, GetDeviceResources()->GetAspectRatio(), 1.f, 1000.f
 				);
@@ -62,8 +62,8 @@ namespace Pleiades::Sandbox
 		GeometryInstance m_SkullGeometry;
 
 		EffectManager m_Effects;
-		float m_CamPosition[3]{};
-		float m_CamRotation[3]{};
+		float m_CamPosition[3]{ 0.f, -2.73f, 34.3f };
+		float m_CamRotation[3]{ -.33f, -.3f, 0.f };
 		DX::XMMATRIX m_ViewProjection;
 
 		GeoInfo_t m_Plane;

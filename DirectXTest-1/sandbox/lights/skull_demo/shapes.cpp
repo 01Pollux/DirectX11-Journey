@@ -26,11 +26,28 @@ namespace Pleiades::Sandbox
 		);
 
 
+		//// Create a sphere
+		//m_ShapesGeometry.PushMesh(
+		//	GeometryFactory::CreateSphere(
+		//		20, 20,
+		//		.5f
+		//	)
+		//);
+		//// Draw the sphere 4 times
+		//m_GeometryCallbacks.emplace_back(
+		//	4,
+		//	[this](size_t index)
+		//	{
+		//		m_Cylinder[index].Bind(GetDeviceResources(), m_Effects, m_ViewProjection);
+		//	}
+		//);
+
+
 		// Create a cylinder
 		m_ShapesGeometry.PushMesh(
 			GeometryFactory::CreateCylinder(
 				20, 20,
-				.5f, 0.3f, 3.f
+				.5f, .3f, 3.f
 			)
 		);
 		// Draw the cylinder 4 times
@@ -39,23 +56,6 @@ namespace Pleiades::Sandbox
 			[this](size_t index)
 			{
 				m_Sphere[index].Bind(GetDeviceResources(), m_Effects, m_ViewProjection);
-			}
-		);
-
-
-		// Create a sphere
-		m_ShapesGeometry.PushMesh(
-			GeometryFactory::CreateCylinder(
-				20, 20,
-				.5f, 0.3f, 3.f
-			)
-		);
-		// Draw the sphere 4 times
-		m_GeometryCallbacks.emplace_back(
-			4,
-			[this](size_t index)
-			{
-				m_Cylinder[index].Bind(GetDeviceResources(), m_Effects, m_ViewProjection);
 			}
 		);
 	}
