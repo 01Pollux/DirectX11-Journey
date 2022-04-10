@@ -28,6 +28,7 @@ namespace Pleiades::Sandbox
 		m_Effects.SetWorldEyePosition({ m_CamPosition[0], m_CamPosition[1], m_CamPosition[2] });
 
 		m_Effects.Bind(d3dcontext);
+		m_Effects.Update(d3dcontext);
 
 		m_ShapesGeometry.Bind(d3dcontext);
 		// m_ShapesGeometry will call m_Shapes.Bind() on each registered shape

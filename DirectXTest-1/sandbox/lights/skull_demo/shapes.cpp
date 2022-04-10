@@ -112,7 +112,7 @@ namespace Pleiades::Sandbox
 
 	EffectManager::WorldConstantBuffer LitSkullDemo::GetDefaultWolrdConstants()
 	{
-		EffectManager::WorldConstantBuffer info;
+		EffectManager::WorldConstantBuffer info{};
 		
 		info.LightCount = 1;
 
@@ -143,12 +143,12 @@ namespace Pleiades::Sandbox
 
 		m_Skull.World = XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(0.0f, 1.0f, 0.0f);
 
-		for (size_t i = 0; i < std::size(m_Cylinder); i++)
+		for (size_t i = 0; i < std::size(m_Cylinder) / 2; i++)
 		{
 			m_Cylinder[i * 2 + 0].World = XMMatrixTranslation(-5.f, 1.5f, -10.f + i * 5);
 			m_Cylinder[i * 2 + 0].World = XMMatrixTranslation(+5.f, 1.5f, -10.f + i * 5);
 
-			m_Sphere[i * 2 + 1].World = XMMatrixTranslation(-5.f, 3.5f, -10.f + i * 5);
+			m_Sphere[i * 2 + 0].World = XMMatrixTranslation(-5.f, 3.5f, -10.f + i * 5);
 			m_Sphere[i * 2 + 1].World = XMMatrixTranslation(+5.f, 3.5f, -10.f + i * 5);
 		}
 

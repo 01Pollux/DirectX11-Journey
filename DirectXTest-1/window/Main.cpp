@@ -51,6 +51,8 @@ int WINAPI wWinMain(
 	if (FAILED(hr))
 		return 1;
 
+	_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG | _CRTDBG_LEAK_CHECK_DF);
+
 	s_GameInst = new Game(false /* fullscreen */);
 	HWND hwnd;
 

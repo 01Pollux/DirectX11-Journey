@@ -22,6 +22,7 @@ namespace Pleiades::Sandbox
 		};
 		static_assert((sizeof(WorldConstantBuffer) % 16) == 0, "Invalid size for d3d11 constant buffers");
 
+		EffectManager() = default;
 		EffectManager(ID3D11Device* d3ddevice, const WorldConstantBuffer& data = {}) :
 			m_Buffer(data)
 		{
@@ -116,4 +117,18 @@ namespace Pleiades::Sandbox
 		DX::ComPtr<ID3D11Buffer> m_d3dBuffer;
 		bool m_BufferDirty{};
 	};
+
+
+#define ASSERT_FXC(Name, Offset, Size)												\
+	static_assert(offsetof(EffectManager::WorldConstantBuffer, Name) == Offset);	\
+	static_assert(sizeof(EffectManager::WorldConstantBuffer::Name) == Size)
+
+	ASSERT_FXC(WorldViewProj, 0, 64);
+	ASSERT_FXC(World, 64, 64);
+	ASSERT_FXC(WorldInvTranspose, 128, 64);
+
+	ASSERT_FXC(EyePosition, 192, 12);
+	ASSERT_FXC(LightCount, 204, 4);
+	ASSERT_FXC(Material, 208, 64);
+	ASSERT_FXC(Lights, 272, 192);
 }
