@@ -8,6 +8,8 @@ namespace Pleiades
 {
 	struct GeometryInstance
 	{
+		using callback_type = std::pair<size_t, std::function<void(size_t)>>;
+
 		struct MeshData_t
 		{
 			using verticies_type = DX::VertexPositionNormalTexture;
@@ -96,6 +98,41 @@ namespace Pleiades
 
 				idx_offset += idx_size;
 				vtx_offset += vtx_size;
+			}
+		}
+
+		/// <summary>
+		/// Unlike its counter part, this version of Draw will execute callback if it exists on each mesh
+		/// and repeat the process n times
+		/// </summary>
+		void Draw(
+			ID3D11DeviceContext* d3dcontext, 
+			const std::span<callback_type> mesh_callback
+		)
+		{
+			auto iter = mesh_callback.begin();
+
+			size_t vtx_offset{}, idx_offset{};
+			for (const auto& [vtx_size, idx_size] : MeshSizes)
+			{
+				size_t draw_time = iter->first;
+
+				while (draw_time)
+				{
+					--draw_time;
+					if (iter->second)
+						iter->second(draw_time);
+
+					d3dcontext->DrawIndexed(
+						static_cast<uint32_t>(idx_size),
+						static_cast<uint32_t>(idx_offset),
+						static_cast<uint32_t>(vtx_offset)
+					);
+				}
+				
+				idx_offset += idx_size;
+				vtx_offset += vtx_size;
+				++iter;
 			}
 		}
 	};

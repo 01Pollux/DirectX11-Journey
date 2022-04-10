@@ -34,7 +34,9 @@
     <ClInclude Include="sandbox\from_file\skull.hpp" />
     <ClInclude Include="sandbox\from_file\car.hpp" />
     <ClInclude Include="sandbox\lights\helper.hpp" />
-    <ClInclude Include="sandbox\lights\light.hpp" />
+    <ClInclude Include="sandbox\lights\basic_demo\light.hpp" />
+    <ClInclude Include="sandbox\lights\skull_demo\skull.hpp" />
+    <ClInclude Include="sandbox\lights\skull_demo\effect.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -58,7 +60,9 @@
     <ClCompile Include="sandbox\plane\plane_and_sphere.cpp" />
     <ClCompile Include="sandbox\from_file\skull.cpp" />
     <ClCompile Include="sandbox\from_file\car.cpp" />
-    <ClCompile Include="sandbox\lights\light.cpp" />
+    <ClCompile Include="sandbox\lights\basic_demo\light.cpp" />
+    <ClCompile Include="sandbox\lights\skull_demo\skull.cpp" />
+    <ClCompile Include="sandbox\lights\skull_demo\shapes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -80,6 +84,8 @@
     <FxCompile Include="resources\geometry_default_vs.hlsl" />
     <FxCompile Include="resources\lights\light_test_vs.hlsl" />
     <FxCompile Include="resources\lights\light_test_ps.hlsl" />
+    <FxCompile Include="resources\lights\skull_demo_vs.hlsl" />
+    <FxCompile Include="resources\lights\skull_demo_ps.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">
@@ -88,9 +94,9 @@
     <None Include="sandbox\test_house\Shader1.dgsl" />
     <None Include="resources\lights\helper.hlsli" />
     <None Include="resources\lights\light_test.hlsli" />
+    <None Include="resources\lights\skull_demo.hlsli" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="E:\Dev\Introduction-to-3D-Game-Programming-With-DirectX11-master\Chapter 6 Drawing in Direct3D\Skull\Models\skull.txt" />
     <Text Include="sandbox\from_file\car.txt" />
     <Text Include="sandbox\from_file\skull.txt" />
   </ItemGroup>

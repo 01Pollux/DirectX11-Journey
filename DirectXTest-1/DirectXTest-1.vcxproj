@@ -93,6 +93,8 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <ModuleOutputFile>$(IntDir)</ModuleOutputFile>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -113,6 +115,8 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FloatingPointModel>Fast</FloatingPointModel>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ModuleOutputFile>$(IntDir)</ModuleOutputFile>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -135,6 +139,8 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <ModuleOutputFile>$(IntDir)</ModuleOutputFile>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -158,6 +164,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <ModuleOutputFile>$(IntDir)</ModuleOutputFile>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -172,10 +180,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="directx\DeviceResources.hpp" />
+    <ClInclude Include="sandbox\lights\skull_demo\effect.hpp" />
     <ClInclude Include="imgui\imgui.hpp" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
     <ClInclude Include="imgui\imgui_impl_win32.h" />
-    <ClInclude Include="sandbox\lights\light.hpp" />
+    <ClInclude Include="sandbox\lights\basic_demo\light.hpp" />
     <ClInclude Include="sandbox\from_file\car.hpp" />
     <ClInclude Include="sandbox\from_file\skull.hpp" />
     <ClInclude Include="sandbox\geometry_factory.hpp" />
@@ -188,6 +197,7 @@
     <ClInclude Include="sandbox\plane\simple_plane.hpp" />
     <ClInclude Include="sandbox\manyshapes\geosphere.hpp" />
     <ClInclude Include="sandbox\resolution_changer\resolution_changer.hpp" />
+    <ClInclude Include="sandbox\lights\skull_demo\skull.hpp" />
     <ClInclude Include="utils\sandbox.hpp" />
     <ClInclude Include="window\Game.hpp" />
     <ClInclude Include="utils\pch.hpp" />
@@ -199,10 +209,11 @@
     <ClCompile Include="imgui\imgui_impl_win32.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="sandbox\lights\light.cpp" />
+    <ClCompile Include="sandbox\lights\basic_demo\light.cpp" />
     <ClCompile Include="sandbox\from_file\car.cpp" />
     <ClCompile Include="sandbox\from_file\skull.cpp" />
     <ClCompile Include="sandbox\geometry_factory.cpp" />
+    <ClCompile Include="sandbox\lights\skull_demo\shapes.cpp" />
     <ClCompile Include="sandbox\manyshapes\cube3d.cpp" />
     <ClCompile Include="sandbox\manyshapes\cylinder.cpp" />
     <ClCompile Include="sandbox\manyshapes\shapes.cpp" />
@@ -211,6 +222,7 @@
     <ClCompile Include="sandbox\plane\simple_plane.cpp" />
     <ClCompile Include="sandbox\manyshapes\geosphere.cpp" />
     <ClCompile Include="sandbox\resolution_changer\resolution_changer.cpp" />
+    <ClCompile Include="sandbox\lights\skull_demo\skull.cpp" />
     <ClCompile Include="utils\sandbox.cpp" />
     <ClCompile Include="window\Game.cpp" />
     <ClCompile Include="window\GameRender.cpp" />
@@ -253,6 +265,16 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="resources\lights\skull_demo_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
@@ -302,15 +324,25 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="resources\lights\skull_demo_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\lights\helper.hlsli" />
     <None Include="resources\lights\light_test.hlsli" />
+    <None Include="resources\lights\skull_demo.hlsli" />
     <None Include="sandbox\test_house\Scene.fbx" />
     <None Include="sandbox\test_house\Shader1.dgsl" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="E:\Dev\Introduction-to-3D-Game-Programming-With-DirectX11-master\Chapter 6 Drawing in Direct3D\Skull\Models\skull.txt" />
     <Text Include="sandbox\from_file\car.txt" />
     <Text Include="sandbox\from_file\skull.txt" />
   </ItemGroup>

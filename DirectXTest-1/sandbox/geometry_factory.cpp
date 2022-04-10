@@ -552,6 +552,9 @@ namespace Pleiades
 		// Create constant buffer for position
 		if (!custom_constants)
 			d3dConstants_WRP.Create(d3ddevice);
+
+		// Dispose of old buffer
+		Mesh = {};
 	}
 
 
@@ -624,5 +627,4 @@ namespace Pleiades
 
 		d3dcontext->PSSetShader(d3dPxlShader.Get(), nullptr, 0);
 	}
-
 }

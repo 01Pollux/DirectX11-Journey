@@ -39,15 +39,18 @@
 #include <DirectXMath.h>
 #include <DirectXColors.h>
 
-#include <algorithm>
 #include <cmath>
-#include <cstdint>
-#include <cstdio>
-#include <cwchar>
-#include <exception>
-#include <iterator>
+#include <algorithm>
 #include <memory>
+#include <functional>
 #include <stdexcept>
+
+#include <exception>
+#include <string>
+#include <span>
+#include <vector>
+#include <array>
+#include <numeric>
 
 #ifdef _DEBUG
 #include <dxgidebug.h>
