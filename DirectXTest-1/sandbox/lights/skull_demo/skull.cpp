@@ -66,7 +66,7 @@ namespace Pleiades::Sandbox
 				++window_open;
 				continue;
 			}
-			if (!ImGui::Begin(window_name, window_open++))
+			if (!ImGui::Begin(window_name, window_open++, ImGuiWindowFlags_AlwaysAutoResize))
 			{
 				ImGui::End();
 				continue;
@@ -96,7 +96,7 @@ namespace Pleiades::Sandbox
 		if (!*window_open)
 			return;
 
-		if (ImGui::Begin("Light", window_open))
+		if (ImGui::Begin("Light", window_open, ImGuiWindowFlags_AlwaysAutoResize))
 		{
 			if (ImGui::DragInt("Light count", &m_LightCount, 1.f, 1, 3))
 				m_Effects.SetLightCount(m_LightCount);
