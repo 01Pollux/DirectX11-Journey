@@ -111,6 +111,11 @@ namespace Pleiades::Sandbox
 			}
 		}
 
+		[[nodiscard]]
+		WorldConstantBuffer& Buffer() noexcept
+		{
+			return m_Buffer;
+		}
 
 	private:
 		WorldConstantBuffer m_Buffer;

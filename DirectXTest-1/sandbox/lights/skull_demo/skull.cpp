@@ -49,16 +49,28 @@ namespace Pleiades::Sandbox
 		if (update)
 			UpdateViewProjection();
 
-		for (auto& material : {
-			&m_Plane.Material,
-			&m_Skull.Material,
-			&m_Cylinder[0].Material,
-			&m_Cylinder[1].Material,
-			&m_Cylinder[2].Material,
-			&m_Cylinder[3].Material
+		static bool windows[7]{};
+		bool* window_open = windows;
+		for (auto& [window_name, material] : {
+			std::pair{ "Plane", &m_Plane.Material },
+			std::pair{ "Skull", &m_Skull.Material },
+			std::pair{ "Cylinder[0]", &m_Cylinder[0].Material } ,
+			std::pair{ "Cylinder[1]", &m_Cylinder[1].Material } ,
+			std::pair{ "Cylinder[2]", &m_Cylinder[2].Material } ,
+			std::pair{ "Cylinder[3]", &m_Cylinder[3].Material }
 			})
 		{
-			ImGui::PushID(material);
+			ImGui::Checkbox(window_name, window_open);
+			if (!*window_open)
+			{
+				++window_open;
+				continue;
+			}
+			if (!ImGui::Begin(window_name, window_open++))
+			{
+				ImGui::End();
+				continue;
+			}
 
 			for (auto [name, vec_color] : {
 				std::pair{ "Ambient", &material->Ambient },
@@ -76,9 +88,55 @@ namespace Pleiades::Sandbox
 					*vec_color = DX::XMVectorSet(color[0], color[1], color[2], color[3]);
 			}
 
-			ImGui::PopID();
-			ImGui::Separator();
+			ImGui::End();
 		}
+
+
+		ImGui::Checkbox("Light", window_open);
+		if (!*window_open)
+			return;
+
+		if (ImGui::Begin("Light", window_open))
+		{
+			if (ImGui::DragInt("Light count", &m_LightCount, 1.f, 1, 3))
+				m_Effects.SetLightCount(m_LightCount);
+
+			for (int i = 0; i < 3; i++)
+			{
+				ImGui::PushID(i);
+
+				for (auto [name, vec_color] : {
+					std::pair{ "Ambient", &m_Effects.Buffer().Lights[i].Ambient },
+					std::pair{ "Diffuse", &m_Effects.Buffer().Lights[i].Diffuse }
+					})
+				{
+					float color[4]{
+						DX::XMVectorGetX(*vec_color),
+						DX::XMVectorGetY(*vec_color),
+						DX::XMVectorGetZ(*vec_color),
+						DX::XMVectorGetW(*vec_color)
+					};
+					if (ImGui::ColorEdit4(name, color))
+						*vec_color = DX::XMVectorSet(color[0], color[1], color[2], color[3]);
+				}
+
+				ImGui::DragFloat3("Direction", &m_Effects.Buffer().Lights[i].Direction.x);
+
+				float color[4]{
+						DX::XMVectorGetX(m_Effects.Buffer().Lights[i].Specular),
+						DX::XMVectorGetY(m_Effects.Buffer().Lights[i].Specular),
+						DX::XMVectorGetZ(m_Effects.Buffer().Lights[i].Specular),
+						DX::XMVectorGetW(m_Effects.Buffer().Lights[i].Specular)
+				};
+				if (ImGui::DragFloat4("Specular", color))
+					m_Effects.Buffer().Lights[i].Specular = DX::XMVectorSet(color[0], color[1], color[2], color[3]);
+
+				ImGui::PopID();
+				ImGui::Separator();
+			}
+		}
+
+		ImGui::End();
 	}
 
 
