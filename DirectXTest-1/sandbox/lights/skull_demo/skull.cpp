@@ -74,8 +74,7 @@ namespace Pleiades::Sandbox
 
 			for (auto [name, vec_color] : {
 				std::pair{ "Ambient", &material->Ambient },
-				std::pair{ "Diffuse", &material->Diffuse },
-				std::pair{ "Specular", &material->Specular }
+				std::pair{ "Diffuse", &material->Diffuse }
 				})
 			{
 				float color[4]{
@@ -87,6 +86,15 @@ namespace Pleiades::Sandbox
 				if (ImGui::ColorEdit4(name, color))
 					*vec_color = DX::XMVectorSet(color[0], color[1], color[2], color[3]);
 			}
+
+			float color[4]{
+					DX::XMVectorGetX(material->Specular),
+					DX::XMVectorGetY(material->Specular),
+					DX::XMVectorGetZ(material->Specular),
+					DX::XMVectorGetW(material->Specular)
+			};
+			if (ImGui::DragFloat4("Specular", color))
+				material->Specular = DX::XMVectorSet(color[0], color[1], color[2], color[3]);
 
 			ImGui::End();
 		}
