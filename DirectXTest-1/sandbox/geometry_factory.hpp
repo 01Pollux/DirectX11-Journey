@@ -142,6 +142,31 @@ namespace Pleiades
 	public:
 		using MeshData_t = GeometryInstance::MeshData_t;
 
+		static MeshData_t CreateBox(
+			float width,
+			float height,
+			float depth
+		)
+		{
+			MeshData_t mesh;
+			CreateBoxVertices(mesh, width, height, depth);
+			CreateBoxIndices(mesh);
+			return mesh;
+		}
+
+		static void CreateBox(
+			std::unique_ptr<GeometryInstance>& geometry,
+			uint32_t rows,
+			uint32_t columns,
+			float width,
+			float height
+		)
+		{
+			geometry = std::make_unique<GeometryInstance>(geometry.get());
+			geometry->PushMesh(CreatePlane(rows, columns, width, height));
+		}
+		
+
 		static MeshData_t CreatePlane(
 			uint32_t rows,
 			uint32_t columns,
@@ -246,6 +271,18 @@ namespace Pleiades
 		}
 
 	private:
+		static void CreateBoxVertices(
+			MeshData_t& mesh,
+			float width,
+			float height,
+			float depth
+		);
+
+		static void CreateBoxIndices(
+			MeshData_t& mesh
+		);
+		
+		
 		static void CreatePlaneVertices(
 			MeshData_t& mesh,
 			uint32_t rows,

@@ -6,6 +6,95 @@
 
 namespace Pleiades
 {
+	void GeometryFactory::CreateBoxVertices(
+		MeshData_t& mesh, 
+		float width, 
+		float height, 
+		float depth
+	)
+	{
+		using namespace DX;
+
+		mesh.vertices.clear();
+		mesh.vertices.resize(24);
+
+		float 
+			hw = width / 2.f,
+			hh = height / 2.f,
+			hd = depth / 2.f;
+
+		mesh.vertices[0] = { XMFLOAT3(-hw, -hh, -hd), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 1.0f) };
+		mesh.vertices[1] = { XMFLOAT3(-hw, +hh, -hd), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) };
+		mesh.vertices[2] = { XMFLOAT3(+hw, +hh, -hd), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) };
+		mesh.vertices[3] = { XMFLOAT3(+hw, -hh, -hd), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) };
+
+		// Fill in the back face vertex data.
+		mesh.vertices[4] = { XMFLOAT3(-hw, -hh, +hd), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) };
+		mesh.vertices[5] = { XMFLOAT3(+hw, -hh, +hd), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) };
+		mesh.vertices[6] = { XMFLOAT3(+hw, +hh, +hd), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) };
+		mesh.vertices[7] = { XMFLOAT3(-hw, +hh, +hd), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT2(1.0f, 0.0f) };
+
+		// Fill in the top face vertex data.
+		mesh.vertices[8] =  { XMFLOAT3(-hw, +hh, -hd), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) };
+		mesh.vertices[9] =  { XMFLOAT3(-hw, +hh, +hd), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) };
+		mesh.vertices[10] = { XMFLOAT3(+hw, +hh, +hd), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) };
+		mesh.vertices[11] = { XMFLOAT3(+hw, +hh, -hd), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) };
+
+		// Fill in the bottom face vertex data.
+		mesh.vertices[12] = { XMFLOAT3(-hw, -hh, -hd), XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) };
+		mesh.vertices[13] = { XMFLOAT3(+hw, -hh, -hd), XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) };
+		mesh.vertices[14] = { XMFLOAT3(+hw, -hh, +hd), XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) };
+		mesh.vertices[15] = { XMFLOAT3(-hw, -hh, +hd), XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) };
+
+		// Fill in the left face vertex data.
+		mesh.vertices[16] = { XMFLOAT3(-hw, -hh, +hd), XMFLOAT3(-1.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) };
+		mesh.vertices[17] = { XMFLOAT3(-hw, +hh, +hd), XMFLOAT3(-1.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) };
+		mesh.vertices[18] = { XMFLOAT3(-hw, +hh, -hd), XMFLOAT3(-1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) };
+		mesh.vertices[19] = { XMFLOAT3(-hw, -hh, -hd), XMFLOAT3(-1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) };
+
+		// Fill in the right face vertex data.
+		mesh.vertices[20] = { XMFLOAT3(+hw, -hh, -hd), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) };
+		mesh.vertices[21] = { XMFLOAT3(+hw, +hh, -hd), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 0.0f) };
+		mesh.vertices[22] = { XMFLOAT3(+hw, +hh, +hd), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) };
+		mesh.vertices[23] = { XMFLOAT3(+hw, -hh, +hd), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) };
+	}
+
+	void GeometryFactory::CreateBoxIndices(
+		MeshData_t& mesh
+	)
+	{
+		mesh.indices.clear();
+		mesh.indices.resize(36);
+
+		auto& i = mesh.indices;
+
+		// Fill in the front face index data
+		i[0] = 0; i[1] = 1; i[2] = 2;
+		i[3] = 0; i[4] = 2; i[5] = 3;
+
+		// Fill in the back face index data
+		i[6] = 4; i[7] = 5; i[8] = 6;
+		i[9] = 4; i[10] = 6; i[11] = 7;
+
+		// Fill in the top face index data
+		i[12] = 8; i[13] = 9; i[14] = 10;
+		i[15] = 8; i[16] = 10; i[17] = 11;
+
+		// Fill in the bottom face index data
+		i[18] = 12; i[19] = 13; i[20] = 14;
+		i[21] = 12; i[22] = 14; i[23] = 15;
+
+		// Fill in the left face index data
+		i[24] = 16; i[25] = 17; i[26] = 18;
+		i[27] = 16; i[28] = 18; i[29] = 19;
+
+		// Fill in the right face index data
+		i[30] = 20; i[31] = 21; i[32] = 22;
+		i[33] = 20; i[34] = 22; i[35] = 23;
+	}
+
+
+
 	void GeometryFactory::CreatePlaneVertices(
 		MeshData_t& mesh,
 		uint32_t rows,
