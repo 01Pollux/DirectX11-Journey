@@ -14,6 +14,10 @@ namespace Pleiades::Sandbox
 		UpdateViewProjection();
 		BuildBoxMesh();
 
+		m_Box.Material.Ambient = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
+		m_Box.Material.Diffuse = DX::XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+		m_Box.Material.Specular = DX::XMVectorSet(0.6f, 0.6f, 0.6f, 16.0f);
+
 		m_BoxGeometry->CreateBuffers(GetDeviceResources()->GetD3DDevice(), true);
 		m_BoxGeometry->CreateShaders(GetDeviceResources()->GetD3DDevice(), L"resources/box_texture/box_vs.cso", L"resources/box_texture/box_ps.cso");
 	}
@@ -23,6 +27,7 @@ namespace Pleiades::Sandbox
 	{
 		auto d3dcontext = GetDeviceResources()->GetD3DDeviceContext();
 		
+		m_Effects.SetWorldEyePosition({ m_CamPosition[0], m_CamPosition[1], m_CamPosition[2] });
 		m_Effects.Bind(d3dcontext);
 
 		m_BoxGeometry->Bind(d3dcontext);
@@ -37,16 +42,87 @@ namespace Pleiades::Sandbox
 		if (ImGui::Button("Update"))
 		{
 			BuildBoxMesh();
-			m_BoxGeometry->CreateBuffers(GetDeviceResources()->GetD3DDevice());
+			m_BoxGeometry->CreateBuffers(GetDeviceResources()->GetD3DDevice(), true);
 		}
 
+		static bool window_open[2]{};
+
+		ImGui::DragFloat3("Draw size", m_BoxSize);
 		bool update = ImGui::DragFloat3("Position", m_CamPosition);
 		update |= ImGui::DragFloat3("Rotation", m_CamRotation);
 
 		if (update)
 			UpdateViewProjection();
 
-		ImGui::DragFloat3("Draw size", m_BoxSize);
+		ImGui::Checkbox("Box", &window_open[0]);
+		if (window_open[0])
+		{
+			if (ImGui::Begin("Box", &window_open[0], ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				for (auto [name, vec_color] : {
+				std::pair{ "Ambient", &m_Box.Material.Ambient },
+				std::pair{ "Diffuse", &m_Box.Material.Diffuse }
+					})
+				{
+					float color[4]{
+						DX::XMVectorGetX(*vec_color),
+						DX::XMVectorGetY(*vec_color),
+						DX::XMVectorGetZ(*vec_color),
+						DX::XMVectorGetW(*vec_color)
+					};
+					if (ImGui::ColorEdit4(name, color))
+						*vec_color = DX::XMVectorSet(color[0], color[1], color[2], color[3]);
+				}
+
+				float color[4]{
+						DX::XMVectorGetX(m_Box.Material.Specular),
+						DX::XMVectorGetY(m_Box.Material.Specular),
+						DX::XMVectorGetZ(m_Box.Material.Specular),
+						DX::XMVectorGetW(m_Box.Material.Specular)
+				};
+				if (ImGui::DragFloat4("Specular", color))
+					m_Box.Material.Specular = DX::XMVectorSet(color[0], color[1], color[2], color[3]);
+
+			}
+			
+			ImGui::End();
+		}
+
+
+		ImGui::Checkbox("Light", &window_open[1]);
+		if (!window_open[1])
+			return;
+
+		if (ImGui::Begin("Light", &window_open[1], ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			for (auto [name, vec_color] : {
+					std::pair{ "Ambient", &m_Effects.Buffer().Light.Ambient },
+					std::pair{ "Diffuse", &m_Effects.Buffer().Light.Diffuse }
+				})
+			{
+				float color[4]{
+					DX::XMVectorGetX(*vec_color),
+					DX::XMVectorGetY(*vec_color),
+					DX::XMVectorGetZ(*vec_color),
+					DX::XMVectorGetW(*vec_color)
+				};
+				if (ImGui::ColorEdit4(name, color))
+					*vec_color = DX::XMVectorSet(color[0], color[1], color[2], color[3]);
+			}
+
+			ImGui::DragFloat3("Direction", &m_Effects.Buffer().Light.Direction.x);
+
+			float color[4]{
+					DX::XMVectorGetX(m_Effects.Buffer().Light.Specular),
+					DX::XMVectorGetY(m_Effects.Buffer().Light.Specular),
+					DX::XMVectorGetZ(m_Effects.Buffer().Light.Specular),
+					DX::XMVectorGetW(m_Effects.Buffer().Light.Specular)
+			};
+			if (ImGui::DragFloat4("Specular", color))
+				m_Effects.Buffer().Light.Specular = DX::XMVectorSet(color[0], color[1], color[2], color[3]);
+		}
+
+		ImGui::End();
 	}
 
 
@@ -66,11 +142,12 @@ namespace Pleiades::Sandbox
 	{
 		EffectManager::WorldConstantBuffer info{};
 
+		info.World = info.WorldViewProj = info.WorldInvTranspose = DX::XMMatrixIdentity();
+
 		info.Light.Ambient = DX::XMVectorSet(0.2f, 0.2f, 0.2f, 1.0f);
 		info.Light.Diffuse = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
 		info.Light.Specular = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
 		info.Light.Direction = { .57735f, -.57735f, .57735f };
-
 
 		return info;
 	}
