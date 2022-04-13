@@ -59,9 +59,32 @@ namespace Pleiades::Sandbox
 		{
 			if (ImGui::Begin("Box", &window_open[0], ImGuiWindowFlags_AlwaysAutoResize))
 			{
+				if (ImGui::BeginCombo("Texture", nullptr))
+				{
+					for (auto [texture_name, texture_path] : {
+						std::pair("darkbrickdxt1.dds", L"resources/box_texture/darkbrickdxt1.dds"),
+						std::pair("WoodCrate01.dds", L"resources/box_texture/WoodCrate01.dds"),
+						std::pair("WoodCrate02.dds", L"resources/box_texture/WoodCrate02.dds")
+						})
+					{
+						if (ImGui::Selectable(texture_name))
+						{
+							DX::ThrowIfFailed(
+								DX::CreateDDSTextureFromFile(
+									GetDeviceResources()->GetD3DDevice(),
+									texture_path,
+									nullptr,
+									m_Effects.NonNumericBuffer().Texture.ReleaseAndGetAddressOf()
+								)
+							);
+						}
+					}
+					ImGui::EndCombo();
+				}
+
 				for (auto [name, vec_color] : {
-				std::pair{ "Ambient", &m_Box.Material.Ambient },
-				std::pair{ "Diffuse", &m_Box.Material.Diffuse }
+					std::pair{ "Ambient", &m_Box.Material.Ambient },
+					std::pair{ "Diffuse", &m_Box.Material.Diffuse }
 					})
 				{
 					float color[4]{
