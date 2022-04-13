@@ -184,6 +184,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="directx\DeviceResources.hpp" />
+    <ClInclude Include="sandbox\textures\box\box_texture.hpp" />
+    <ClInclude Include="sandbox\textures\box\effect.hpp" />
     <ClInclude Include="sandbox\lights\skull_demo\effect.hpp" />
     <ClInclude Include="imgui\imgui.hpp" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
@@ -192,7 +194,7 @@
     <ClInclude Include="sandbox\from_file\car.hpp" />
     <ClInclude Include="sandbox\from_file\skull.hpp" />
     <ClInclude Include="sandbox\geometry_factory.hpp" />
-    <ClInclude Include="sandbox\lights\helper.hpp" />
+    <ClInclude Include="sandbox\helper.hpp" />
     <ClInclude Include="sandbox\manyshapes\cube3d.hpp" />
     <ClInclude Include="sandbox\manyshapes\cylinder.hpp" />
     <ClInclude Include="sandbox\manyshapes\shapes.hpp" />
@@ -213,6 +215,7 @@
     <ClCompile Include="imgui\imgui_impl_win32.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="sandbox\textures\box\box_texture.cpp" />
     <ClCompile Include="sandbox\lights\basic_demo\light.cpp" />
     <ClCompile Include="sandbox\from_file\car.cpp" />
     <ClCompile Include="sandbox\from_file\skull.cpp" />
@@ -254,6 +257,26 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="resources\box_texture\box_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="resources\box_texture\box_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="resources\lights\light_test_ps.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
@@ -348,6 +371,8 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\box_texture\helper.hlsli" />
+    <None Include="resources\box_texture\box.hlsli" />
     <None Include="resources\lights\helper.hlsli" />
     <None Include="resources\lights\light_test.hlsli" />
     <None Include="resources\lights\skull_demo.hlsli" />

@@ -4,13 +4,19 @@
 #include "imgui/imgui.hpp"
 
 #include "sandbox/manyshapes/shapes.hpp"
+
 #include "sandbox/resolution_changer/resolution_changer.hpp"
+
 #include "sandbox/plane/simple_plane.hpp"
 #include "sandbox/plane/plane_and_sphere.hpp"
+
 #include "sandbox/from_file/skull.hpp"
 #include "sandbox/from_file/car.hpp"
+
 #include "sandbox/lights/basic_demo/light.hpp"
 #include "sandbox/lights/skull_demo/skull.hpp"
+
+#include "sandbox/textures/box/box_texture.hpp"
 
 namespace Pleiades
 {
@@ -20,15 +26,21 @@ namespace Pleiades
 		m_States = std::make_unique<DX::CommonStates>(res->GetD3DDevice());
 
 		AddSample<Sandbox::ManyShapes>();
+		
 		AddSample<Sandbox::ResolutionCChanger_ImGui>();
+		
 		AddSample<Sandbox::SimplePlane>();
 		AddSample<Sandbox::PlaneAndSphere>();
+		
 		AddSample<Sandbox::SkullFromFile>();
 		AddSample<Sandbox::CarFromFile>();
+		
 		AddSample<Sandbox::LightDemo>();
 		AddSample<Sandbox::LitSkullDemo>();
 
-		Set(Sandbox::LitSkullDemo::GetName());
+		AddSample<Sandbox::TexturedBox>();
+
+		Set(Sandbox::TexturedBox::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

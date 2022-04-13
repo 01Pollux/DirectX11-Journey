@@ -26,8 +26,8 @@ namespace Pleiades::Sandbox
 		auto d3dcontext = GetDeviceResources()->GetD3DDeviceContext();
 
 		m_Effects.SetWorldEyePosition({ m_CamPosition[0], m_CamPosition[1], m_CamPosition[2] });
-
 		m_Effects.Bind(d3dcontext);
+
 
 		m_SkullGeometry.Bind(d3dcontext);
 		m_Effects.SetMaterial(m_Skull.Material);

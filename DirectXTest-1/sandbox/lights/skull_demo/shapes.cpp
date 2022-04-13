@@ -92,7 +92,8 @@ namespace Pleiades::Sandbox
 	}
 
 
-	EffectManager::WorldConstantBuffer LitSkullDemo::GetDefaultWolrdConstants()
+	auto LitSkullDemo::GetDefaultWolrdConstants() ->
+		EffectManager::WorldConstantBuffer
 	{
 		EffectManager::WorldConstantBuffer info{};
 		

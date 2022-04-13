@@ -2,28 +2,35 @@
 
 #include "sandbox/helper.hpp"
 #include "utils/sandbox.hpp"
+#include <bitset>
 
-namespace Pleiades::Sandbox::LitDemo
+namespace Pleiades::Sandbox::TextureBox
 {
 	class EffectManager
 	{
 	public:
+		struct NonNumericConstants
+		{
+			DX::ComPtr<ID3D11ShaderResourceView> Texture;
+			DX::ComPtr<ID3D11SamplerState> Sampler;
+		};
+
 		struct WorldConstantBuffer
 		{
 			DX::XMMATRIX WorldViewProj;
 			DX::XMMATRIX World;
 			DX::XMMATRIX WorldInvTranspose;
-			DX::XMFLOAT3 EyePosition;
-			int			 LightCount;
 
 			Material	 Material;
 
-			DirectionalLight Lights[3];
+			DirectionalLight Light;
+
+			DX::XMFLOAT3 EyePosition;
 		};
 		static_assert((sizeof(WorldConstantBuffer) % 16) == 0, "Invalid size for d3d11 constant buffers");
 
-		EffectManager(ID3D11Device* d3ddevice, const WorldConstantBuffer& data = {}) :
-			m_Buffer(data)
+		EffectManager(ID3D11Device* d3ddevice, NonNumericConstants&& shader_info, const WorldConstantBuffer& data = {}) :
+			m_Buffer(data), m_NBuffer(std::move(shader_info))
 		{
 			D3D11_BUFFER_DESC buffer_desc{};
 			buffer_desc.Usage = D3D11_USAGE_DEFAULT;
@@ -45,43 +52,43 @@ namespace Pleiades::Sandbox::LitDemo
 		void SetWorld(const DX::XMMATRIX& world)
 		{
 			m_Buffer.World = world;
-			m_BufferDirty = true;
+			m_DirtyFlags[0] = true;
 		}
 
 		void SetWorldViewProj(const DX::XMMATRIX& world_view_proj)
 		{
 			m_Buffer.WorldViewProj = world_view_proj;
-			m_BufferDirty = true;
+			m_DirtyFlags[0] = true;
 		}
 
 		void SetWorldInvTranspose(const DX::XMMATRIX& world_inv_transpose)
 		{
 			m_Buffer.WorldInvTranspose = world_inv_transpose;
-			m_BufferDirty = true;
+			m_DirtyFlags[0] = true;
 		}
 
 		void SetWorldEyePosition(const DX::XMFLOAT3& position)
 		{
 			m_Buffer.EyePosition = position;
-			m_BufferDirty = true;
+			m_DirtyFlags[0] = true;
 		}
 		
 		void SetMaterial(const Material& mat)
 		{
 			m_Buffer.Material = mat;
-			m_BufferDirty = true;
+			m_DirtyFlags[0] = true;
 		}
 
-		void SetLight(size_t light_idx, const DirectionalLight& light)
+		void SetLight(const DirectionalLight& light)
 		{
-			m_Buffer.Lights[light_idx] = light;
-			m_BufferDirty = true;
+			m_Buffer.Light = light;
+			m_DirtyFlags[0] = true;
 		}
 
-		void SetLightCount(int light_count)
+		void SetTexture(ID3D11ShaderResourceView* texture)
 		{
-			m_Buffer.LightCount = light_count;
-			m_BufferDirty = true;
+			m_NBuffer.Texture = texture;
+			m_DirtyFlags[1] = true;
 		}
 
 		void Bind(ID3D11DeviceContext* d3dcontext)
@@ -92,13 +99,20 @@ namespace Pleiades::Sandbox::LitDemo
 			d3dcontext->PSSetConstantBuffers(
 				0, 1, m_d3dBuffer.GetAddressOf()
 			);
+
+			d3dcontext->PSSetShaderResources(
+				0, 1, m_NBuffer.Texture.GetAddressOf()
+			);
+			d3dcontext->PSSetSamplers(
+				0, 1, m_NBuffer.Sampler.GetAddressOf()
+			);
 		}
 
 		void Update(ID3D11DeviceContext* d3dcontext)
 		{
-			if (m_BufferDirty)
+			if (m_DirtyFlags[0])
 			{
-				m_BufferDirty = false;
+				m_DirtyFlags[0] = false;
 				d3dcontext->UpdateSubresource(
 					m_d3dBuffer.Get(),
 					0,
@@ -111,6 +125,12 @@ namespace Pleiades::Sandbox::LitDemo
 		}
 
 		[[nodiscard]]
+		NonNumericConstants& NonNumericBuffer() noexcept
+		{
+			return m_NBuffer;
+		}
+
+		[[nodiscard]]
 		WorldConstantBuffer& Buffer() noexcept
 		{
 			return m_Buffer;
@@ -118,7 +138,9 @@ namespace Pleiades::Sandbox::LitDemo
 
 	private:
 		WorldConstantBuffer m_Buffer;
+		NonNumericConstants m_NBuffer;
+
 		DX::ComPtr<ID3D11Buffer> m_d3dBuffer;
-		bool m_BufferDirty{};
+		std::bitset<1> m_DirtyFlags;
 	};
 }

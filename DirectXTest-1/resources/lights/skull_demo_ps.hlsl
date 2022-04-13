@@ -16,7 +16,7 @@ float4 main(PSInput ps_input) : SV_Target
         res.Specular += light.Specular;
     }
     
-    float4 lit_color = res.Ambient + light.Diffuse + light.Specular;
+    float4 lit_color = res.Ambient + res.Diffuse + res.Specular;
     lit_color.a = gMaterial.Diffuse.a;
     return lit_color;
 }

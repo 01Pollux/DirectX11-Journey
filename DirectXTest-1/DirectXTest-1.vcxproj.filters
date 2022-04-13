@@ -33,10 +33,12 @@
     <ClInclude Include="sandbox\plane\plane_and_sphere.hpp" />
     <ClInclude Include="sandbox\from_file\skull.hpp" />
     <ClInclude Include="sandbox\from_file\car.hpp" />
-    <ClInclude Include="sandbox\lights\helper.hpp" />
+    <ClInclude Include="sandbox\helper.hpp" />
     <ClInclude Include="sandbox\lights\basic_demo\light.hpp" />
     <ClInclude Include="sandbox\lights\skull_demo\skull.hpp" />
     <ClInclude Include="sandbox\lights\skull_demo\effect.hpp" />
+    <ClInclude Include="sandbox\textures\box\box_texture.hpp" />
+    <ClInclude Include="sandbox\textures\box\effect.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -63,6 +65,7 @@
     <ClCompile Include="sandbox\lights\basic_demo\light.cpp" />
     <ClCompile Include="sandbox\lights\skull_demo\skull.cpp" />
     <ClCompile Include="sandbox\lights\skull_demo\shapes.cpp" />
+    <ClCompile Include="sandbox\textures\box\box_texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -86,6 +89,8 @@
     <FxCompile Include="resources\lights\light_test_ps.hlsl" />
     <FxCompile Include="resources\lights\skull_demo_vs.hlsl" />
     <FxCompile Include="resources\lights\skull_demo_ps.hlsl" />
+    <FxCompile Include="resources\box_texture\box_vs.hlsl" />
+    <FxCompile Include="resources\box_texture\box_ps.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">
@@ -95,6 +100,8 @@
     <None Include="resources\lights\helper.hlsli" />
     <None Include="resources\lights\light_test.hlsli" />
     <None Include="resources\lights\skull_demo.hlsli" />
+    <None Include="resources\box_texture\box.hlsli" />
+    <None Include="resources\box_texture\helper.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="sandbox\from_file\car.txt" />

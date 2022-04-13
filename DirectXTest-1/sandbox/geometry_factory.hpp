@@ -156,14 +156,13 @@ namespace Pleiades
 
 		static void CreateBox(
 			std::unique_ptr<GeometryInstance>& geometry,
-			uint32_t rows,
-			uint32_t columns,
 			float width,
-			float height
+			float height,
+			float depth
 		)
 		{
 			geometry = std::make_unique<GeometryInstance>(geometry.get());
-			geometry->PushMesh(CreatePlane(rows, columns, width, height));
+			geometry->PushMesh(CreateBox(width, height, depth));
 		}
 		
 
