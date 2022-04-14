@@ -18,6 +18,7 @@
 
 #include "sandbox/textures/box/box_texture.hpp"
 #include "sandbox/textures/box_multiple/box_texture.hpp"
+#include "sandbox/textures/box_anim/box_texture.hpp"
 #include "sandbox/textures/waves/waves_texture.hpp"
 
 namespace Pleiades
@@ -42,9 +43,10 @@ namespace Pleiades
 
 		AddSample<Sandbox::TexturedBox>();
 		AddSample<Sandbox::MultipleTexturedBox>();
+		AddSample<Sandbox::AnimatedTexturedBox>();
 		AddSample<Sandbox::WavesTextured>();
 
-		Set(Sandbox::MultipleTexturedBox::GetName());
+		Set(Sandbox::AnimatedTexturedBox::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

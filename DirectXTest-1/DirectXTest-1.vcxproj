@@ -204,6 +204,8 @@
     <ClInclude Include="sandbox\manyshapes\geosphere.hpp" />
     <ClInclude Include="sandbox\resolution_changer\resolution_changer.hpp" />
     <ClInclude Include="sandbox\lights\skull_demo\skull.hpp" />
+    <ClInclude Include="sandbox\textures\box_anim\box_texture.hpp" />
+    <ClInclude Include="sandbox\textures\box_anim\effect.hpp" />
     <ClInclude Include="sandbox\textures\box_multiple\box_texture.hpp" />
     <ClInclude Include="sandbox\textures\box_multiple\effect.hpp" />
     <ClInclude Include="sandbox\textures\waves\waves.hpp" />
@@ -235,6 +237,7 @@
     <ClCompile Include="sandbox\manyshapes\geosphere.cpp" />
     <ClCompile Include="sandbox\resolution_changer\resolution_changer.cpp" />
     <ClCompile Include="sandbox\lights\skull_demo\skull.cpp" />
+    <ClCompile Include="sandbox\textures\box_anim\box_texture.cpp" />
     <ClCompile Include="sandbox\textures\box_multiple\box_texture.cpp" />
     <ClCompile Include="sandbox\textures\waves\waves.cpp" />
     <ClCompile Include="sandbox\textures\waves\waves_texture.cpp" />

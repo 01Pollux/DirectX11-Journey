@@ -44,6 +44,8 @@
     <ClInclude Include="sandbox\textures\waves\waves.hpp" />
     <ClInclude Include="sandbox\textures\box_multiple\box_texture.hpp" />
     <ClInclude Include="sandbox\textures\box_multiple\effect.hpp" />
+    <ClInclude Include="sandbox\textures\box_anim\box_texture.hpp" />
+    <ClInclude Include="sandbox\textures\box_anim\effect.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -74,6 +76,7 @@
     <ClCompile Include="sandbox\textures\waves\waves_texture.cpp" />
     <ClCompile Include="sandbox\textures\waves\waves.cpp" />
     <ClCompile Include="sandbox\textures\box_multiple\box_texture.cpp" />
+    <ClCompile Include="sandbox\textures\box_anim\box_texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
