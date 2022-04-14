@@ -616,17 +616,42 @@ namespace Pleiades
 		}
 	}
 
-	void GeometryInstance::CreateBuffers(ID3D11Device* d3ddevice, bool custom_constants)
+	void GeometryInstance::CreateBuffers(ID3D11Device* d3ddevice, bool custom_constants, bool dynamic_vertex)
 	{
-		// Create vertex buffer
-		DX::ThrowIfFailed(
-			DX::CreateStaticBuffer(
-				d3ddevice,
-				Mesh.vertices,
-				D3D11_BIND_VERTEX_BUFFER,
-				d3dVerticies.ReleaseAndGetAddressOf()
-			)
-		);
+		if (dynamic_vertex)
+		{
+			D3D11_BUFFER_DESC vtx_buffer{};
+			vtx_buffer.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+			vtx_buffer.ByteWidth = static_cast<uint32_t>(Mesh.vertices.size() * sizeof(MeshData_t::verticies_type));
+			vtx_buffer.StructureByteStride = sizeof(MeshData_t::verticies_type);
+
+			vtx_buffer.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			vtx_buffer.Usage = D3D11_USAGE_DYNAMIC;
+
+			D3D11_SUBRESOURCE_DATA vtx_data{};
+			vtx_data.pSysMem = Mesh.vertices.data();
+
+			// Create vertex buffer
+			DX::ThrowIfFailed(
+				d3ddevice->CreateBuffer(
+					&vtx_buffer,
+					&vtx_data,
+					d3dVerticies.ReleaseAndGetAddressOf()
+				)
+			);
+		}
+		else
+		{
+			// Create vertex buffer
+			DX::ThrowIfFailed(
+				DX::CreateStaticBuffer(
+					d3ddevice,
+					Mesh.vertices,
+					D3D11_BIND_VERTEX_BUFFER,
+					d3dVerticies.ReleaseAndGetAddressOf()
+				)
+			);
+		}
 
 		// Create index buffer
 		DX::ThrowIfFailed(

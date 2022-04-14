@@ -39,6 +39,9 @@
     <ClInclude Include="sandbox\lights\skull_demo\effect.hpp" />
     <ClInclude Include="sandbox\textures\box\box_texture.hpp" />
     <ClInclude Include="sandbox\textures\box\effect.hpp" />
+    <ClInclude Include="sandbox\textures\waves\waves_texture.hpp" />
+    <ClInclude Include="sandbox\textures\waves\effect.hpp" />
+    <ClInclude Include="sandbox\textures\waves\waves.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -66,12 +69,23 @@
     <ClCompile Include="sandbox\lights\skull_demo\skull.cpp" />
     <ClCompile Include="sandbox\lights\skull_demo\shapes.cpp" />
     <ClCompile Include="sandbox\textures\box\box_texture.cpp" />
+    <ClCompile Include="sandbox\textures\waves\waves_texture.cpp" />
+    <ClCompile Include="sandbox\textures\waves\waves.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="directx.ico">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="E:\Dev\Introduction-to-3D-Game-Programming-With-DirectX11-master\Chapter 8 Texturing\TexturedHillsAndWaves\Textures\grass.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="E:\Dev\Introduction-to-3D-Game-Programming-With-DirectX11-master\Chapter 8 Texturing\TexturedHillsAndWaves\Textures\water1.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="E:\Dev\Introduction-to-3D-Game-Programming-With-DirectX11-master\Chapter 8 Texturing\TexturedHillsAndWaves\Textures\water2.dds">
       <Filter>Assets</Filter>
     </Image>
   </ItemGroup>

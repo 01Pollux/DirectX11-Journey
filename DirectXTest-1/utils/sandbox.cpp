@@ -17,6 +17,7 @@
 #include "sandbox/lights/skull_demo/skull.hpp"
 
 #include "sandbox/textures/box/box_texture.hpp"
+#include "sandbox/textures/waves/waves_texture.hpp"
 
 namespace Pleiades
 {
@@ -39,8 +40,9 @@ namespace Pleiades
 		AddSample<Sandbox::LitSkullDemo>();
 
 		AddSample<Sandbox::TexturedBox>();
+		AddSample<Sandbox::WavesTextured>();
 
-		Set(Sandbox::TexturedBox::GetName());
+		Set(Sandbox::WavesTextured::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

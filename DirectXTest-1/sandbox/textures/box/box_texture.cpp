@@ -65,7 +65,7 @@ namespace Pleiades::Sandbox
 						std::pair("darkbrickdxt1.dds", L"resources/box_texture/darkbrickdxt1.dds"),
 						std::pair("WoodCrate01.dds", L"resources/box_texture/WoodCrate01.dds"),
 						std::pair("WoodCrate02.dds", L"resources/box_texture/WoodCrate02.dds")
-						})
+					})
 					{
 						if (ImGui::Selectable(texture_name))
 						{
