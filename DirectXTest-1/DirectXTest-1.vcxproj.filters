@@ -42,6 +42,8 @@
     <ClInclude Include="sandbox\textures\waves\waves_texture.hpp" />
     <ClInclude Include="sandbox\textures\waves\effect.hpp" />
     <ClInclude Include="sandbox\textures\waves\waves.hpp" />
+    <ClInclude Include="sandbox\textures\box_multiple\box_texture.hpp" />
+    <ClInclude Include="sandbox\textures\box_multiple\effect.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -71,6 +73,7 @@
     <ClCompile Include="sandbox\textures\box\box_texture.cpp" />
     <ClCompile Include="sandbox\textures\waves\waves_texture.cpp" />
     <ClCompile Include="sandbox\textures\waves\waves.cpp" />
+    <ClCompile Include="sandbox\textures\box_multiple\box_texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -105,6 +108,8 @@
     <FxCompile Include="resources\lights\skull_demo_ps.hlsl" />
     <FxCompile Include="resources\box_texture\box_vs.hlsl" />
     <FxCompile Include="resources\box_texture\box_ps.hlsl" />
+    <FxCompile Include="resources\box_texture\box_multiple_vs.hlsl" />
+    <FxCompile Include="resources\box_texture\box_multiple_ps.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">

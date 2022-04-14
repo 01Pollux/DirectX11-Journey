@@ -7,7 +7,7 @@
 
 namespace Pleiades::Sandbox
 {
-	TexturedBox::TexturedBox(DX::DeviceResources* d3dres) : 
+	MultipleTexturedBox ::MultipleTexturedBox (DX::DeviceResources* d3dres) : 
 		ISandbox(d3dres),
 		m_Effects(d3dres->GetD3DDevice(), GetDefaultTexture(d3dres), GetDefaultWolrdConstants())
 	{
@@ -19,11 +19,11 @@ namespace Pleiades::Sandbox
 		m_Box.Material.Specular = DX::XMVectorSet(0.6f, 0.6f, 0.6f, 16.0f);
 
 		m_BoxGeometry->CreateBuffers(GetDeviceResources()->GetD3DDevice(), true);
-		m_BoxGeometry->CreateShaders(GetDeviceResources()->GetD3DDevice(), L"resources/box_texture/box_vs.cso", L"resources/box_texture/box_ps.cso");
+		m_BoxGeometry->CreateShaders(GetDeviceResources()->GetD3DDevice(), L"resources/box_texture/box_multiple_vs.cso", L"resources/box_texture/box_multiple_ps.cso");
 	}
 
 
-	void TexturedBox::OnFrame(uint64_t)
+	void MultipleTexturedBox ::OnFrame(uint64_t)
 	{
 		auto d3dcontext = GetDeviceResources()->GetD3DDeviceContext();
 		
@@ -37,7 +37,7 @@ namespace Pleiades::Sandbox
 	}
 
 
-	void TexturedBox::OnImGuiDraw()
+	void MultipleTexturedBox ::OnImGuiDraw()
 	{
 		if (ImGui::Button("Update"))
 		{
@@ -59,30 +59,6 @@ namespace Pleiades::Sandbox
 		{
 			if (ImGui::Begin("Box", &window_open[0], ImGuiWindowFlags_AlwaysAutoResize))
 			{
-				if (ImGui::BeginCombo("Texture", nullptr))
-				{
-					for (auto [texture_name, texture_path] : {
-						std::pair("mipmap_views.dds", L"resources/box_texture/mipmap_views.dds"),
-						std::pair("darkbrickdxt1.dds", L"resources/box_texture/darkbrickdxt1.dds"),
-						std::pair("WoodCrate01.dds", L"resources/box_texture/WoodCrate01.dds"),
-						std::pair("WoodCrate02.dds", L"resources/box_texture/WoodCrate02.dds")
-					})
-					{
-						if (ImGui::Selectable(texture_name))
-						{
-							DX::ThrowIfFailed(
-								DX::CreateDDSTextureFromFile(
-									GetDeviceResources()->GetD3DDevice(),
-									texture_path,
-									nullptr,
-									m_Effects.NonNumericBuffer().Texture.ReleaseAndGetAddressOf()
-								)
-							);
-						}
-					}
-					ImGui::EndCombo();
-				}
-
 				for (auto [name, vec_color] : {
 					std::pair{ "Ambient", &m_Box.Material.Ambient },
 					std::pair{ "Diffuse", &m_Box.Material.Diffuse }
@@ -150,7 +126,7 @@ namespace Pleiades::Sandbox
 	}
 
 
-	void TexturedBox::BuildBoxMesh()
+	void MultipleTexturedBox ::BuildBoxMesh()
 	{
 		GeometryFactory::CreateBox(
 			m_BoxGeometry,
@@ -161,14 +137,14 @@ namespace Pleiades::Sandbox
 	}
 
 
-	auto TexturedBox::GetDefaultWolrdConstants() ->
+	auto MultipleTexturedBox ::GetDefaultWolrdConstants() ->
 		EffectManager::WorldConstantBuffer
 	{
 		EffectManager::WorldConstantBuffer info{};
 
 		info.World = info.WorldViewProj = info.WorldInvTranspose = DX::XMMatrixIdentity();
 
-		info.Light.Ambient = DX::XMVectorSet(0.2f, 0.2f, 0.2f, 1.0f);
+		info.Light.Ambient = DX::XMVectorSet(1.f, 1.f, 1.f, 1.0f);
 		info.Light.Diffuse = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
 		info.Light.Specular = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
 		info.Light.Direction = { .57735f, -.57735f, .57735f };
@@ -177,20 +153,30 @@ namespace Pleiades::Sandbox
 	}
 	
 
-	auto TexturedBox::GetDefaultTexture(DX::DeviceResources* d3dres) ->
+	auto MultipleTexturedBox ::GetDefaultTexture(DX::DeviceResources* d3dres) ->
 		EffectManager::NonNumericConstants
 	{
 		auto d3ddevice = d3dres->GetD3DDevice();
 		EffectManager::NonNumericConstants info;
 
-		DX::ThrowIfFailed(
-			DX::CreateDDSTextureFromFile(
-				d3ddevice,
-				L"resources/box_texture/WoodCrate01.dds",
-				nullptr,
-				info.Texture.GetAddressOf()
-			)
-		);
+
+		const wchar_t* texture_paths[]{
+			L"resources/box_texture/flare.dds",
+			L"resources/box_texture/flarealpha.dds"
+		};
+
+		for (size_t i = 0; i < 2; i++)
+		{
+			DX::ComPtr<ID3D11Texture2D> cur_texture;
+			DX::ThrowIfFailed(
+				DX::CreateDDSTextureFromFile(
+					d3ddevice,
+					texture_paths[i],
+					nullptr,
+					info.Texture[i].GetAddressOf()
+				)
+			);
+		}
 
 		CD3D11_SAMPLER_DESC sampler_desc(CD3D11_DEFAULT{});
 		sampler_desc.AddressU = sampler_desc.AddressV = sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;

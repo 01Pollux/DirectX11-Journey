@@ -204,6 +204,8 @@
     <ClInclude Include="sandbox\manyshapes\geosphere.hpp" />
     <ClInclude Include="sandbox\resolution_changer\resolution_changer.hpp" />
     <ClInclude Include="sandbox\lights\skull_demo\skull.hpp" />
+    <ClInclude Include="sandbox\textures\box_multiple\box_texture.hpp" />
+    <ClInclude Include="sandbox\textures\box_multiple\effect.hpp" />
     <ClInclude Include="sandbox\textures\waves\waves.hpp" />
     <ClInclude Include="sandbox\textures\waves\waves_texture.hpp" />
     <ClInclude Include="sandbox\textures\waves\effect.hpp" />
@@ -233,6 +235,7 @@
     <ClCompile Include="sandbox\manyshapes\geosphere.cpp" />
     <ClCompile Include="sandbox\resolution_changer\resolution_changer.cpp" />
     <ClCompile Include="sandbox\lights\skull_demo\skull.cpp" />
+    <ClCompile Include="sandbox\textures\box_multiple\box_texture.cpp" />
     <ClCompile Include="sandbox\textures\waves\waves.cpp" />
     <ClCompile Include="sandbox\textures\waves\waves_texture.cpp" />
     <ClCompile Include="utils\sandbox.cpp" />
@@ -265,6 +268,26 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="resources\box_texture\box_multiple_vs.hlsl">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="resources\box_texture\box_multiple_ps.hlsl">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
     <FxCompile Include="resources\box_texture\box_ps.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
