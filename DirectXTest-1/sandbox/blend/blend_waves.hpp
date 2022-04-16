@@ -1,24 +1,25 @@
 #pragma once
 
 #include "effect.hpp"
+#include "render_states.hpp"
 #include "sandbox/geometry_factory.hpp"
 #include "sandbox/waves.hpp"
 
 namespace Pleiades::Sandbox
 {
-	class WavesTextured : public ISandbox
+	class WavesBlendingDemo : public ISandbox
 	{
 	public:
-		using EffectManager = WavesTextureEffect::EffectManager;
+		using EffectManager = WavesBlendingEffect::EffectManager;
 
-		WavesTextured(DX::DeviceResources* d3dres);
+		WavesBlendingDemo(DX::DeviceResources* d3dres);
 
 		void OnFrame(uint64_t frame_time) override;
 		void OnImGuiDraw() override;
 
 		static const char* GetName() noexcept
 		{
-			return "Waves textured";
+			return "Blend Waves textured";
 		}
 
 	private:
@@ -45,15 +46,19 @@ namespace Pleiades::Sandbox
 		DX::XMMATRIX m_ViewProjection;
 
 		EffectManager m_Effects;
+		BlendRenderState_t m_BlendRenderState;
 
 		GeometryInstance m_LandGeometry;
+		GeometryInstance m_BoxGeometry;
 		GeometryInstance m_WavesGeometry;
 		Waves m_WavesMesh;
 
 		GeoInfo_t m_Land;
+		GeoInfo_t m_Box;
 		GeoInfo_t m_Waves;
 
 		DX::ComPtr<ID3D11ShaderResourceView> m_LandTexture;
+		DX::ComPtr<ID3D11ShaderResourceView> m_BoxTexture;
 		DX::ComPtr<ID3D11ShaderResourceView> m_WavesTexture;
 	};
 }

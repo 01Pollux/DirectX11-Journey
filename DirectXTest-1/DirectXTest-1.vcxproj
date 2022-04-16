@@ -184,6 +184,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="directx\DeviceResources.hpp" />
+    <ClInclude Include="sandbox\blend\effect.hpp" />
+    <ClInclude Include="sandbox\blend\render_states.hpp" />
+    <ClInclude Include="sandbox\waves.hpp" />
+    <ClInclude Include="sandbox\blend\blend_waves.hpp" />
     <ClInclude Include="sandbox\textures\box\box_texture.hpp" />
     <ClInclude Include="sandbox\textures\box\effect.hpp" />
     <ClInclude Include="sandbox\lights\skull_demo\effect.hpp" />
@@ -208,7 +212,6 @@
     <ClInclude Include="sandbox\textures\box_anim\effect.hpp" />
     <ClInclude Include="sandbox\textures\box_multiple\box_texture.hpp" />
     <ClInclude Include="sandbox\textures\box_multiple\effect.hpp" />
-    <ClInclude Include="sandbox\textures\waves\waves.hpp" />
     <ClInclude Include="sandbox\textures\waves\waves_texture.hpp" />
     <ClInclude Include="sandbox\textures\waves\effect.hpp" />
     <ClInclude Include="utils\sandbox.hpp" />
@@ -222,6 +225,8 @@
     <ClCompile Include="imgui\imgui_impl_win32.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="sandbox\waves.cpp" />
+    <ClCompile Include="sandbox\blend\blend_waves.cpp" />
     <ClCompile Include="sandbox\textures\box\box_texture.cpp" />
     <ClCompile Include="sandbox\lights\basic_demo\light.cpp" />
     <ClCompile Include="sandbox\from_file\car.cpp" />
@@ -239,7 +244,6 @@
     <ClCompile Include="sandbox\lights\skull_demo\skull.cpp" />
     <ClCompile Include="sandbox\textures\box_anim\box_texture.cpp" />
     <ClCompile Include="sandbox\textures\box_multiple\box_texture.cpp" />
-    <ClCompile Include="sandbox\textures\waves\waves.cpp" />
     <ClCompile Include="sandbox\textures\waves\waves_texture.cpp" />
     <ClCompile Include="utils\sandbox.cpp" />
     <ClCompile Include="window\Game.cpp" />
@@ -271,6 +275,26 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="resources\blending\env_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="resources\blending\env_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="resources\box_texture\box_multiple_vs.hlsl">
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
@@ -409,6 +433,8 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\blending\env.hlsli" />
+    <None Include="resources\blending\helper.hlsli" />
     <None Include="resources\box_texture\helper.hlsli" />
     <None Include="resources\box_texture\box.hlsli" />
     <None Include="resources\lights\helper.hlsli" />

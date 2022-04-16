@@ -80,13 +80,13 @@ namespace Pleiades
 
 	void Waves::Update(float dt)
 	{
-		static float t = 0;
+		static float time = 0;
 
 		// Accumulate time.
-		t += dt;
+		time += dt;
 
 		// Only update the simulation at the specified time step.
-		if (t >= m_TimeStep)
+		if (time >= m_TimeStep)
 		{
 			// Only update interior points; we use zero boundary conditions.
 			for (uint32_t i = 1; i < m_NumRows - 1; ++i)
@@ -117,7 +117,7 @@ namespace Pleiades
 			// current solution becomes the new previous solution.
 			std::swap(m_PrevSolution, m_CurrSolution);
 
-			t = 0.0f; // reset time
+			time = 0.0f; // reset time
 
 			//
 			// Compute normals using finite difference scheme.

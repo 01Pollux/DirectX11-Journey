@@ -21,6 +21,8 @@
 #include "sandbox/textures/box_anim/box_texture.hpp"
 #include "sandbox/textures/waves/waves_texture.hpp"
 
+#include "sandbox/blend/blend_waves.hpp"
+
 namespace Pleiades
 {
 	void SandboxHolder::Init(DX::DeviceResources* res) noexcept
@@ -46,7 +48,9 @@ namespace Pleiades
 		AddSample<Sandbox::AnimatedTexturedBox>();
 		AddSample<Sandbox::WavesTextured>();
 
-		Set(Sandbox::AnimatedTexturedBox::GetName());
+		AddSample<Sandbox::WavesBlendingDemo>();
+
+		Set(Sandbox::WavesBlendingDemo::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

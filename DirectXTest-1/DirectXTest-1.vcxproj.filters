@@ -41,11 +41,14 @@
     <ClInclude Include="sandbox\textures\box\effect.hpp" />
     <ClInclude Include="sandbox\textures\waves\waves_texture.hpp" />
     <ClInclude Include="sandbox\textures\waves\effect.hpp" />
-    <ClInclude Include="sandbox\textures\waves\waves.hpp" />
     <ClInclude Include="sandbox\textures\box_multiple\box_texture.hpp" />
     <ClInclude Include="sandbox\textures\box_multiple\effect.hpp" />
     <ClInclude Include="sandbox\textures\box_anim\box_texture.hpp" />
     <ClInclude Include="sandbox\textures\box_anim\effect.hpp" />
+    <ClInclude Include="sandbox\blend\effect.hpp" />
+    <ClInclude Include="sandbox\waves.hpp" />
+    <ClInclude Include="sandbox\blend\blend_waves.hpp" />
+    <ClInclude Include="sandbox\blend\render_states.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -74,9 +77,10 @@
     <ClCompile Include="sandbox\lights\skull_demo\shapes.cpp" />
     <ClCompile Include="sandbox\textures\box\box_texture.cpp" />
     <ClCompile Include="sandbox\textures\waves\waves_texture.cpp" />
-    <ClCompile Include="sandbox\textures\waves\waves.cpp" />
     <ClCompile Include="sandbox\textures\box_multiple\box_texture.cpp" />
     <ClCompile Include="sandbox\textures\box_anim\box_texture.cpp" />
+    <ClCompile Include="sandbox\waves.cpp" />
+    <ClCompile Include="sandbox\blend\blend_waves.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -113,6 +117,8 @@
     <FxCompile Include="resources\box_texture\box_ps.hlsl" />
     <FxCompile Include="resources\box_texture\box_multiple_vs.hlsl" />
     <FxCompile Include="resources\box_texture\box_multiple_ps.hlsl" />
+    <FxCompile Include="resources\blending\env_ps.hlsl" />
+    <FxCompile Include="resources\blending\env_vs.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">
@@ -124,6 +130,8 @@
     <None Include="resources\lights\skull_demo.hlsli" />
     <None Include="resources\box_texture\box.hlsli" />
     <None Include="resources\box_texture\helper.hlsli" />
+    <None Include="resources\blending\env.hlsli" />
+    <None Include="resources\blending\helper.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="sandbox\from_file\car.txt" />
