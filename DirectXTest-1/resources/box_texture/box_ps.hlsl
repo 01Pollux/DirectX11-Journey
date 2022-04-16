@@ -12,7 +12,8 @@ float4 main(PSInput ps_input) : SV_Target
     LightRes res;
     Compute_DirectionalLight(gDirLight, gMaterial, ps_input.Normal, position_normal, res);
     
-    float4 lit_color = (res.Ambient + res.Diffuse) * gBoxTexture.Sample(gBoxSampler, ps_input.TexCoord) + res.Specular;
-    lit_color.a = gMaterial.Diffuse.a;
+    float4 sampled = gBoxTexture.Sample(gBoxSampler, ps_input.TexCoord);
+    float4 lit_color = (res.Ambient + res.Diffuse) * sampled + res.Specular;
+    lit_color.a = gMaterial.Diffuse.a * sampled.a;
     return lit_color;
 }

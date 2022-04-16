@@ -15,6 +15,6 @@ float4 main(PSInput ps_input) : SV_Target
     
     float4 sampled = gBoxTexture[0].Sample(gBoxSampler, ps_input.TexCoord) * gBoxTexture[1].Sample(gBoxSampler, ps_input.TexCoord);
     float4 lit_color = (res.Ambient + res.Diffuse) * sampled + res.Specular;
-    lit_color.a = gMaterial.Diffuse.a;
+    lit_color.a = gMaterial.Diffuse.a * sampled.a;
     return lit_color;
 }

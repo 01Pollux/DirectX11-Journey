@@ -176,7 +176,7 @@ namespace Pleiades::Sandbox
 			);
 		}
 
-		CD3D11_SAMPLER_DESC sampler_desc(CD3D11_DEFAULT{});
+		CD3D11_SAMPLER_DESC sampler_desc(D3D11_DEFAULT);
 		sampler_desc.AddressU = sampler_desc.AddressV = sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 
 		DX::ThrowIfFailed(
