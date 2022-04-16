@@ -40,8 +40,8 @@ namespace Pleiades::Sandbox
 		}
 
 	private:
-		float m_CamPosition[3]{ .26f, .18f, 11.24f };
-		float m_CamRotation[3]{ -.33f, -.49f, .2f };
+		float m_CamPosition[3]{ .26f, .18f, 208.24f };
+		float m_CamRotation[3]{ -.33f, -1.29f, .2f };
 
 		DX::XMMATRIX m_ViewProjection;
 

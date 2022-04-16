@@ -24,7 +24,6 @@ float4 main(PSInput ps_input) : SV_Target
     
     if (gFogColor.a != 0.f)
     {
-        clip(dist_to_eye - gFogEndDist);
         float s = saturate((dist_to_eye - gFogStartDist) / gFogEndDist);
         
         lit_color = lerp(lit_color, gFogColor, s);

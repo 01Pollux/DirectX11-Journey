@@ -19,7 +19,7 @@ namespace Pleiades::Sandbox
 		UpdateViewProjection();
 		BuildLandAndWavesMesh();
 
-		m_Land.World = DX::XMMatrixScaling(5.0f, 5.0f, 0.0f);
+		m_Land.World = DX::XMMatrixScaling(2.f, 2.f, 2.f) * DX::XMMatrixTranslation(8.0f, 5.0f, 0.f);
 		m_Land.Material.Ambient = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
 		m_Land.Material.Diffuse = DX::XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
 		m_Land.Material.Specular = DX::XMVectorSet(0.2f, 0.2f, 0.2f, 16.0f);
@@ -28,7 +28,7 @@ namespace Pleiades::Sandbox
 		m_LandGeometry.CreateShaders(GetDeviceResources()->GetD3DDevice(), L"resources/blending/env_vs.cso", L"resources/blending/env_ps.cso");
 
 
-		m_Box.World = DX::XMMatrixScaling(15.0f, 15.0f, 15.0f) * DX::XMMatrixTranslation(8.0f, 5.0f, -15.0f);
+		m_Box.World = DX::XMMatrixScaling(15.0f, 15.0f, 15.0f) * DX::XMMatrixTranslation(-9.0f, 5.0f, 5.0f);
 		m_Box.Material.Ambient = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
 		m_Box.Material.Diffuse = DX::XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
 		m_Box.Material.Specular = DX::XMVectorSet(0.4f, 0.4f, 0.4f, 16.f);
@@ -37,6 +37,7 @@ namespace Pleiades::Sandbox
 		m_BoxGeometry.CreateShaders(GetDeviceResources()->GetD3DDevice(), L"resources/blending/env_vs.cso", L"resources/blending/env_ps.cso");
 		
 
+		m_Waves.World = DX::XMMatrixScaling(10.f, 10.f, 10.f) * DX::XMMatrixTranslation(8.0f, 5.0f, -15.0f);
 		m_Waves.Material.Ambient = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
 		m_Waves.Material.Diffuse = DX::XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
 		m_Waves.Material.Specular = DX::XMVectorSet(0.8f, 0.8f, 0.8f, 32.0f);
@@ -85,12 +86,12 @@ namespace Pleiades::Sandbox
 
 		for (auto& [geometry, effect_info, texture, cull_on, blend_on] : {
 			std::tuple(&m_LandGeometry, &m_Land, m_LandTexture.Get(), false, false),
-			//std::tuple(&m_BoxGeometry, &m_Box, m_BoxTexture.Get(), true, true),
-			std::tuple(&m_WavesGeometry, &m_Waves, m_WavesTexture.Get(), false, false)
+			std::tuple(&m_BoxGeometry, &m_Box, m_BoxTexture.Get(), true, true),
+			std::tuple(&m_WavesGeometry, &m_Waves, m_WavesTexture.Get(), false, true)
 			})
 		{
-			// m_BlendRenderState.SetCullMode(d3dcontext, cull_on);
-			// m_BlendRenderState.SetAlphaBlend(d3dcontext, blend_on);
+			m_BlendRenderState.SetCullMode(d3dcontext, cull_on);
+			m_BlendRenderState.SetAlphaBlend(d3dcontext, blend_on);
 
 			geometry->Bind(d3dcontext);
 			m_Effects.SetMaterial(effect_info->Material);
@@ -112,6 +113,19 @@ namespace Pleiades::Sandbox
 
 		if (update)
 			UpdateViewProjection();
+
+		ImGui::Checkbox("Fog", &window_open[0]);
+		if (window_open[0])
+		{
+			if (ImGui::Begin("Fog", &window_open[1], ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				ImGui::ColorEdit4("Color", &m_Effects.Buffer().FogColor.x);
+				ImGui::DragFloat("Start", &m_Effects.Buffer().FogStartDist);
+				ImGui::DragFloat("End", &m_Effects.Buffer().FogEndDist);
+			}
+			ImGui::End();
+		}
+
 
 		ImGui::Checkbox("Light", &window_open[1]);
 		if (!window_open[1])
@@ -280,8 +294,8 @@ namespace Pleiades::Sandbox
 		info.Light.Direction = { .57735f, -.57735f, .57735f };
 
 		DX::XMStoreFloat4(&info.FogColor, DX::Colors::Silver);
-		info.FogEndDist = 175.f;
-		info.FogStartDist = 15.f;
+		info.FogEndDist = 326.f;
+		info.FogStartDist = 261.f;
 
 		return info;
 	}
