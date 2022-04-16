@@ -28,7 +28,7 @@ namespace Pleiades::Sandbox
 		m_LandGeometry.CreateShaders(GetDeviceResources()->GetD3DDevice(), L"resources/blending/env_vs.cso", L"resources/blending/env_ps.cso");
 
 
-		m_Box.World = DX::XMMatrixScaling(15.0f, 15.0f, 15.0f) * DX::XMMatrixTranslation(-9.0f, 5.0f, 5.0f);
+		m_Box.World = DX::XMMatrixScaling(15.0f, 15.0f, 15.0f) * DX::XMMatrixTranslation(-9.0f, 10.0f, 5.0f);
 		m_Box.Material.Ambient = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
 		m_Box.Material.Diffuse = DX::XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
 		m_Box.Material.Specular = DX::XMVectorSet(0.4f, 0.4f, 0.4f, 16.f);
