@@ -78,6 +78,7 @@ namespace Pleiades
 				);
 			}
 		}
+		ImGui::Spacing();
 
 		if (m_CurrentSanbox)
 		{
@@ -87,14 +88,45 @@ namespace Pleiades
 		}
 		else
 		{
-			for (auto& test : m_SandboxFactory)
+			static ImGuiTextFilter search_filter;
+			search_filter.Draw("Samples");
+
+			static std::vector<decltype(m_SandboxFactory)::iterator> entries;
+			entries.clear();
+
+			for (auto iter = m_SandboxFactory.begin(); iter != m_SandboxFactory.end(); iter++)
 			{
-				if (ImGui::Button(test.first.c_str()))
+				if (!search_filter.PassFilter(iter->first.c_str(), iter->first.c_str() + iter->first.size()))
+					continue;
+
+				entries.emplace_back(iter);
+			}
+
+			ImVec2 half_screen = ImGui::GetContentRegionAvail();
+			half_screen.x /= 2.f;
+
+			if (ImGui::BeginChild("##First half", half_screen))
+			{
+				for (size_t i = 0, first_half = entries.size() / 2; i < entries.size(); i++)
 				{
-					m_CurrentSanbox.reset(test.second(m_DeviceRes));
-					break;
+					if (i > first_half)
+					{
+						ImGui::EndChild();
+
+						ImGui::SameLine();
+						if (!ImGui::BeginChild("##Second half", half_screen))
+							break;
+					}
+
+					if (ImGui::Button(entries[i]->first.c_str()))
+					{
+						m_CurrentSanbox.reset(entries[i]->second(m_DeviceRes));
+						break;
+					}
 				}
 			}
+
+			ImGui::EndChild();
 		}
 		ImGui::End();
 	}
