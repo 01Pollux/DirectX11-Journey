@@ -11,6 +11,7 @@ namespace Pleiades::Sandbox
 	{
 	public:
 		using EffectManager = WavesBlendingEffect::EffectManager;
+		using BlendRenderState = WavesBlendingEffect::BlendRenderState;
 
 		WavesBlendingDemo(DX::DeviceResources* d3dres);
 
@@ -46,7 +47,7 @@ namespace Pleiades::Sandbox
 		DX::XMMATRIX m_ViewProjection;
 
 		EffectManager m_Effects;
-		BlendRenderState_t m_BlendRenderState;
+		BlendRenderState m_BlendRenderState;
 
 		GeometryInstance m_LandGeometry;
 		GeometryInstance m_BoxGeometry;

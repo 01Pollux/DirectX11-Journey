@@ -20,12 +20,16 @@ namespace Pleiades::Sandbox
 	}
 
 
-	void MirrorSkullWorld::OnFrame(uint64_t ticks)
+	void MirrorSkullWorld::OnFrame(uint64_t)
 	{
-		auto d3dcontext = GetDeviceResources()->GetD3DDeviceContext();
-
 		m_Effects.SetWorldEyePosition({ m_CamPosition[0], m_CamPosition[1], m_CamPosition[2] });
 
+		DrawWorld();
+		DrawSkull();
+
+		DrawMirror_Stencil();
+		DrawSkull_Reflection();
+		DrawMirror();
 	}
 
 
@@ -80,11 +84,22 @@ namespace Pleiades::Sandbox
 	{
 		UpdateViewProjection();
 
-		m_Wall.World = DX::XMMatrixScaling(2.f, 2.f, 2.f) * DX::XMMatrixTranslation(8.0f, 5.0f, 0.f);
+		m_Wall.World = DX::XMMatrixIdentity();
+		m_Mirror.World = DX::XMMatrixIdentity();
+		m_Skull.World = DX::XMMatrixScaling(0.2f, 0.2f, 0.2f) * DX::XMMatrixTranslation(0.0f, 1.0f, -5.0f);
+
 		m_Wall.Material.Ambient = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
 		m_Wall.Material.Diffuse = DX::XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
 		m_Wall.Material.Specular = DX::XMVectorSet(0.2f, 0.2f, 0.2f, 16.0f);
 
+		m_Skull.Material.Ambient = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
+		m_Skull.Material.Diffuse = DX::XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+		m_Skull.Material.Specular = DX::XMVectorSet(0.4f, 0.4f, 0.4f, 16.0f);
+
+		// Reflected material is transparent so it blends into mirror.
+		m_Mirror.Material.Ambient = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
+		m_Mirror.Material.Diffuse = DX::XMVectorSet(1.0f, 1.0f, 1.0f, 0.5f);
+		m_Mirror.Material.Specular = DX::XMVectorSet(0.4f, 0.4f, 0.4f, 16.0f);
 	}
 
 
@@ -94,12 +109,12 @@ namespace Pleiades::Sandbox
 
 		m_WallGeometry.PushMesh(CreateWalls());
 		m_WallGeometry.CreateBuffers(d3ddevice, true);
-		m_WallGeometry.CreateShaders(d3ddevice, L"resources/blending/env_vs.cso", L"resources/blending/env_ps.cso");
+		m_WallGeometry.CreateShaders(d3ddevice, L"resources/stencil/env_vs.cso", L"resources/stencil/env_ps.cso");
 
 		DX::ThrowIfFailed(
 			DX::CreateDDSTextureFromFile(
 				d3ddevice,
-				L"resources/stecilling/brick01.dds",
+				L"resources/stencil/brick01.dds",
 				nullptr,
 				m_WallTexture.GetAddressOf()
 			)
@@ -108,14 +123,14 @@ namespace Pleiades::Sandbox
 
 		m_SkullGeometry.PushMesh(GeometryFactory::CreateFromTxt("sandbox/from_file/skull.txt"));
 		m_SkullGeometry.CreateBuffers(d3ddevice, true);
-		m_SkullGeometry.CreateShaders(d3ddevice, L"resources/blending/env_vs.cso", L"resources/blending/env_ps.cso");
+		m_SkullGeometry.CreateShaders(d3ddevice, L"resources/stencil/env_vs.cso", L"resources/stencil/env_ps.cso");
 
 		m_SkullTexture = nullptr;
 
 
 		m_MirrorGeometry.PushMesh(CreateMirror());
-		m_SkullGeometry.CreateBuffers(d3ddevice, true);
-		m_SkullGeometry.CreateShaders(d3ddevice, L"resources/blending/env_vs.cso", L"resources/blending/env_ps.cso");
+		m_MirrorGeometry.CreateBuffers(d3ddevice, true);
+		m_MirrorGeometry.CreateShaders(d3ddevice, L"resources/stencil/env_vs.cso", L"resources/stencil/env_ps.cso");
 
 		DX::ThrowIfFailed(
 			DX::CreateDDSTextureFromFile(
@@ -224,6 +239,7 @@ namespace Pleiades::Sandbox
 
 		return v;
 	}
+
 
 	auto MirrorSkullWorld::GetDefaultWolrdConstants() ->
 		EffectManager::WorldConstantBuffer

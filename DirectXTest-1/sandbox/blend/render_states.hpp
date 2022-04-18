@@ -3,12 +3,12 @@
 #include "sandbox/helper.hpp"
 #include "utils/sandbox.hpp"
 
-namespace Pleiades::Sandbox
+namespace Pleiades::Sandbox::WavesBlendingEffect
 {
-	class BlendRenderState_t
+	class BlendRenderState
 	{
 	public:
-		BlendRenderState_t(DX::DeviceResources* d3dres)
+		BlendRenderState(DX::DeviceResources* d3dres)
 		{
 			auto d3ddevice = d3dres->GetD3DDevice();
 

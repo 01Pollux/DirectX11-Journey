@@ -23,6 +23,8 @@
 
 #include "sandbox/blend/blend_waves.hpp"
 
+#include "sandbox/stencilling/mirror/mirror.hpp"
+
 namespace Pleiades
 {
 	void SandboxHolder::Init(DX::DeviceResources* res) noexcept
@@ -50,7 +52,9 @@ namespace Pleiades
 
 		AddSample<Sandbox::WavesBlendingDemo>();
 
-		Set(Sandbox::WavesBlendingDemo::GetName());
+		AddSample<Sandbox::MirrorSkullWorld>();
+
+		Set(Sandbox::MirrorSkullWorld::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

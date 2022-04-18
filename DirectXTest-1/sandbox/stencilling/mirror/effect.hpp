@@ -4,7 +4,7 @@
 #include "utils/sandbox.hpp"
 #include <bitset>
 
-namespace Pleiades::Sandbox::WavesBlendingEffect
+namespace Pleiades::Sandbox::StencilMirrorDemo
 {
 	class EffectManager
 	{
@@ -26,7 +26,7 @@ namespace Pleiades::Sandbox::WavesBlendingEffect
 			DirectionalLight Light;
 
 			DX::XMFLOAT3 EyePosition;
-			bool UsingTexture{};
+			int UsingTexture{};
 		};
 		static_assert((sizeof(WorldConstantBuffer) % 16) == 0, "Invalid size for d3d11 constant buffers");
 
@@ -93,7 +93,7 @@ namespace Pleiades::Sandbox::WavesBlendingEffect
 
 			if (update_buffer)
 			{
-				m_Buffer.UsingTexture = texture != nullptr;
+				m_Buffer.UsingTexture = texture != nullptr ? 1 : 0;
 				m_DirtyFlags[0] = true;
 			}
 		}

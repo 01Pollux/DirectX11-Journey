@@ -10,7 +10,8 @@ namespace Pleiades::Sandbox
 	class MirrorSkullWorld : public ISandbox
 	{
 	public:
-		using EffectManager = WavesBlendingEffect::EffectManager;
+		using EffectManager = StencilMirrorDemo::EffectManager;
+		using BlendRenderState = StencilMirrorDemo::BlendRenderState;
 
 		MirrorSkullWorld(DX::DeviceResources* d3dres);
 
@@ -42,14 +43,20 @@ namespace Pleiades::Sandbox
 				);
 		}
 
+		void DrawWorld();
+		void DrawSkull();
+		void DrawMirror_Stencil();
+		void DrawSkull_Reflection();
+		void DrawMirror();
+
 	private:
-		float m_CamPosition[3]{ .26f, .18f, 208.24f };
-		float m_CamRotation[3]{ -.33f, -1.29f, .2f };
+		float m_CamPosition[3]{ .26f, .18f, 16.24f };
+		float m_CamRotation[3]{ -.29f, .37f, .04f };
 
 		DX::XMMATRIX m_ViewProjection;
 
 		EffectManager m_Effects;
-		BlendRenderState_t m_BlendRenderState;
+		BlendRenderState m_BlendRenderState;
 
 		GeometryInstance m_WallGeometry;
 		GeometryInstance m_SkullGeometry;
