@@ -22,7 +22,7 @@ namespace Pleiades::Sandbox::WavesBlendingEffect
 				);
 			}
 			{
-				D3D11_BLEND_DESC blend_desc;
+				D3D11_BLEND_DESC blend_desc{};
 
 				blend_desc.RenderTarget[0].BlendEnable = true;
 				blend_desc.RenderTarget[0].SrcBlend = D3D11_BLEND_DEST_ALPHA;

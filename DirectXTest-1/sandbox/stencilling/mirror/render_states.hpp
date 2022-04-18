@@ -16,9 +16,57 @@ namespace Pleiades::Sandbox::StencilMirrorDemo
 				CD3D11_RASTERIZER_DESC rasterize_desc(D3D11_DEFAULT);
 				rasterize_desc.FrontCounterClockwise = true;
 
-				d3ddevice->CreateRasterizerState(
-					&rasterize_desc,
-					m_BackCullState.GetAddressOf()
+				DX::ThrowIfFailed(
+					d3ddevice->CreateRasterizerState(
+						&rasterize_desc,
+						m_BackCullState.GetAddressOf()
+					)
+				);
+			}
+			{
+				D3D11_DEPTH_STENCIL_DESC stencil_desc{};
+
+				stencil_desc.DepthEnable = true;
+				stencil_desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+				stencil_desc.DepthFunc = D3D11_COMPARISON_LESS;
+				stencil_desc.StencilEnable = true;
+				stencil_desc.StencilReadMask = stencil_desc.StencilWriteMask = static_cast<uint8_t>(-1);
+
+				stencil_desc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+				stencil_desc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+				stencil_desc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE;
+				stencil_desc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+				stencil_desc.BackFace = stencil_desc.FrontFace;
+
+				DX::ThrowIfFailed(
+					d3ddevice->CreateDepthStencilState(
+						&stencil_desc,
+						m_StencilTemplate.GetAddressOf()
+					)
+				);
+			}
+			{
+				D3D11_DEPTH_STENCIL_DESC stencil_desc{};
+
+				stencil_desc.DepthEnable = true;
+				stencil_desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+				stencil_desc.DepthFunc = D3D11_COMPARISON_LESS;
+				stencil_desc.StencilEnable = true;
+				stencil_desc.StencilReadMask = stencil_desc.StencilWriteMask = static_cast<uint8_t>(-1);
+
+				stencil_desc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+				stencil_desc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+				stencil_desc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+				stencil_desc.FrontFace.StencilFunc = D3D11_COMPARISON_EQUAL;
+
+				stencil_desc.BackFace = stencil_desc.FrontFace;
+
+				DX::ThrowIfFailed(
+					d3ddevice->CreateDepthStencilState(
+						&stencil_desc,
+						m_StencilDepthWrite.GetAddressOf()
+					)
 				);
 			}
 			{
@@ -33,25 +81,30 @@ namespace Pleiades::Sandbox::StencilMirrorDemo
 				blend_desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 				blend_desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-				d3ddevice->CreateBlendState(
-					&blend_desc,
-					m_AlphaTransparent.GetAddressOf()
+				DX::ThrowIfFailed(
+					d3ddevice->CreateBlendState(
+						&blend_desc,
+						m_AlphaTransparent.GetAddressOf()
+					)
 				);
 			}
 			{
 				D3D11_BLEND_DESC blend_desc{};
 
-				blend_desc.RenderTarget[0].BlendEnable = true;
+				blend_desc.RenderTarget[0].BlendEnable = false;
 				blend_desc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
 				blend_desc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
 				blend_desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 				blend_desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
 				blend_desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
 				blend_desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+				blend_desc.RenderTarget[0].RenderTargetWriteMask = 0;
 
-				d3ddevice->CreateBlendState(
-					&blend_desc,
-					m_NoDrawBlend.GetAddressOf()
+				DX::ThrowIfFailed(
+					d3ddevice->CreateBlendState(
+						&blend_desc,
+						m_NoDrawBlend.GetAddressOf()
+					)
 				);
 			}
 		}
@@ -59,6 +112,16 @@ namespace Pleiades::Sandbox::StencilMirrorDemo
 		void SetReverseCull(ID3D11DeviceContext* d3dcontext, bool state = true)
 		{
 			d3dcontext->RSSetState(state ? m_BackCullState.Get() : nullptr);
+		}
+
+		void SetStencilTemplate(ID3D11DeviceContext* d3dcontext, bool state = true)
+		{
+			d3dcontext->OMSetDepthStencilState(state ? m_StencilTemplate.Get() : nullptr, state ? 1 : 0);
+		}
+		
+		void SetStencilDepthWrite(ID3D11DeviceContext* d3dcontext, bool state = true)
+		{
+			d3dcontext->OMSetDepthStencilState(state ? m_StencilDepthWrite.Get() : nullptr, state ? 1 : 0);
 		}
 
 		void SetAlphaTransparent(ID3D11DeviceContext* d3dcontext, bool state = true)
@@ -75,6 +138,9 @@ namespace Pleiades::Sandbox::StencilMirrorDemo
 
 	private:
 		DX::ComPtr<ID3D11RasterizerState> m_BackCullState;
+		DX::ComPtr<ID3D11DepthStencilState> m_StencilTemplate;
+		DX::ComPtr<ID3D11DepthStencilState> m_StencilDepthWrite;
+
 		DX::ComPtr<ID3D11BlendState> m_AlphaTransparent;
 		DX::ComPtr<ID3D11BlendState> m_NoDrawBlend;
 	};

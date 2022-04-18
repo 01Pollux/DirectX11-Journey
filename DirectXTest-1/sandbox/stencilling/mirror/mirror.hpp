@@ -47,11 +47,11 @@ namespace Pleiades::Sandbox
 		void DrawSkull();
 		void DrawMirror_Stencil();
 		void DrawSkull_Reflection();
-		void DrawMirror();
+		void DrawMirror(bool stencil);
 
 	private:
-		float m_CamPosition[3]{ .26f, .18f, 16.24f };
-		float m_CamRotation[3]{ -.29f, .37f, .04f };
+		float m_CamPosition[3]{ 2.26f, -1.4f, 10.3f };
+		float m_CamRotation[3]{ -.29f, .17f, 0.f };
 
 		DX::XMMATRIX m_ViewProjection;
 

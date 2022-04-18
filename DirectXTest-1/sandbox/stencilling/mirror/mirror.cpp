@@ -15,7 +15,6 @@ namespace Pleiades::Sandbox
 		m_BlendRenderState(d3dres)
 	{
 		InitializeWorldInfo();
-
 		InitializeForD3D();
 	}
 
@@ -29,7 +28,7 @@ namespace Pleiades::Sandbox
 
 		DrawMirror_Stencil();
 		DrawSkull_Reflection();
-		DrawMirror();
+		DrawMirror(false);
 	}
 
 
@@ -42,6 +41,16 @@ namespace Pleiades::Sandbox
 
 		if (update)
 			UpdateViewProjection();
+
+		ImGui::Checkbox("Skull", &window_open[0]);
+		if (window_open[0])
+		{
+			if (ImGui::Begin("Skull", &window_open[0]))
+			{
+				ImGui::DragFloat3("Position", &m_Skull.World.r[3].m128_f32[0]);
+			}
+			ImGui::End();
+		}
 
 		ImGui::Checkbox("Light", &window_open[1]);
 		if (!window_open[1])
@@ -86,7 +95,7 @@ namespace Pleiades::Sandbox
 
 		m_Wall.World = DX::XMMatrixIdentity();
 		m_Mirror.World = DX::XMMatrixIdentity();
-		m_Skull.World = DX::XMMatrixScaling(0.2f, 0.2f, 0.2f) * DX::XMMatrixTranslation(0.0f, 1.0f, -5.0f);
+		m_Skull.World = DX::XMMatrixScaling(0.2f, 0.2f, 0.2f) * DX::XMMatrixRotationY(DX::XM_PIDIV2) * DX::XMMatrixTranslation(-2.56f, 1.75f, -1.44f);
 
 		m_Wall.Material.Ambient = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
 		m_Wall.Material.Diffuse = DX::XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
