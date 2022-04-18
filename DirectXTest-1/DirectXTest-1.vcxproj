@@ -186,6 +186,9 @@
     <ClInclude Include="directx\DeviceResources.hpp" />
     <ClInclude Include="sandbox\blend\effect.hpp" />
     <ClInclude Include="sandbox\blend\render_states.hpp" />
+    <ClInclude Include="sandbox\stencilling\mirror\mirror.hpp" />
+    <ClInclude Include="sandbox\stencilling\mirror\effect.hpp" />
+    <ClInclude Include="sandbox\stencilling\mirror\render_states.hpp" />
     <ClInclude Include="sandbox\waves.hpp" />
     <ClInclude Include="sandbox\blend\blend_waves.hpp" />
     <ClInclude Include="sandbox\textures\box\box_texture.hpp" />
@@ -225,6 +228,7 @@
     <ClCompile Include="imgui\imgui_impl_win32.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="sandbox\stencilling\mirror\mirror.cpp" />
     <ClCompile Include="sandbox\waves.cpp" />
     <ClCompile Include="sandbox\blend\blend_waves.cpp" />
     <ClCompile Include="sandbox\textures\box\box_texture.cpp" />

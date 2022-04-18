@@ -142,6 +142,19 @@ namespace Pleiades
 	public:
 		using MeshData_t = GeometryInstance::MeshData_t;
 
+		static MeshData_t CreateFromTxt(
+			const std::string& file_path
+		);
+
+		static void CreateFromTxt(
+			std::unique_ptr<GeometryInstance>& geometry,
+			const std::string& file_path
+		)
+		{
+			geometry = std::make_unique<GeometryInstance>(geometry.get());
+			geometry->PushMesh(CreateFromTxt(file_path));
+		}
+
 		static MeshData_t CreateBox(
 			float width,
 			float height,

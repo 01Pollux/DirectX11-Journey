@@ -2,10 +2,61 @@
 #include "utils/pch.hpp"
 #include "geometry_factory.hpp"
 
+#include <fstream>
 #include <d3dcompiler.h>
 
 namespace Pleiades
 {
+	auto GeometryFactory::CreateFromTxt(const std::string& file_path) ->
+		MeshData_t
+	{
+		std::ifstream file("sandbox/from_file/skull.txt");
+
+		size_t vertex_count, idx_count;
+		std::string ignore;
+
+		file >> ignore >> vertex_count;
+		file >> ignore >> idx_count;
+
+		std::getline(file, ignore); // \n
+		std::getline(file, ignore); // VertexLisst
+		std::getline(file, ignore); // {
+
+		GeometryInstance::MeshData_t mesh;
+		mesh.vertices.reserve(vertex_count);
+		mesh.indices.resize(idx_count * 3);
+
+		while (vertex_count--)
+		{
+			float x, y, z, nx, ny, nz;
+			file >> x >> y >> z >> nx >> ny >> nz;
+
+			mesh.vertices.emplace_back(
+				DX::XMFLOAT3{ x, y, z },
+				DX::XMFLOAT3{ nx, ny, nz },
+				DX::XMFLOAT2{}
+			);
+		}
+
+		std::getline(file, ignore); // \n
+		std::getline(file, ignore); // }
+		std::getline(file, ignore); // TriangleList
+		std::getline(file, ignore); // {
+
+		for (size_t i = 0; i < idx_count; i++)
+		{
+			uint32_t i0, i1, i2;
+			file >> i0 >> i1 >> i2;
+
+			mesh.indices[i * 3 + 0] = static_cast<uint16_t>(i0);
+			mesh.indices[i * 3 + 1] = static_cast<uint16_t>(i1);
+			mesh.indices[i * 3 + 2] = static_cast<uint16_t>(i2);
+		}
+
+		return mesh;
+	}
+
+
 	void GeometryFactory::CreateBoxVertices(
 		MeshData_t& mesh, 
 		float width, 

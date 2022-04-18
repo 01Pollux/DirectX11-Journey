@@ -19,8 +19,6 @@ namespace Pleiades::Sandbox
 		}
 
 	private:
-		void BuildCarFromFile();
-
 		void UpdateScene();
 
 	private:

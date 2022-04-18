@@ -49,6 +49,9 @@
     <ClInclude Include="sandbox\waves.hpp" />
     <ClInclude Include="sandbox\blend\blend_waves.hpp" />
     <ClInclude Include="sandbox\blend\render_states.hpp" />
+    <ClInclude Include="sandbox\stencilling\mirror\mirror.hpp" />
+    <ClInclude Include="sandbox\stencilling\mirror\effect.hpp" />
+    <ClInclude Include="sandbox\stencilling\mirror\render_states.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -81,6 +84,7 @@
     <ClCompile Include="sandbox\textures\box_anim\box_texture.cpp" />
     <ClCompile Include="sandbox\waves.cpp" />
     <ClCompile Include="sandbox\blend\blend_waves.cpp" />
+    <ClCompile Include="sandbox\stencilling\mirror\mirror.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
