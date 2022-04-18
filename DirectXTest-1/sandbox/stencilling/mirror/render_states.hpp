@@ -42,7 +42,7 @@ namespace Pleiades::Sandbox::StencilMirrorDemo
 				DX::ThrowIfFailed(
 					d3ddevice->CreateDepthStencilState(
 						&stencil_desc,
-						m_StencilTemplate.GetAddressOf()
+						m_StencilMask.GetAddressOf()
 					)
 				);
 			}
@@ -65,7 +65,7 @@ namespace Pleiades::Sandbox::StencilMirrorDemo
 				DX::ThrowIfFailed(
 					d3ddevice->CreateDepthStencilState(
 						&stencil_desc,
-						m_StencilDepthWrite.GetAddressOf()
+						m_StencilApplyMask.GetAddressOf()
 					)
 				);
 			}
@@ -114,14 +114,14 @@ namespace Pleiades::Sandbox::StencilMirrorDemo
 			d3dcontext->RSSetState(state ? m_BackCullState.Get() : nullptr);
 		}
 
-		void SetStencilTemplate(ID3D11DeviceContext* d3dcontext, bool state = true)
+		void SetStencilMask(ID3D11DeviceContext* d3dcontext, bool state = true)
 		{
-			d3dcontext->OMSetDepthStencilState(state ? m_StencilTemplate.Get() : nullptr, state ? 1 : 0);
+			d3dcontext->OMSetDepthStencilState(state ? m_StencilMask.Get() : nullptr, 1);
 		}
 		
-		void SetStencilDepthWrite(ID3D11DeviceContext* d3dcontext, bool state = true)
+		void ApplyStencilMask(ID3D11DeviceContext* d3dcontext, bool state = true)
 		{
-			d3dcontext->OMSetDepthStencilState(state ? m_StencilDepthWrite.Get() : nullptr, state ? 1 : 0);
+			d3dcontext->OMSetDepthStencilState(state ? m_StencilApplyMask.Get() : nullptr, 1);
 		}
 
 		void SetAlphaTransparent(ID3D11DeviceContext* d3dcontext, bool state = true)
@@ -138,8 +138,8 @@ namespace Pleiades::Sandbox::StencilMirrorDemo
 
 	private:
 		DX::ComPtr<ID3D11RasterizerState> m_BackCullState;
-		DX::ComPtr<ID3D11DepthStencilState> m_StencilTemplate;
-		DX::ComPtr<ID3D11DepthStencilState> m_StencilDepthWrite;
+		DX::ComPtr<ID3D11DepthStencilState> m_StencilMask;
+		DX::ComPtr<ID3D11DepthStencilState> m_StencilApplyMask;
 
 		DX::ComPtr<ID3D11BlendState> m_AlphaTransparent;
 		DX::ComPtr<ID3D11BlendState> m_NoDrawBlend;

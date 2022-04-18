@@ -46,9 +46,9 @@ void Game::Clear()
 	auto renderTarget = m_DeviceResources->GetRenderTargetView();
 	auto depthStencil = m_DeviceResources->GetDepthStencilView();
 
+	d3dcontext->OMSetRenderTargets(1, &renderTarget, depthStencil);
 	d3dcontext->ClearRenderTargetView(renderTarget, DirectX::Colors::CornflowerBlue);
 	d3dcontext->ClearDepthStencilView(depthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-	d3dcontext->OMSetRenderTargets(1, &renderTarget, depthStencil);
 
 	// Set the viewport.
 	auto viewport = m_DeviceResources->GetScreenViewport();

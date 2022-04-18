@@ -10,7 +10,7 @@ namespace Pleiades
 	auto GeometryFactory::CreateFromTxt(const std::string& file_path) ->
 		MeshData_t
 	{
-		std::ifstream file("sandbox/from_file/skull.txt");
+		std::ifstream file(file_path);
 
 		size_t vertex_count, idx_count;
 		std::string ignore;

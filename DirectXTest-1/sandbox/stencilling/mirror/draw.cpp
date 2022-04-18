@@ -40,11 +40,11 @@ namespace Pleiades::Sandbox
 		auto d3dcontext = GetDeviceResources()->GetD3DDeviceContext();
 
 		m_BlendRenderState.SetNoDraw(d3dcontext);
-		m_BlendRenderState.SetStencilTemplate(d3dcontext);
+		m_BlendRenderState.SetStencilMask(d3dcontext);
 
 		DrawMirror(true);
 		
-		m_BlendRenderState.SetStencilTemplate(d3dcontext, false);
+		m_BlendRenderState.SetStencilMask(d3dcontext, false);
 		m_BlendRenderState.SetNoDraw(d3dcontext, false);
 	}
 	
@@ -63,13 +63,13 @@ namespace Pleiades::Sandbox
 		);
 		m_Skull.World *= reflection_plane;
 
-		m_BlendRenderState.SetStencilDepthWrite(d3dcontext);
+		m_BlendRenderState.ApplyStencilMask(d3dcontext);
 		m_BlendRenderState.SetReverseCull(d3dcontext);
 
 		DrawSkull();
 
 		m_BlendRenderState.SetReverseCull(d3dcontext, false);
-		m_BlendRenderState.SetStencilDepthWrite(d3dcontext, false);
+		m_BlendRenderState.ApplyStencilMask(d3dcontext, false);
 
 		m_Skull.World = old_world;
 		m_Effects.Buffer().Light.Direction = old_light_dir;
