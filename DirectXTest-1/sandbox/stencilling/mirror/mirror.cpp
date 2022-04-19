@@ -97,7 +97,7 @@ namespace Pleiades::Sandbox
 
 		m_Wall.World = DX::XMMatrixIdentity();
 		m_Mirror.World = DX::XMMatrixIdentity();
-		m_Skull.World = DX::XMMatrixScaling(0.2f, 0.2f, 0.2f) * DX::XMMatrixRotationY(DX::XM_PIDIV2) * DX::XMMatrixTranslation(-2.56f, 1.75f, -1.44f);
+		m_Skull.World = DX::XMMatrixScaling(0.2f, 0.2f, 0.2f) * DX::XMMatrixRotationY(DX::XM_PIDIV2) * DX::XMMatrixTranslation(-2.67f, 0.9f, -3.77f);
 
 		m_Wall.Material.Ambient = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
 		m_Wall.Material.Diffuse = DX::XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
@@ -262,7 +262,7 @@ namespace Pleiades::Sandbox
 		info.Light.Ambient = DX::XMVectorSet(0.2f, 0.2f, 0.2f, 1.0f);
 		info.Light.Diffuse = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
 		info.Light.Specular = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
-		info.Light.Direction = { .57735f, -.57735f, .57735f };
+		info.Light.Direction = { .147f, -.567f, -.033f };
 
 		return info;
 	}

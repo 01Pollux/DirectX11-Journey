@@ -108,7 +108,7 @@ namespace Pleiades::Sandbox
 		auto old_skull_info = m_Skull;
 
 		m_Skull.World *=
-			DX::XMMatrixShadow(DX::XMVectorSet(0.f, 1.f, 0.f, 0.f), DX::XMLoadFloat3(&m_Effects.Buffer().Light.Direction)) *
+			DX::XMMatrixShadow(DX::XMVectorSet(0.f, 1.f, 0.f, 0.f), DX::XMVectorNegate(DX::XMLoadFloat3(&m_Effects.Buffer().Light.Direction))) *
 			DX::XMMatrixTranslation(0.f, .001f, 0.f);
 
 		m_Skull.Material.Ambient = DX::XMVectorSet(0.f, 0.f, 0.f, 1.f);

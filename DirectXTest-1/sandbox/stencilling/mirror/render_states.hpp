@@ -149,7 +149,7 @@ namespace Pleiades::Sandbox::StencilMirrorDemo
 
 		void SetStencilBlendOnce(ID3D11DeviceContext* d3dcontext, bool state = true)
 		{
-			d3dcontext->OMSetDepthStencilState(state ? m_StencilBlendOnce.Get() : nullptr, 1);
+			d3dcontext->OMSetDepthStencilState(state ? m_StencilBlendOnce.Get() : nullptr, 0);
 		}
 
 		void SetAlphaTransparent(ID3D11DeviceContext* d3dcontext, bool state = true)

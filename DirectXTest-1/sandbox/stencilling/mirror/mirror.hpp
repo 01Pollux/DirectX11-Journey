@@ -51,7 +51,7 @@ namespace Pleiades::Sandbox
 		void DrawSkull_Shadow();
 
 	private:
-		float m_CamPosition[3]{ 2.26f, -1.4f, 10.3f };
+		float m_CamPosition[3]{ 2.26f, -1.4f, 16.24f };
 		float m_CamRotation[3]{ -.29f, .17f, 0.f };
 
 		DX::XMMATRIX m_ViewProjection;
