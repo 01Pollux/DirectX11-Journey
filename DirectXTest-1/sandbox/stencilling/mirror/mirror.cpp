@@ -29,6 +29,8 @@ namespace Pleiades::Sandbox
 		DrawMirror_Stencil();
 		DrawSkull_Reflection();
 		DrawMirror(false);
+
+		DrawSkull_Shadow();
 	}
 
 
@@ -152,7 +154,7 @@ namespace Pleiades::Sandbox
 	}
 
 
-	
+
 	GeometryInstance::MeshData_t MirrorSkullWorld::CreateWalls()
 	{
 		// Create and specify geometry.  For this sample we draw a floor

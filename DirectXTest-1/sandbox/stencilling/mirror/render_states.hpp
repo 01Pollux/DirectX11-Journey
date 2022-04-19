@@ -70,6 +70,29 @@ namespace Pleiades::Sandbox::StencilMirrorDemo
 				);
 			}
 			{
+				D3D11_DEPTH_STENCIL_DESC stencil_desc{};
+
+				stencil_desc.DepthEnable = true;
+				stencil_desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+				stencil_desc.DepthFunc = D3D11_COMPARISON_LESS;
+				stencil_desc.StencilEnable = true;
+				stencil_desc.StencilReadMask = stencil_desc.StencilWriteMask = static_cast<uint8_t>(-1);
+
+				stencil_desc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+				stencil_desc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+				stencil_desc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_INCR_SAT;
+				stencil_desc.FrontFace.StencilFunc = D3D11_COMPARISON_EQUAL;
+
+				stencil_desc.BackFace = stencil_desc.FrontFace;
+
+				DX::ThrowIfFailed(
+					d3ddevice->CreateDepthStencilState(
+						&stencil_desc,
+						m_StencilBlendOnce.GetAddressOf()
+					)
+				);
+			}
+			{
 				D3D11_BLEND_DESC blend_desc{};
 
 				blend_desc.RenderTarget[0].BlendEnable = true;
@@ -124,6 +147,11 @@ namespace Pleiades::Sandbox::StencilMirrorDemo
 			d3dcontext->OMSetDepthStencilState(state ? m_StencilApplyMask.Get() : nullptr, 1);
 		}
 
+		void SetStencilBlendOnce(ID3D11DeviceContext* d3dcontext, bool state = true)
+		{
+			d3dcontext->OMSetDepthStencilState(state ? m_StencilBlendOnce.Get() : nullptr, 1);
+		}
+
 		void SetAlphaTransparent(ID3D11DeviceContext* d3dcontext, bool state = true)
 		{
 			constexpr float blend_factor[4]{};
@@ -138,8 +166,10 @@ namespace Pleiades::Sandbox::StencilMirrorDemo
 
 	private:
 		DX::ComPtr<ID3D11RasterizerState> m_BackCullState;
+
 		DX::ComPtr<ID3D11DepthStencilState> m_StencilMask;
 		DX::ComPtr<ID3D11DepthStencilState> m_StencilApplyMask;
+		DX::ComPtr<ID3D11DepthStencilState> m_StencilBlendOnce;
 
 		DX::ComPtr<ID3D11BlendState> m_AlphaTransparent;
 		DX::ComPtr<ID3D11BlendState> m_NoDrawBlend;

@@ -95,4 +95,31 @@ namespace Pleiades::Sandbox
 		if (!stencil)
 			m_BlendRenderState.SetAlphaTransparent(d3dcontext, false);
 	}
+
+
+	void MirrorSkullWorld::DrawSkull_Shadow()
+	{
+		auto d3dres = GetDeviceResources();
+		auto d3dcontext = d3dres->GetD3DDeviceContext();
+
+		m_BlendRenderState.SetStencilBlendOnce(d3dcontext);
+		m_BlendRenderState.SetAlphaTransparent(d3dcontext);
+
+		auto old_skull_info = m_Skull;
+
+		m_Skull.World *=
+			DX::XMMatrixShadow(DX::XMVectorSet(0.f, 1.f, 0.f, 0.f), DX::XMLoadFloat3(&m_Effects.Buffer().Light.Direction)) *
+			DX::XMMatrixTranslation(0.f, .001f, 0.f);
+
+		m_Skull.Material.Ambient = DX::XMVectorSet(0.f, 0.f, 0.f, 1.f);
+		m_Skull.Material.Diffuse = DX::XMVectorSet(0.f, 0.f, 0.f, .5f);
+		m_Skull.Material.Specular = DX::XMVectorSet(0.f, 0.f, 0.f, 16.f);
+
+		DrawSkull();
+
+		m_Skull = old_skull_info;
+
+		m_BlendRenderState.SetAlphaTransparent(d3dcontext, false);
+		m_BlendRenderState.SetStencilBlendOnce(d3dcontext, false);
+	}
 }

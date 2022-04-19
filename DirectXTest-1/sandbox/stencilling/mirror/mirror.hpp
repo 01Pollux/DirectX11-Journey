@@ -48,6 +48,7 @@ namespace Pleiades::Sandbox
 		void DrawMirror_Stencil();
 		void DrawSkull_Reflection();
 		void DrawMirror(bool stencil);
+		void DrawSkull_Shadow();
 
 	private:
 		float m_CamPosition[3]{ 2.26f, -1.4f, 10.3f };
