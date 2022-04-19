@@ -70,9 +70,9 @@ void Compute_DirectionalLight(
     if (diffuse_factor > 0.f)
     {
         float3 reflected = reflect(light.Direction, surface_normal);
-        float spec_factor = pow(max(dot(position_normal, reflected), 0.f), light.Specular.a * mat.Specular.a);
+        float spec_factor = pow(max(dot(position_normal, reflected), 0.f), mat.Specular.w);
         
-        res.Specular = spec_factor * float4(light.Specular.rgb * mat.Specular.rgb, 1.f);
+        res.Specular = spec_factor * light.Specular * mat.Specular;
         res.Diffuse = diffuse_factor * light.Diffuse * mat.Diffuse;
     }
 }
@@ -102,11 +102,11 @@ void Compute_PointLight(
     if (diffuse_factor > 0.f)
     {
         float3 reflected = reflect(-to_light, surface_normal);
-        float spec_factor = pow(max(dot(position_normal, reflected), 0.f), light.Specular.a * mat.Specular.a);
+        float spec_factor = pow(max(dot(position_normal, reflected), 0.f), mat.Specular.w);
         
         float attenuation = 1.f / dot(light.Attenuation, float3(1.f, distance, distance * distance));
         
-        res.Specular = spec_factor * float4(light.Specular.rgb * mat.Specular.rgb, 1.f) * attenuation;
+        res.Specular = spec_factor * light.Specular * mat.Specular * attenuation;
         res.Diffuse = diffuse_factor * light.Diffuse * mat.Diffuse * attenuation;
     }
 }
@@ -136,13 +136,13 @@ void Compute_SpotLight(
     if (diffuse_factor > 0.f)
     {
         float3 reflected = reflect(-to_light, surface_normal);
-        float spec_factor = pow(max(dot(reflected, position_normal), 0.f), light.Specular.a * mat.Specular.w);
+        float spec_factor = pow(max(dot(reflected, position_normal), 0.f), mat.Specular.w);
         
         float spot_factor = pow(max(dot(-to_light, light.Direction), 0.f), light.ExpFactor);
         float attenuation = spot_factor / dot(light.Attenuation, float3(1.f, dist, dist * dist));
 
         res.Ambient *= spot_factor;
         res.Diffuse = light.Diffuse * mat.Diffuse * diffuse_factor * attenuation;
-        res.Specular = float4(light.Specular.rgb * mat.Specular.rgb, 1.f) * spec_factor * attenuation;
+        res.Specular = light.Specular * float4(mat.Specular.rgb, 1.f) * spec_factor * attenuation;
     }
 }

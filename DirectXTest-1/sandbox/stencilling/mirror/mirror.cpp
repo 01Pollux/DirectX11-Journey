@@ -105,7 +105,7 @@ namespace Pleiades::Sandbox
 
 		m_Skull.Material.Ambient = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
 		m_Skull.Material.Diffuse = DX::XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
-		m_Skull.Material.Specular = DX::XMVectorSet(0.4f, 0.4f, 0.4f, 16.0f);
+		m_Skull.Material.Specular = DX::XMVectorSet(0.4f, 0.4f, 0.4f, 1.f);
 
 		// Reflected material is transparent so it blends into mirror.
 		m_Mirror.Material.Ambient = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);

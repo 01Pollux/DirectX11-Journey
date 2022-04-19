@@ -103,6 +103,7 @@ namespace Pleiades::Sandbox
 
 	void MirrorSkullWorld::DrawSkull_Shadow()
 	{
+		
 		auto d3dres = GetDeviceResources();
 		auto d3dcontext = d3dres->GetD3DDeviceContext();
 

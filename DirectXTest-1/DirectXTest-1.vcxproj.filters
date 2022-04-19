@@ -117,6 +117,9 @@
     <FxCompile Include="resources\blending\env_vs.hlsl" />
     <FxCompile Include="resources\stencil\env_ps.hlsl" />
     <FxCompile Include="resources\stencil\env_vs.hlsl" />
+    <FxCompile Include="resources\billboards\env_ps.hlsl" />
+    <FxCompile Include="resources\billboards\env_vs.hlsl" />
+    <FxCompile Include="resources\billboards\env_gs.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">
@@ -132,6 +135,8 @@
     <None Include="resources\blending\helper.hlsli" />
     <None Include="resources\stencil\env.hlsli" />
     <None Include="resources\stencil\helper.hlsli" />
+    <None Include="resources\billboards\env.hlsli" />
+    <None Include="resources\billboards\helper.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="sandbox\from_file\car.txt" />
