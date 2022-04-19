@@ -54,7 +54,8 @@ namespace Pleiades::Sandbox
 		DX::XMMATRIX reflection_plane = DX::XMMatrixReflect(DX::XMVectorSet(0.f, 0.f, 1.f, 0.f));
 		auto d3dcontext = GetDeviceResources()->GetD3DDeviceContext();
 
-		DX::XMMATRIX old_world = m_Skull.World;
+		DX::XMMATRIX old_skull = m_Skull.World;
+		DX::XMMATRIX old_world = m_Wall.World;
 		DX::XMFLOAT3 old_light_dir = m_Effects.Buffer().Light.Direction;
 
 		DX::XMStoreFloat3(
@@ -62,16 +63,19 @@ namespace Pleiades::Sandbox
 			DX::XMVector2TransformNormal(DX::XMLoadFloat3(&old_light_dir), reflection_plane)
 		);
 		m_Skull.World *= reflection_plane;
+		m_Wall.World *= reflection_plane;
 
 		m_BlendRenderState.ApplyStencilMask(d3dcontext);
 		m_BlendRenderState.SetReverseCull(d3dcontext);
 
+		DrawWorld();
 		DrawSkull();
 
 		m_BlendRenderState.SetReverseCull(d3dcontext, false);
 		m_BlendRenderState.ApplyStencilMask(d3dcontext, false);
 
-		m_Skull.World = old_world;
+		m_Skull.World = old_skull;
+		m_Wall.World = old_world;
 		m_Effects.Buffer().Light.Direction = old_light_dir;
 	}
 	
