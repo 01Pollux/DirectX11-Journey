@@ -7,6 +7,27 @@
 
 namespace Pleiades
 {
+	template<typename _Ty>
+	struct D3DInputElement
+	{
+		static constexpr D3D11_INPUT_ELEMENT_DESC Desc[1]{};
+		static constexpr uint32_t Size = 0;
+	};
+
+	template<>
+	struct D3DInputElement<DX::VertexPositionNormalTexture>
+	{
+		static constexpr D3D11_INPUT_ELEMENT_DESC Desc[] = {
+			{.SemanticName = "Position", .Format = DXGI_FORMAT_R32G32B32_FLOAT, .AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT },
+			{.SemanticName = "Normal", .Format = DXGI_FORMAT_R32G32B32_FLOAT, .AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT },
+			{.SemanticName = "TexCoord", .Format = DXGI_FORMAT_R32G32_FLOAT, .AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT }
+		};
+
+		static constexpr uint32_t Size = 3;
+	};
+
+
+
 	auto GeometryFactory::CreateFromTxt(const std::string& file_path) ->
 		MeshData_t
 	{
@@ -238,7 +259,7 @@ namespace Pleiades
 		const float theta = DX::XM_2PI / slices;
 
 		mesh.vertices.clear();
-		mesh.vertices.reserve(static_cast<size_t>(stacks + 1) * (slices + 1));
+		mesh.vertices.reserve(static_cast<size_t>((stacks + 1) * (slices + 1)));
 
 		const float dr = bottom_radius - top_radius;
 
@@ -761,8 +782,8 @@ namespace Pleiades
 		// create input layout
 		DX::ThrowIfFailed(
 			d3ddevice->CreateInputLayout(
-				MeshData_t::verticies_type::InputElements,
-				MeshData_t::verticies_type::InputElementCount,
+				D3DInputElement<MeshData_t::verticies_type>::Desc,
+				D3DInputElement<MeshData_t::verticies_type>::Size,
 				shader_blob->GetBufferPointer(),
 				static_cast<uint32_t>(shader_blob->GetBufferSize()),
 				d3dInputLayout.ReleaseAndGetAddressOf()

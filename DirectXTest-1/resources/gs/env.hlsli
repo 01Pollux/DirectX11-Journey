@@ -7,29 +7,31 @@ struct PSInput
     float3 PosW : Position;
     float3 Normal : Normal;
     float2 TexCoord : TexCoord;
-    uint PrimId : SV_PrimitiveID;
 };
 
 struct GSInput
 {
     float3 PosW : Position;
-    float2 Size : Size;
+    float3 Normal : Normal;
+    float2 TexCoord : TexCoord;
 };
 
 struct VSInput
 {
     float3 PosW : Position;
-    float2 Size : Size;
+    float3 Normal : Normal;
+    float2 TexCoord : TexCoord;
 };
 
 
 cbuffer WorldConstantBuffer : register(b0)
 {
-    matrix gViewProj;
+    matrix gWorld;
+    matrix gWorldViewProj;
+    matrix gWOrldInvTranspose;
     
     Material gMaterial;
     DirectionalLight gDirLight;
     
     float3 gWorldEyePosition;
-    int gUsingTexture;
 };
