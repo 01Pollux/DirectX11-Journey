@@ -11,8 +11,8 @@ namespace Pleiades::Sandbox::GSSubdivisonDemoFx
 	public:
 		struct WorldConstantBuffer
 		{
-			DX::XMMATRIX WorldViewProj;
 			DX::XMMATRIX World;
+			DX::XMMATRIX WorldViewProj;
 			DX::XMMATRIX WorldInvTranspose;
 
 			Material	 Material;
@@ -85,6 +85,9 @@ namespace Pleiades::Sandbox::GSSubdivisonDemoFx
 				0, 1, m_d3dBuffer.GetAddressOf()
 			);
 			d3dcontext->PSSetConstantBuffers(
+				0, 1, m_d3dBuffer.GetAddressOf()
+			);
+			d3dcontext->GSSetConstantBuffers(
 				0, 1, m_d3dBuffer.GetAddressOf()
 			);
 		}
