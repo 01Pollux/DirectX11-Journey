@@ -67,5 +67,16 @@ namespace Pleiades::Sandbox
 			fxmgr.SetMaterial(Material);
 			fxmgr.Update(d3dres->GetD3DDeviceContext());
 		}
+
+		template<typename _DevieRes, typename _EffectMgr>
+		void Bind1(_DevieRes* d3dres, _EffectMgr& fxmgr, const DX::XMMATRIX& view_proj)
+		{
+			auto world_transposed = DX::XMMatrixTranspose(World);
+
+			fxmgr.SetWorld(world_transposed);
+			fxmgr.SetViewProj(DX::XMMatrixTranspose(view_proj));
+			fxmgr.SetMaterial(Material);
+			fxmgr.Update(d3dres->GetD3DDeviceContext());
+		}
 	};
 }

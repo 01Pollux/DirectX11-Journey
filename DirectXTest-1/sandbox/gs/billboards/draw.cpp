@@ -4,17 +4,27 @@
 
 namespace Pleiades::Sandbox
 {
-	void GSBillboards::DrawCube()
+	void GSBillboardsDemo::DrawCube()
 	{
 		auto d3dres = GetDeviceResources();
 		auto d3dcontext = d3dres->GetD3DDeviceContext();
 
-		m_SphereGeometry.Bind(d3dcontext);
-		m_Sphere.Bind(d3dres, m_Effects, m_ViewProjection);
+		d3dcontext->GSSetShader(m_d3dPointBillboardGS.Get(), nullptr, 0);
+		m_PointBillboardGeometry.Bind(d3dcontext);
 
-		d3dcontext->GSSetShader(m_GSTriangle.Get(), nullptr, 0);
+		d3dcontext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 		m_Effects.Bind(d3dcontext);
 
-		m_SphereGeometry.Draw(d3dcontext);
+		for (auto& pt : m_PointBilloards)
+		{
+			pt.Bind1(d3dres, m_Effects, m_ViewProjection);
+
+			m_Effects.SetViewProj(DX::XMMatrixIdentity());
+
+			d3dcontext->Draw(
+				1,
+				0
+			);
+		}
 	}
 }

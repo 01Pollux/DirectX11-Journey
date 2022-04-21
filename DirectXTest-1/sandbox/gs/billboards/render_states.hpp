@@ -3,7 +3,7 @@
 #include "sandbox/helper.hpp"
 #include "utils/sandbox.hpp"
 
-namespace Pleiades::Sandbox::GSSubdivisonDemoFx
+namespace Pleiades::Sandbox::GSBillboardsDemoFx
 {
 	class BlendRenderState
 	{

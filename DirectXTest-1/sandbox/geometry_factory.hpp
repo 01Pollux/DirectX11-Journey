@@ -40,49 +40,73 @@ namespace Pleiades
 
 		void CreateBuffers(ID3D11Device* d3ddevice, bool custom_constants = false, bool dynamic_vertex = false);
 		
-		void CreateShaders(ID3D11Device* d3ddevice, const wchar_t* vs_shader = L"resources/geometry_default_vs.cso", const wchar_t* ps_shader = L"resources/geometry_default_ps.cso");
+		void CreateShaders(
+			ID3D11Device* d3ddevice, 
+			const wchar_t* vs_shader = L"resources/geometry_default_vs.cso",
+			const wchar_t* ps_shader = L"resources/geometry_default_ps.cso",
+			bool custom_input_layout = false
+		);
 
 		void Bind(ID3D11DeviceContext* d3dcontext);
 		
-		void PushMesh(MeshData_t&& mesh)
+		void PushMesh(
+			MeshData_t&& mesh,
+			bool vertices = true,
+			bool indices = true
+		)
 		{
 			MeshSizes.emplace_back(
-				mesh.vertices.size(),
-				mesh.indices.size()
+				vertices ? mesh.vertices.size() : 0,
+				indices ? mesh.indices.size() : 0
 			);
 
-			Mesh.vertices.insert(
-				Mesh.vertices.end(),
-				std::make_move_iterator(mesh.vertices.begin()),
-				std::make_move_iterator(mesh.vertices.end())
-			);
+			if (vertices)
+			{
+				Mesh.vertices.insert(
+					Mesh.vertices.end(),
+					std::make_move_iterator(mesh.vertices.begin()),
+					std::make_move_iterator(mesh.vertices.end())
+				);
+			}
 
-			Mesh.indices.insert(
-				Mesh.indices.end(),
-				std::make_move_iterator(mesh.indices.begin()),
-				std::make_move_iterator(mesh.indices.end())
-			);
+			if (indices)
+			{
+				Mesh.indices.insert(
+					Mesh.indices.end(),
+					std::make_move_iterator(mesh.indices.begin()),
+					std::make_move_iterator(mesh.indices.end())
+				);
+			}
 		}
 		
-		void PushMesh(const MeshData_t& mesh)
+		void PushMesh(
+			const MeshData_t& mesh,
+			bool vertices = true,
+			bool indices = true
+		)
 		{
 			MeshSizes.emplace_back(
-				mesh.vertices.size(),
-				mesh.indices.size()
+				vertices ? mesh.vertices.size() : 0,
+				indices ? mesh.indices.size() : 0
 			);
 
-			Mesh.vertices.insert(
-				Mesh.vertices.end(),
-				mesh.vertices.begin(),
-				mesh.vertices.end()
-			);
+			if (vertices)
+			{
+				Mesh.vertices.insert(
+					Mesh.vertices.end(),
+					mesh.vertices.begin(),
+					mesh.vertices.end()
+				);
+			}
 
-
-			Mesh.indices.insert(
-				Mesh.indices.end(),
-				mesh.indices.begin(),
-				mesh.indices.end()
-			);
+			if (indices)
+			{
+				Mesh.indices.insert(
+					Mesh.indices.end(),
+					mesh.indices.begin(),
+					mesh.indices.end()
+				);
+			}
 		}
 
 		void Draw(ID3D11DeviceContext* d3dcontext)

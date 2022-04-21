@@ -744,7 +744,12 @@ namespace Pleiades
 	}
 
 
-	void GeometryInstance::CreateShaders(ID3D11Device* d3ddevice, const wchar_t* vs_shader, const wchar_t* ps_shader)
+	void GeometryInstance::CreateShaders(
+		ID3D11Device* d3ddevice, 
+		const wchar_t* vs_shader, 
+		const wchar_t* ps_shader,
+		bool custom_input_layout
+	)
 	{
 		DX::ComPtr<ID3DBlob> shader_blob;
 		// Create pixel shader
@@ -779,16 +784,19 @@ namespace Pleiades
 			);
 		}
 
-		// create input layout
-		DX::ThrowIfFailed(
-			d3ddevice->CreateInputLayout(
-				D3DInputElement<MeshData_t::verticies_type>::Desc,
-				D3DInputElement<MeshData_t::verticies_type>::Size,
-				shader_blob->GetBufferPointer(),
-				static_cast<uint32_t>(shader_blob->GetBufferSize()),
-				d3dInputLayout.ReleaseAndGetAddressOf()
-			)
-		);
+		if (!custom_input_layout)
+		{
+			// create input layout
+			DX::ThrowIfFailed(
+				d3ddevice->CreateInputLayout(
+					D3DInputElement<MeshData_t::verticies_type>::Desc,
+					D3DInputElement<MeshData_t::verticies_type>::Size,
+					shader_blob->GetBufferPointer(),
+					static_cast<uint32_t>(shader_blob->GetBufferSize()),
+					d3dInputLayout.ReleaseAndGetAddressOf()
+				)
+			);
+		}
 	}
 
 

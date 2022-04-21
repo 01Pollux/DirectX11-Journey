@@ -1,79 +1,61 @@
 
 #include "env.hlsli"
 
-void SubdivideTriangle(
-    in GSInput init_verts[3],
-    out GSInput new_verts[6]
-)
+
+/*
+3--------2
+|        |
+|        |
+|        |
+0--------1
+*/
+static const float2 s_TexCoords[] =
 {
-    GSInput mx[3];
-
-    mx[0].PosW = 0.5f * (init_verts[0].PosW + init_verts[1].PosW);
-    mx[1].PosW = 0.5f * (init_verts[1].PosW + init_verts[2].PosW);
-    mx[2].PosW = 0.5f * (init_verts[2].PosW + init_verts[0].PosW);
- 
-    mx[0].Normal = mx[0].PosW = normalize(mx[0].PosW);
-    mx[1].Normal = mx[1].PosW = normalize(mx[1].PosW);
-    mx[2].Normal = mx[2].PosW = normalize(mx[2].PosW);
-    
-    mx[0].TexCoord = 0.5f * (init_verts[0].TexCoord + init_verts[1].TexCoord);
-    mx[1].TexCoord = 0.5f * (init_verts[1].TexCoord + init_verts[2].TexCoord);
-    mx[2].TexCoord = 0.5f * (init_verts[2].TexCoord + init_verts[0].TexCoord);
-
-    new_verts[0] = init_verts[0];
-    new_verts[1] = mx[0];
-    new_verts[2] = mx[2];
-    new_verts[3] = mx[1];
-    new_verts[4] = init_verts[2];
-    new_verts[5] = init_verts[1];
+    { 0.f, 1.f },
+    { 1.f, 1.f },
+    { 1.f, 0.f },
+    { 0.f, 0.f }
 };
 
-void OutputNewTriangle(
-    in GSInput gs_input[6],
+[maxvertexcount(8)]
+void main(
+    point GSInput gs_input[1],
     inout TriangleStream<PSInput> triangle_stream
 )
 {
-    PSInput ps_input[6];
-
-	[unroll]
-    for (int i = 0; i < 6; ++i)
+    float3 up = float3(0.f, 1.f, 0.f);
+    float3 look = gWorldEyePosition - gs_input[0].PosW;
+    look.y = 0.f; look = normalize(look);
+    float3 right = cross(look, up);
+    
+    float2 half_size = gs_input[0].Size * .5f;
+    
+    float3 pos[] =
     {
-        ps_input[i].PosH = mul(float4(gs_input[i].PosW, 1.f), gWorldViewProj);
-        ps_input[i].PosW = mul(float4(gs_input[i].PosW, 1.f), gWorld).xyz;
-        ps_input[i].Normal = mul(gs_input[i].Normal, (float3x3) gWOrldInvTranspose);
-        ps_input[i].TexCoord = gs_input[i].TexCoord;
+        gs_input[0].PosW + right * half_size.x - up * half_size.y,
+        gs_input[0].PosW - right * half_size.x - up * half_size.y,
+        gs_input[0].PosW - right * half_size.x + up * half_size.y,
+        gs_input[0].PosW + right * half_size.x + up * half_size.y
+    };
+    
+    PSInput ps_input[4];
 
-        if (i != 5)
-            triangle_stream.Append(ps_input[i]);
+    [unroll]
+    for (uint i = 0; i < 4; i++)
+    {
+        ps_input[i].PosH = mul(float4(pos[i], 1.f), gViewProj);
+        ps_input[i].PosW = pos[i];
+        ps_input[i].Normal = look;
+        ps_input[i].TexCoord = s_TexCoords[i];
     }
-    triangle_stream.RestartStrip();
-	
+    
+    triangle_stream.Append(ps_input[0]);
     triangle_stream.Append(ps_input[1]);
-    triangle_stream.Append(ps_input[5]);
+    triangle_stream.Append(ps_input[2]);
+    
+    triangle_stream.RestartStrip();
+    
+    triangle_stream.Append(ps_input[2]);
     triangle_stream.Append(ps_input[3]);
-}
-
-[maxvertexcount(8)]
-void main(triangle GSInput gs_input[3], inout TriangleStream<PSInput> triangle_stream)
-{
-    if (true)
-    {
-        GSInput v[6];
-        SubdivideTriangle(gs_input, v);
-        OutputNewTriangle(v, triangle_stream);
-    }
-    else 
-    {
-        PSInput ps_input;
-		[unroll]
-        for (int i = 0; i < 3; ++i)
-        {
-            ps_input.PosH = mul(float4(gs_input[i].PosW, 1.0f), gWorldViewProj);
-            ps_input.PosW = mul(float4(gs_input[i].PosW, 1.0f), gWorld).xyz;
-            ps_input.Normal = mul(gs_input[i].Normal, (float3x3) gWOrldInvTranspose);
-            ps_input.TexCoord = gs_input[i].TexCoord;
-
-            triangle_stream.Append(ps_input);
-        }
-    }
+    triangle_stream.Append(ps_input[0]);
 }

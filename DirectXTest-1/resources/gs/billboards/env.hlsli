@@ -12,23 +12,20 @@ struct PSInput
 struct GSInput
 {
     float3 PosW : Position;
-    float3 Normal : Normal;
-    float2 TexCoord : TexCoord;
+    float2 Size : Size;
 };
 
 struct VSInput
 {
     float3 PosW : Position;
-    float3 Normal : Normal;
-    float2 TexCoord : TexCoord;
+    float2 Size : Size;
 };
 
 
 cbuffer WorldConstantBuffer : register(b0)
 {
     matrix gWorld;
-    matrix gWorldViewProj;
-    matrix gWOrldInvTranspose;
+    matrix gViewProj;
     
     Material gMaterial;
     DirectionalLight gDirLight;

@@ -7,13 +7,13 @@
 
 namespace Pleiades::Sandbox
 {
-	class GSBillboards : public ISandbox
+	class GSBillboardsDemo : public ISandbox
 	{
 	public:
-		using EffectManager = GSSubdivisonDemoFx::EffectManager;
-		using BlendRenderState = GSSubdivisonDemoFx::BlendRenderState;
+		using EffectManager = GSBillboardsDemoFx::EffectManager;
+		using BlendRenderState = GSBillboardsDemoFx::BlendRenderState;
 
-		GSBillboards(DX::DeviceResources* d3dres);
+		GSBillboardsDemo(DX::DeviceResources* d3dres);
 
 		void OnFrame(uint64_t frame_time) override;
 		void OnImGuiDraw() override;
@@ -22,6 +22,12 @@ namespace Pleiades::Sandbox
 		{
 			return "GS Billboards";
 		}
+
+		struct MeshData_t
+		{
+			DX::XMFLOAT3 Position;
+			DX::XMFLOAT2 Size;
+		};
 
 	private:
 		void InitializeWorldInfo();
@@ -50,10 +56,8 @@ namespace Pleiades::Sandbox
 		EffectManager m_Effects;
 		BlendRenderState m_BlendRenderState;
 
-		DX::ComPtr<ID3D11GeometryShader> m_GSTriangle;
-		uint32_t m_TriangleSubDivisons{ 1 };
-
-		GeometryInstance m_SphereGeometry;
-		GeoInfo_t m_Sphere;
+		DX::ComPtr<ID3D11GeometryShader> m_d3dPointBillboardGS;
+		GeometryInstance m_PointBillboardGeometry;
+		GeoInfo_t		m_PointBilloards[4];
 	};
 }

@@ -25,6 +25,7 @@
 
 #include "sandbox/stencilling/mirror/mirror.hpp"
 #include "sandbox/gs/subdivison/subdivison.hpp"
+#include "sandbox/gs/billboards/billboards.hpp"
 
 namespace Pleiades
 {
@@ -56,8 +57,9 @@ namespace Pleiades
 		AddSample<Sandbox::MirrorSkullWorld>();
 
 		AddSample<Sandbox::GSSubdivisonDemo>();
+		AddSample<Sandbox::GSBillboardsDemo>();
 
-		Set(Sandbox::GSSubdivisonDemo::GetName());
+		Set(Sandbox::GSBillboardsDemo::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

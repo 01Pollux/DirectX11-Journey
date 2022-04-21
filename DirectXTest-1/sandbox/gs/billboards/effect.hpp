@@ -4,7 +4,7 @@
 #include "utils/sandbox.hpp"
 #include <bitset>
 
-namespace Pleiades::Sandbox::GSSubdivisonDemoFx
+namespace Pleiades::Sandbox::GSBillboardsDemoFx
 {
 	class EffectManager
 	{
@@ -12,11 +12,9 @@ namespace Pleiades::Sandbox::GSSubdivisonDemoFx
 		struct WorldConstantBuffer
 		{
 			DX::XMMATRIX World;
-			DX::XMMATRIX WorldViewProj;
-			DX::XMMATRIX WorldInvTranspose;
+			DX::XMMATRIX ViewProj;
 
 			Material	 Material;
-
 			DirectionalLight Light;
 
 			DX::XMFLOAT3 EyePosition;
@@ -49,15 +47,9 @@ namespace Pleiades::Sandbox::GSSubdivisonDemoFx
 			m_DirtyFlags[0] = true;
 		}
 
-		void SetWorldViewProj(const DX::XMMATRIX& world_view_proj)
+		void SetViewProj(const DX::XMMATRIX& view_proj)
 		{
-			m_Buffer.WorldViewProj = world_view_proj;
-			m_DirtyFlags[0] = true;
-		}
-
-		void SetWorldInvTranspose(const DX::XMMATRIX& world_inv_transpose)
-		{
-			m_Buffer.WorldInvTranspose = world_inv_transpose;
+			m_Buffer.ViewProj = view_proj;
 			m_DirtyFlags[0] = true;
 		}
 

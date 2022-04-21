@@ -9,7 +9,7 @@
 
 namespace Pleiades::Sandbox
 {
-	GSBillboards::GSBillboards(DX::DeviceResources* d3dres) :
+	GSBillboardsDemo::GSBillboardsDemo(DX::DeviceResources* d3dres) :
 		ISandbox(d3dres),
 		m_Effects(d3dres->GetD3DDevice(), GetDefaultWolrdConstants()),
 		m_BlendRenderState(d3dres)
@@ -19,14 +19,14 @@ namespace Pleiades::Sandbox
 	}
 
 
-	void GSBillboards::OnFrame(uint64_t)
+	void GSBillboardsDemo::OnFrame(uint64_t)
 	{
 		m_Effects.SetWorldEyePosition({ m_CamPosition[0], m_CamPosition[1], m_CamPosition[2] });
 		DrawCube();
 	}
 
 
-	void GSBillboards::OnImGuiDraw()
+	void GSBillboardsDemo::OnImGuiDraw()
 	{
 		static bool window_open[2]{};
 
@@ -41,7 +41,12 @@ namespace Pleiades::Sandbox
 		{
 			if (ImGui::Begin("Skull", &window_open[0]))
 			{
-				ImGui::DragFloat3("Position", &m_Sphere.World.r[3].m128_f32[0]);
+				for (auto& pt : m_PointBilloards)
+				{
+					ImGui::PushID(static_cast<const void*>(&pt));
+					ImGui::DragFloat3("Position", &pt.World.r[3].m128_f32[0]);
+					ImGui::PopID();
+				}
 			}
 			ImGui::End();
 		}
@@ -83,46 +88,140 @@ namespace Pleiades::Sandbox
 	}
 
 
-	void GSBillboards::InitializeWorldInfo()
+	void GSBillboardsDemo::InitializeWorldInfo()
 	{
 		UpdateViewProjection();
 
-		m_Sphere.Material.Ambient = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
-		m_Sphere.Material.Diffuse = DX::XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
-		m_Sphere.Material.Specular = DX::XMVectorSet(0.2f, 0.2f, 0.2f, 16.0f);
+		float z_offset = 0.f, x_offset = 0.f;
+		bool swap = false;
+
+		for (auto& pt : m_PointBilloards)
+		{
+			pt.World = DX::XMMatrixTranslation(x_offset, 0.f, z_offset);
+			pt.Material.Ambient = DX::XMVectorSet(.5f, .5f, .5f, 1.f);
+			pt.Material.Diffuse = DX::XMVectorSet(1.f, 1.f, 1.f, 1.f);
+			pt.Material.Specular = DX::XMVectorSet(.2f, .2f, .2f, 16.f);
+
+			x_offset += 3.f;
+			z_offset += 2.f;
+
+			if (swap)
+				x_offset *= -1.f;
+
+			swap = !swap;
+		}
 	}
 
 
-	void GSBillboards::InitializeForD3D()
+	void GSBillboardsDemo::InitializeForD3D()
 	{
 		auto d3ddevice = GetDeviceResources()->GetD3DDevice();
 
-		m_SphereGeometry.PushMesh(GeometryFactory::CreateGeoSphere(0, 1.f));
-		m_SphereGeometry.CreateBuffers(d3ddevice, true);
-		m_SphereGeometry.CreateShaders(d3ddevice, L"resources/gs/subdiv/env_vs.cso", L"resources/gs/subdiv/env_ps.cso");
+		{
+			MeshData_t mesh[]
+			{
+				{
+					DX::XMFLOAT3(0.f, 0.f, 0.f),
+					DX::XMFLOAT2(2.f, 4.f)
+				}
+			};
+			// Create vertex buffer
+			DX::ThrowIfFailed(
+				DX::CreateStaticBuffer(
+					d3ddevice,
+					static_cast<const void*>(mesh),
+					std::ssize(mesh),
+					sizeof(MeshData_t),
+					D3D11_BIND_VERTEX_BUFFER,
+					m_PointBillboardGeometry.d3dVerticies.ReleaseAndGetAddressOf()
+				)
+			);
+		}
 
-		DX::ComPtr<ID3DBlob> gs_shader;
-		DX::ThrowIfFailed(
-			D3DReadFileToBlob(L"resources/gs/env_gs.cso", gs_shader.GetAddressOf())
-		);
+		{
+			DX::ComPtr<ID3DBlob> shader_blob;
 
-		DX::ThrowIfFailed(
-			d3ddevice->CreateGeometryShader(
-				gs_shader->GetBufferPointer(),
-				gs_shader->GetBufferSize(),
-				nullptr,
-				m_GSTriangle.GetAddressOf()
-			)
-		);
+			// create vertex shader + input layout
+			{
+				const D3D11_INPUT_ELEMENT_DESC input_layout[]{
+					{ .SemanticName = "Position", .Format = DXGI_FORMAT_R32G32B32_FLOAT, .AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT },
+					{ .SemanticName = "Size", .Format = DXGI_FORMAT_R32G32_FLOAT, .AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT }
+				};
+
+				DX::ThrowIfFailed(
+					D3DReadFileToBlob(
+						L"resources/gs/billboards/env_vs.cso",
+						shader_blob.GetAddressOf()
+					)
+				);
+
+				DX::ThrowIfFailed(
+					d3ddevice->CreateVertexShader(
+						shader_blob->GetBufferPointer(),
+						shader_blob->GetBufferSize(),
+						nullptr,
+						m_PointBillboardGeometry.d3dVtxShader.GetAddressOf()
+					)
+				);
+
+				DX::ThrowIfFailed(
+					d3ddevice->CreateInputLayout(
+						input_layout,
+						static_cast<uint32_t>(std::size(input_layout)),
+						shader_blob->GetBufferPointer(),
+						shader_blob->GetBufferSize(),
+						m_PointBillboardGeometry.d3dInputLayout.GetAddressOf()
+					)
+				);
+			}
+
+			// create pixel shader
+			{
+				DX::ThrowIfFailed(
+					D3DReadFileToBlob(
+						L"resources/gs/billboards/env_ps.cso",
+						shader_blob.ReleaseAndGetAddressOf()
+					)
+				);
+
+				DX::ThrowIfFailed(
+					d3ddevice->CreatePixelShader(
+						shader_blob->GetBufferPointer(),
+						shader_blob->GetBufferSize(),
+						nullptr,
+						m_PointBillboardGeometry.d3dPxlShader.GetAddressOf()
+					)
+				);
+			}
+
+			// create geometry shader
+			{
+				DX::ThrowIfFailed(
+					D3DReadFileToBlob(
+						L"resources/gs/billboards/env_gs.cso",
+						shader_blob.ReleaseAndGetAddressOf()
+					)
+				);
+
+				DX::ThrowIfFailed(
+					d3ddevice->CreateGeometryShader(
+						shader_blob->GetBufferPointer(),
+						shader_blob->GetBufferSize(),
+						nullptr,
+						m_d3dPointBillboardGS.GetAddressOf()
+					)
+				);
+			}
+		}
 	}
 
 
-	auto GSBillboards::GetDefaultWolrdConstants() ->
+	auto GSBillboardsDemo::GetDefaultWolrdConstants() ->
 		EffectManager::WorldConstantBuffer
 	{
 		EffectManager::WorldConstantBuffer info{};
 
-		info.World = info.WorldViewProj = info.WorldInvTranspose = DX::XMMatrixIdentity();
+		info.World = info.ViewProj = DX::XMMatrixIdentity();
 
 		info.Light.Ambient = DX::XMVectorSet(0.2f, 0.2f, 0.2f, 1.0f);
 		info.Light.Diffuse = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
