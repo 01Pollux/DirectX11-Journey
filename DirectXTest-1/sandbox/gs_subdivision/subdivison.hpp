@@ -53,7 +53,7 @@ namespace Pleiades::Sandbox
 		DX::ComPtr<ID3D11GeometryShader> m_GSTriangle;
 		uint32_t m_TriangleSubDivisons{ 1 };
 
-		GeometryInstance m_CubeGeometry;
-		GeoInfo_t m_Cube;
+		GeometryInstance m_SphereGeometry;
+		GeoInfo_t m_Sphere;
 	};
 }

@@ -41,7 +41,7 @@ namespace Pleiades::Sandbox
 		{
 			if (ImGui::Begin("Skull", &window_open[0]))
 			{
-				ImGui::DragFloat3("Position", &m_Cube.World.r[3].m128_f32[0]);
+				ImGui::DragFloat3("Position", &m_Sphere.World.r[3].m128_f32[0]);
 			}
 			ImGui::End();
 		}
@@ -87,9 +87,9 @@ namespace Pleiades::Sandbox
 	{
 		UpdateViewProjection();
 
-		m_Cube.Material.Ambient = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
-		m_Cube.Material.Diffuse = DX::XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
-		m_Cube.Material.Specular = DX::XMVectorSet(0.2f, 0.2f, 0.2f, 16.0f);
+		m_Sphere.Material.Ambient = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
+		m_Sphere.Material.Diffuse = DX::XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+		m_Sphere.Material.Specular = DX::XMVectorSet(0.2f, 0.2f, 0.2f, 16.0f);
 	}
 
 
@@ -97,9 +97,9 @@ namespace Pleiades::Sandbox
 	{
 		auto d3ddevice = GetDeviceResources()->GetD3DDevice();
 
-		m_CubeGeometry.PushMesh(GeometryFactory::CreateBox(1.f, 1.f, 1.f));
-		m_CubeGeometry.CreateBuffers(d3ddevice, true);
-		m_CubeGeometry.CreateShaders(d3ddevice, L"resources/gs/env_vs.cso", L"resources/gs/env_ps.cso");
+		m_SphereGeometry.PushMesh(GeometryFactory::CreateGeoSphere(0, 1.f));
+		m_SphereGeometry.CreateBuffers(d3ddevice, true);
+		m_SphereGeometry.CreateShaders(d3ddevice, L"resources/gs/env_vs.cso", L"resources/gs/env_ps.cso");
 
 		DX::ComPtr<ID3DBlob> gs_shader;
 		DX::ThrowIfFailed(

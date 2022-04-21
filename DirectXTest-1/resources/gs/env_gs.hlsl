@@ -12,10 +12,10 @@ void SubdivideTriangle(
     mx[1].PosW = 0.5f * (init_verts[1].PosW + init_verts[2].PosW);
     mx[2].PosW = 0.5f * (init_verts[2].PosW + init_verts[0].PosW);
  
-    mx[0].Normal = normalize(mx[0].PosW);
-    mx[1].Normal = normalize(mx[1].PosW);
-    mx[2].Normal = normalize(mx[2].PosW);
-
+    mx[0].Normal = mx[0].PosW = normalize(mx[0].PosW);
+    mx[1].Normal = mx[1].PosW = normalize(mx[1].PosW);
+    mx[2].Normal = mx[2].PosW = normalize(mx[2].PosW);
+    
     mx[0].TexCoord = 0.5f * (init_verts[0].TexCoord + init_verts[1].TexCoord);
     mx[1].TexCoord = 0.5f * (init_verts[1].TexCoord + init_verts[2].TexCoord);
     mx[2].TexCoord = 0.5f * (init_verts[2].TexCoord + init_verts[0].TexCoord);
@@ -42,12 +42,9 @@ void OutputNewTriangle(
         ps_input[i].PosW = mul(float4(gs_input[i].PosW, 1.f), gWorld).xyz;
         ps_input[i].Normal = mul(gs_input[i].Normal, (float3x3) gWOrldInvTranspose);
         ps_input[i].TexCoord = gs_input[i].TexCoord;
-    }
-		
-	[unroll]
-    for (int j = 0; j < 5; ++j)
-    {
-        triangle_stream.Append(ps_input[j]);
+
+        if (i != 5)
+            triangle_stream.Append(ps_input[i]);
     }
     triangle_stream.RestartStrip();
 	
@@ -57,13 +54,13 @@ void OutputNewTriangle(
 }
 
 [maxvertexcount(8)]
-void main(triangle GSInput gs_input[3], inout TriangleStream<PSInput> triStream)
+void main(triangle GSInput gs_input[3], inout TriangleStream<PSInput> triangle_stream)
 {
-    if (true) 
+    if (true)
     {
         GSInput v[6];
         SubdivideTriangle(gs_input, v);
-        OutputNewTriangle(v, triStream);
+        OutputNewTriangle(v, triangle_stream);
     }
     else 
     {
@@ -76,7 +73,7 @@ void main(triangle GSInput gs_input[3], inout TriangleStream<PSInput> triStream)
             ps_input.Normal = mul(gs_input[i].Normal, (float3x3) gWOrldInvTranspose);
             ps_input.TexCoord = gs_input[i].TexCoord;
 
-            triStream.Append(ps_input);
+            triangle_stream.Append(ps_input);
         }
     }
 }
