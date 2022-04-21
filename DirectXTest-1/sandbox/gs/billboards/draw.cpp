@@ -1,11 +1,10 @@
 
 #include "utils/pch.hpp"
-#include "subdivison.hpp"
-
+#include "billboards.hpp"
 
 namespace Pleiades::Sandbox
 {
-	void GSSubdivisonDemo::DrawCube()
+	void GSBillboards::DrawCube()
 	{
 		auto d3dres = GetDeviceResources();
 		auto d3dcontext = d3dres->GetD3DDeviceContext();

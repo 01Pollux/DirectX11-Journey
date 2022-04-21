@@ -39,7 +39,7 @@ namespace Pleiades::Sandbox
 				);
 		}
 
-		void DrawCube();
+		void DrawIcosahedron();
 
 	private:
 		float m_CamPosition[3]{ 2.26f, -1.4f, 16.24f };

@@ -1,6 +1,6 @@
 
 #include "utils/pch.hpp"
-#include "subdivison.hpp"
+#include "billboards.hpp"
 
 #include "imgui/imgui.hpp"
 #include "DirectXTK/DDSTextureLoader.h"
@@ -9,7 +9,7 @@
 
 namespace Pleiades::Sandbox
 {
-	GSSubdivisonDemo::GSSubdivisonDemo(DX::DeviceResources* d3dres) :
+	GSBillboards::GSBillboards(DX::DeviceResources* d3dres) :
 		ISandbox(d3dres),
 		m_Effects(d3dres->GetD3DDevice(), GetDefaultWolrdConstants()),
 		m_BlendRenderState(d3dres)
@@ -19,14 +19,14 @@ namespace Pleiades::Sandbox
 	}
 
 
-	void GSSubdivisonDemo::OnFrame(uint64_t)
+	void GSBillboards::OnFrame(uint64_t)
 	{
 		m_Effects.SetWorldEyePosition({ m_CamPosition[0], m_CamPosition[1], m_CamPosition[2] });
 		DrawCube();
 	}
 
 
-	void GSSubdivisonDemo::OnImGuiDraw()
+	void GSBillboards::OnImGuiDraw()
 	{
 		static bool window_open[2]{};
 
@@ -83,7 +83,7 @@ namespace Pleiades::Sandbox
 	}
 
 
-	void GSSubdivisonDemo::InitializeWorldInfo()
+	void GSBillboards::InitializeWorldInfo()
 	{
 		UpdateViewProjection();
 
@@ -93,13 +93,13 @@ namespace Pleiades::Sandbox
 	}
 
 
-	void GSSubdivisonDemo::InitializeForD3D()
+	void GSBillboards::InitializeForD3D()
 	{
 		auto d3ddevice = GetDeviceResources()->GetD3DDevice();
 
 		m_SphereGeometry.PushMesh(GeometryFactory::CreateGeoSphere(0, 1.f));
 		m_SphereGeometry.CreateBuffers(d3ddevice, true);
-		m_SphereGeometry.CreateShaders(d3ddevice, L"resources/gs/env_vs.cso", L"resources/gs/env_ps.cso");
+		m_SphereGeometry.CreateShaders(d3ddevice, L"resources/gs/subdiv/env_vs.cso", L"resources/gs/subdiv/env_ps.cso");
 
 		DX::ComPtr<ID3DBlob> gs_shader;
 		DX::ThrowIfFailed(
@@ -117,7 +117,7 @@ namespace Pleiades::Sandbox
 	}
 
 
-	auto GSSubdivisonDemo::GetDefaultWolrdConstants() ->
+	auto GSBillboards::GetDefaultWolrdConstants() ->
 		EffectManager::WorldConstantBuffer
 	{
 		EffectManager::WorldConstantBuffer info{};

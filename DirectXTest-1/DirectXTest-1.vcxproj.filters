@@ -52,9 +52,12 @@
     <ClInclude Include="sandbox\stencilling\mirror\mirror.hpp" />
     <ClInclude Include="sandbox\stencilling\mirror\effect.hpp" />
     <ClInclude Include="sandbox\stencilling\mirror\render_states.hpp" />
-    <ClInclude Include="sandbox\gs_subdivision\effect.hpp" />
-    <ClInclude Include="sandbox\gs_subdivision\render_states.hpp" />
-    <ClInclude Include="sandbox\gs_subdivision\subdivison.hpp" />
+    <ClInclude Include="sandbox\gs\subdivison\effect.hpp" />
+    <ClInclude Include="sandbox\gs\subdivison\render_states.hpp" />
+    <ClInclude Include="sandbox\gs\subdivison\subdivison.hpp" />
+    <ClInclude Include="sandbox\gs\billboards\effect.hpp" />
+    <ClInclude Include="sandbox\gs\billboards\render_states.hpp" />
+    <ClInclude Include="sandbox\gs\billboards\billboards.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -89,8 +92,10 @@
     <ClCompile Include="sandbox\blend\blend_waves.cpp" />
     <ClCompile Include="sandbox\stencilling\mirror\mirror.cpp" />
     <ClCompile Include="sandbox\stencilling\mirror\draw.cpp" />
-    <ClCompile Include="sandbox\gs_subdivision\draw.cpp" />
-    <ClCompile Include="sandbox\gs_subdivision\subdivison.cpp" />
+    <ClCompile Include="sandbox\gs\subdivison\draw.cpp" />
+    <ClCompile Include="sandbox\gs\subdivison\subdivison.cpp" />
+    <ClCompile Include="sandbox\gs\billboards\draw.cpp" />
+    <ClCompile Include="sandbox\gs\billboards\billboards.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -122,9 +127,12 @@
     <FxCompile Include="resources\blending\env_vs.hlsl" />
     <FxCompile Include="resources\stencil\env_ps.hlsl" />
     <FxCompile Include="resources\stencil\env_vs.hlsl" />
-    <FxCompile Include="resources\gs\env_ps.hlsl" />
-    <FxCompile Include="resources\gs\env_vs.hlsl" />
-    <FxCompile Include="resources\gs\env_gs.hlsl" />
+    <FxCompile Include="resources\gs\subdiv\env_ps.hlsl" />
+    <FxCompile Include="resources\gs\subdiv\env_vs.hlsl" />
+    <FxCompile Include="resources\gs\subdiv\env_gs.hlsl" />
+    <FxCompile Include="resources\gs\billboards\env_gs.hlsl" />
+    <FxCompile Include="resources\gs\billboards\env_ps.hlsl" />
+    <FxCompile Include="resources\gs\billboards\env_vs.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">
@@ -140,8 +148,10 @@
     <None Include="resources\blending\helper.hlsli" />
     <None Include="resources\stencil\env.hlsli" />
     <None Include="resources\stencil\helper.hlsli" />
-    <None Include="resources\gs\env.hlsli" />
-    <None Include="resources\gs\helper.hlsli" />
+    <None Include="resources\gs\subdiv\env.hlsli" />
+    <None Include="resources\gs\subdiv\helper.hlsli" />
+    <None Include="resources\gs\billboards\env.hlsli" />
+    <None Include="resources\gs\billboards\helper.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="sandbox\from_file\car.txt" />
