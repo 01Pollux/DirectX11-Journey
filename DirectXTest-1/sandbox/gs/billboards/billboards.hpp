@@ -10,6 +10,8 @@ namespace Pleiades::Sandbox
 	class GSBillboardsDemo : public ISandbox
 	{
 	public:
+		static constexpr uint32_t NumTextures = 4u;
+
 		using EffectManager = GSBillboardsDemoFx::EffectManager;
 		using BlendRenderState = GSBillboardsDemoFx::BlendRenderState;
 
@@ -33,6 +35,7 @@ namespace Pleiades::Sandbox
 		void InitializeWorldInfo();
 		void InitializeForD3D();
 
+		static EffectManager::NonNumericBuffer GetDefaultTextures(DX::DeviceResources* d3dres);
 		static EffectManager::WorldConstantBuffer GetDefaultWolrdConstants();
 
 		void UpdateViewProjection()
@@ -45,7 +48,7 @@ namespace Pleiades::Sandbox
 				);
 		}
 
-		void DrawCube();
+		void DrawBillboard();
 
 	private:
 		float m_CamPosition[3]{ 2.26f, -1.4f, 16.24f };
@@ -58,6 +61,6 @@ namespace Pleiades::Sandbox
 
 		DX::ComPtr<ID3D11GeometryShader> m_d3dPointBillboardGS;
 		GeometryInstance m_PointBillboardGeometry;
-		GeoInfo_t		m_PointBilloards[4];
+		GeoInfo_t		m_PointBilloards[NumTextures];
 	};
 }

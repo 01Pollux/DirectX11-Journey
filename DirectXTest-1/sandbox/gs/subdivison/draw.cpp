@@ -17,5 +17,6 @@ namespace Pleiades::Sandbox
 		m_Effects.Bind(d3dcontext);
 
 		m_SphereGeometry.Draw(d3dcontext);
+		d3dcontext->GSSetShader(nullptr, nullptr, 0);
 	}
 }

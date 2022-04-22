@@ -9,6 +9,12 @@ namespace Pleiades::Sandbox::GSBillboardsDemoFx
 	class EffectManager
 	{
 	public:
+		struct NonNumericBuffer
+		{
+			DX::ComPtr<ID3D11ShaderResourceView> Textures;
+			DX::ComPtr<ID3D11SamplerState> Sampler;
+		};
+
 		struct WorldConstantBuffer
 		{
 			DX::XMMATRIX World;
@@ -21,8 +27,8 @@ namespace Pleiades::Sandbox::GSBillboardsDemoFx
 		};
 		static_assert((sizeof(WorldConstantBuffer) % 16) == 0, "Invalid size for d3d11 constant buffers");
 
-		EffectManager(ID3D11Device* d3ddevice, const WorldConstantBuffer& data = {}) :
-			m_Buffer(data)
+		EffectManager(ID3D11Device* d3ddevice, NonNumericBuffer&& nbuffer, const WorldConstantBuffer& data = {}) :
+			m_Buffer(data), m_NBuffer(std::move(nbuffer))
 		{
 			D3D11_BUFFER_DESC buffer_desc{};
 			buffer_desc.Usage = D3D11_USAGE_DEFAULT;
@@ -82,6 +88,14 @@ namespace Pleiades::Sandbox::GSBillboardsDemoFx
 			d3dcontext->GSSetConstantBuffers(
 				0, 1, m_d3dBuffer.GetAddressOf()
 			);
+
+			d3dcontext->PSSetShaderResources(
+				0, 1, m_NBuffer.Textures.GetAddressOf()
+			);
+
+			d3dcontext->PSSetSamplers(
+				0, 1, m_NBuffer.Sampler.GetAddressOf()
+			);
 		}
 
 		void Update(ID3D11DeviceContext* d3dcontext)
@@ -106,8 +120,15 @@ namespace Pleiades::Sandbox::GSBillboardsDemoFx
 			return m_Buffer;
 		}
 
+		[[nodiscard]]
+		NonNumericBuffer& NBuffer() noexcept
+		{
+			return m_NBuffer;
+		}
+
 	private:
 		WorldConstantBuffer m_Buffer;
+		NonNumericBuffer m_NBuffer;
 
 		DX::ComPtr<ID3D11Buffer> m_d3dBuffer;
 		std::bitset<1> m_DirtyFlags;

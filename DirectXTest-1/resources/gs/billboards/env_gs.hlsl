@@ -1,24 +1,29 @@
 
 #include "env.hlsli"
 
-
 /*
-3--------2
-|        |
-|        |
-|        |
-0--------1
+3---------1
+|    |    |
+|----x----|
+|    |    |
+0---------2
+     
+clockwise:
+012
+031
+
 */
 static const float2 s_TexCoords[] =
 {
     { 0.f, 1.f },
-    { 1.f, 1.f },
     { 1.f, 0.f },
+    { 1.f, 1.f },
     { 0.f, 0.f }
 };
 
 [maxvertexcount(8)]
 void main(
+    uint prim_id : SV_PrimitiveID,
     point GSInput gs_input[1],
     inout TriangleStream<PSInput> triangle_stream
 )
@@ -33,8 +38,8 @@ void main(
     float3 pos[] =
     {
         gs_input[0].PosW + right * half_size.x - up * half_size.y,
-        gs_input[0].PosW - right * half_size.x - up * half_size.y,
         gs_input[0].PosW - right * half_size.x + up * half_size.y,
+        gs_input[0].PosW - right * half_size.x - up * half_size.y,
         gs_input[0].PosW + right * half_size.x + up * half_size.y
     };
     
@@ -47,6 +52,7 @@ void main(
         ps_input[i].PosW = pos[i];
         ps_input[i].Normal = look;
         ps_input[i].TexCoord = s_TexCoords[i];
+        ps_input[i].PrimId = prim_id;
     }
     
     triangle_stream.Append(ps_input[0]);
@@ -55,7 +61,7 @@ void main(
     
     triangle_stream.RestartStrip();
     
-    triangle_stream.Append(ps_input[2]);
-    triangle_stream.Append(ps_input[3]);
     triangle_stream.Append(ps_input[0]);
+    triangle_stream.Append(ps_input[3]);
+    triangle_stream.Append(ps_input[1]);
 }

@@ -83,7 +83,7 @@ namespace Pleiades
 			else
 			{
 				m_DeviceRes->GetD3DDeviceContext()->RSSetState(
-					m_States->CullClockwise()
+					nullptr
 				);
 			}
 		}

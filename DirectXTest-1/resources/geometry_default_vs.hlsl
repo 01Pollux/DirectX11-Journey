@@ -6,7 +6,7 @@ struct PSInput
 
 struct VSInput
 {
-    float3 Position : SV_Position;
+    float3 Position : Position;
     float3 Normal : Normal;
     float2 TexCoord : TexCoord;
 };

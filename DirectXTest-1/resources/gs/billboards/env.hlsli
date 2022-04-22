@@ -7,6 +7,7 @@ struct PSInput
     float3 PosW : Position;
     float3 Normal : Normal;
     float2 TexCoord : TexCoord;
+    uint PrimId : SV_PrimitiveID;
 };
 
 struct GSInput

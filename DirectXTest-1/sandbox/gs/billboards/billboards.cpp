@@ -11,7 +11,7 @@ namespace Pleiades::Sandbox
 {
 	GSBillboardsDemo::GSBillboardsDemo(DX::DeviceResources* d3dres) :
 		ISandbox(d3dres),
-		m_Effects(d3dres->GetD3DDevice(), GetDefaultWolrdConstants()),
+		m_Effects(d3dres->GetD3DDevice(), GetDefaultTextures(d3dres), GetDefaultWolrdConstants()),
 		m_BlendRenderState(d3dres)
 	{
 		InitializeWorldInfo();
@@ -22,7 +22,7 @@ namespace Pleiades::Sandbox
 	void GSBillboardsDemo::OnFrame(uint64_t)
 	{
 		m_Effects.SetWorldEyePosition({ m_CamPosition[0], m_CamPosition[1], m_CamPosition[2] });
-		DrawCube();
+		DrawBillboard();
 	}
 
 
@@ -98,7 +98,7 @@ namespace Pleiades::Sandbox
 		for (auto& pt : m_PointBilloards)
 		{
 			pt.World = DX::XMMatrixTranslation(x_offset, 0.f, z_offset);
-			pt.Material.Ambient = DX::XMVectorSet(.5f, .5f, .5f, 1.f);
+			pt.Material.Ambient = DX::XMVectorSet(1.f, 1.f, 1.f, 1.f);
 			pt.Material.Diffuse = DX::XMVectorSet(1.f, 1.f, 1.f, 1.f);
 			pt.Material.Specular = DX::XMVectorSet(.2f, .2f, .2f, 16.f);
 
@@ -213,6 +213,122 @@ namespace Pleiades::Sandbox
 				);
 			}
 		}
+	}
+
+
+	auto GSBillboardsDemo::GetDefaultTextures(DX::DeviceResources* d3dres) ->
+		EffectManager::NonNumericBuffer
+	{
+		auto d3ddevice = d3dres->GetD3DDevice();
+		auto d3dcontext = d3dres->GetD3DDeviceContext();
+
+		EffectManager::NonNumericBuffer info;
+
+		{
+			DX::ComPtr<ID3D11Texture2D> tree_textures[NumTextures], texture_arr;
+
+			for (auto tree_texture = tree_textures; auto texture_path : {
+					L"resources/gs/billboards/tree2.dds",
+					L"resources/gs/billboards/tree1.dds",
+					L"resources/gs/billboards/tree2.dds",
+					L"resources/gs/billboards/tree3.dds",
+				})
+			{
+				DX::ThrowIfFailed(
+					DX::CreateDDSTextureFromFileEx(
+						d3ddevice,
+						texture_path,
+						0,
+						D3D11_USAGE_STAGING,
+						0,
+						D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE,
+						0,
+						false,
+						reinterpret_cast<ID3D11Resource**>(tree_texture->GetAddressOf()),
+						nullptr
+					)
+				);
+				++tree_texture;
+			}
+			
+
+			D3D11_TEXTURE2D_DESC texture_desc;
+			tree_textures[0]->GetDesc(&texture_desc);
+
+			texture_desc.ArraySize = NumTextures;
+			texture_desc.Usage = D3D11_USAGE_DEFAULT;
+			texture_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+			texture_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+			DX::ThrowIfFailed(
+				d3ddevice->CreateTexture2D(
+					&texture_desc,
+					nullptr,
+					texture_arr.GetAddressOf()
+				)
+			);
+
+			for (uint32_t tex = 0; tex < NumTextures; tex++)
+			{
+				for (uint32_t mip = 0; mip < texture_desc.MipLevels; mip++)
+				{
+					D3D11_MAPPED_SUBRESOURCE texture_data;
+					DX::ThrowIfFailed(
+						d3dcontext->Map(
+							tree_textures[tex].Get(),
+							mip,
+							D3D11_MAP_READ,
+							0,
+							&texture_data
+						)
+					);
+
+					d3dcontext->UpdateSubresource(
+						texture_arr.Get(),
+						D3D11CalcSubresource(
+							mip,
+							tex,
+							texture_desc.MipLevels
+						),
+						nullptr,
+						texture_data.pData,
+						texture_data.RowPitch,
+						texture_data.DepthPitch
+					);
+
+					d3dcontext->Unmap(tree_textures[tex].Get(), mip);
+				}
+			}
+
+			CD3D11_SHADER_RESOURCE_VIEW_DESC shader_desc(
+				D3D11_SRV_DIMENSION_TEXTURE2DARRAY,
+				texture_desc.Format,
+				0,
+				texture_desc.MipLevels,
+				0,
+				NumTextures
+			);
+
+			DX::ThrowIfFailed(
+				d3ddevice->CreateShaderResourceView(
+					texture_arr.Get(),
+					&shader_desc,
+					info.Textures.GetAddressOf()
+				)
+			);
+		}
+
+
+
+		CD3D11_SAMPLER_DESC sampler_desc(D3D11_DEFAULT);
+		DX::ThrowIfFailed(
+			d3ddevice->CreateSamplerState(
+				&sampler_desc,
+				info.Sampler.GetAddressOf()
+			)
+		);
+
+		return info;
 	}
 
 
