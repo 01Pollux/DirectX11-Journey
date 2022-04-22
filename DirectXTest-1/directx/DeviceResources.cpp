@@ -307,10 +307,18 @@ void DeviceResources::CreateWindowSizeDependentResources()
 		swapChainDesc.Format = backBufferFormat;
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		swapChainDesc.BufferCount = m_backBufferCount;
-		swapChainDesc.SampleDesc.Count = 1;
-		swapChainDesc.SampleDesc.Quality = 0;
+		if constexpr (c_MSAAOn)
+		{
+			swapChainDesc.SampleDesc.Count = c_MSAASampleCount;
+			swapChainDesc.SampleDesc.Quality = c_MSAASampleQual;
+		}
+		else
+		{
+			swapChainDesc.SampleDesc.Count = 1;
+			swapChainDesc.SampleDesc.Quality = 0;
+		}
 		swapChainDesc.Scaling = DXGI_SCALING_STRETCH;
-		swapChainDesc.SwapEffect = (m_options & (c_FlipPresent | c_AllowTearing | c_EnableHDR)) ? DXGI_SWAP_EFFECT_FLIP_DISCARD : DXGI_SWAP_EFFECT_DISCARD;
+		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 		swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_IGNORE;
 		swapChainDesc.Flags = (m_options & c_AllowTearing) ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0u;
 
@@ -336,7 +344,8 @@ void DeviceResources::CreateWindowSizeDependentResources()
 	// Create a render target view of the swap chain back buffer.
 	ThrowIfFailed(m_swapChain->GetBuffer(0, IID_PPV_ARGS(m_renderTarget.ReleaseAndGetAddressOf())));
 
-	CD3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc(D3D11_RTV_DIMENSION_TEXTURE2D, m_backBufferFormat);
+	constexpr D3D11_RTV_DIMENSION rtv_textype = c_MSAAOn ? D3D11_RTV_DIMENSION_TEXTURE2DMS : D3D11_RTV_DIMENSION_TEXTURE2D;
+	CD3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc(rtv_textype, m_backBufferFormat);
 	ThrowIfFailed(m_d3dDevice->CreateRenderTargetView(
 		m_renderTarget.Get(),
 		&renderTargetViewDesc,
@@ -355,13 +364,20 @@ void DeviceResources::CreateWindowSizeDependentResources()
 			D3D11_BIND_DEPTH_STENCIL
 		);
 
+		if constexpr (c_MSAAOn)
+		{
+			depthStencilDesc.SampleDesc.Count = c_MSAASampleCount;
+			depthStencilDesc.SampleDesc.Quality = c_MSAASampleQual;
+		}
+
 		ThrowIfFailed(m_d3dDevice->CreateTexture2D(
 			&depthStencilDesc,
 			nullptr,
 			m_depthStencil.ReleaseAndGetAddressOf()
 		));
 
-		CD3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc(D3D11_DSV_DIMENSION_TEXTURE2D);
+		D3D11_DSV_DIMENSION dsv_textype = c_MSAAOn ? D3D11_DSV_DIMENSION_TEXTURE2DMS : D3D11_DSV_DIMENSION_TEXTURE2D;
+		CD3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc(dsv_textype);
 		ThrowIfFailed(m_d3dDevice->CreateDepthStencilView(
 			m_depthStencil.Get(),
 			&depthStencilViewDesc,

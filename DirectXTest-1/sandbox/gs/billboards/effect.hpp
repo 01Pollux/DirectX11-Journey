@@ -24,6 +24,7 @@ namespace Pleiades::Sandbox::GSBillboardsDemoFx
 			DirectionalLight Light;
 
 			DX::XMFLOAT3 EyePosition;
+			uint32_t	 TexId;
 		};
 		static_assert((sizeof(WorldConstantBuffer) % 16) == 0, "Invalid size for d3d11 constant buffers");
 
@@ -74,6 +75,12 @@ namespace Pleiades::Sandbox::GSBillboardsDemoFx
 		void SetLight(const DirectionalLight& light)
 		{
 			m_Buffer.Light = light;
+			m_DirtyFlags[0] = true;
+		}
+
+		void SetTexId(uint32_t texid)
+		{
+			m_Buffer.TexId = texid;
 			m_DirtyFlags[0] = true;
 		}
 

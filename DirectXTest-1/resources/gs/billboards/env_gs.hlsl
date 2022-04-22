@@ -21,9 +21,8 @@ static const float2 s_TexCoords[] =
     { 0.f, 0.f }
 };
 
-[maxvertexcount(8)]
+[maxvertexcount(6)]
 void main(
-    uint prim_id : SV_PrimitiveID,
     point GSInput gs_input[1],
     inout TriangleStream<PSInput> triangle_stream
 )
@@ -52,7 +51,7 @@ void main(
         ps_input[i].PosW = pos[i];
         ps_input[i].Normal = look;
         ps_input[i].TexCoord = s_TexCoords[i];
-        ps_input[i].PrimId = prim_id;
+        ps_input[i].TexId = gCurTexId;
     }
     
     triangle_stream.Append(ps_input[0]);

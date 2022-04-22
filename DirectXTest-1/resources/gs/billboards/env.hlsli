@@ -7,7 +7,7 @@ struct PSInput
     float3 PosW : Position;
     float3 Normal : Normal;
     float2 TexCoord : TexCoord;
-    uint PrimId : SV_PrimitiveID;
+    uint TexId : TexId;
 };
 
 struct GSInput
@@ -32,4 +32,5 @@ cbuffer WorldConstantBuffer : register(b0)
     DirectionalLight gDirLight;
     
     float3 gWorldEyePosition;
+    uint gCurTexId;
 };

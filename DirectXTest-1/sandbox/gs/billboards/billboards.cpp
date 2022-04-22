@@ -32,14 +32,15 @@ namespace Pleiades::Sandbox
 
 		bool update = ImGui::DragFloat3("Position", m_CamPosition);
 		update |= ImGui::DragFloat3("Rotation", m_CamRotation);
+		ImGui::Checkbox("Alpha to coverage", &m_AlphaToCoverage);
 
 		if (update)
 			UpdateViewProjection();
 
-		ImGui::Checkbox("Skull", &window_open[0]);
+		ImGui::Checkbox("Trees", &window_open[0]);
 		if (window_open[0])
 		{
-			if (ImGui::Begin("Skull", &window_open[0]))
+			if (ImGui::Begin("Trees", &window_open[0]))
 			{
 				for (auto& pt : m_PointBilloards)
 				{

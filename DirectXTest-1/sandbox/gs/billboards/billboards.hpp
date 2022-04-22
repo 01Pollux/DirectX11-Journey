@@ -53,6 +53,7 @@ namespace Pleiades::Sandbox
 	private:
 		float m_CamPosition[3]{ 2.26f, -1.4f, 16.24f };
 		float m_CamRotation[3]{ -.29f, .17f, 0.f };
+		bool m_AlphaToCoverage = DX::DeviceResources::c_MSAAOn;
 
 		DX::XMMATRIX m_ViewProjection;
 

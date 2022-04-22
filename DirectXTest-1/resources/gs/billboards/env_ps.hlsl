@@ -11,7 +11,7 @@ float4 main(PSInput ps_input) : SV_Target
     
     float3 position_normal = to_eye / dist_to_eye;
     
-    float4 sampled = gTex_Billboard.Sample(gLinear_Billboard, float3(ps_input.TexCoord, ps_input.PrimId % 4));
+    float4 sampled = gTex_Billboard.Sample(gLinear_Billboard, float3(ps_input.TexCoord, ps_input.TexId % 4));
     clip(sampled.a - .1f);
     
     LightRes res;
