@@ -27,6 +27,8 @@
 #include "sandbox/gs/subdivison/subdivison.hpp"
 #include "sandbox/gs/billboards/billboards.hpp"
 
+#include "sandbox/cs/vec_add.hpp"
+
 namespace Pleiades
 {
 	void SandboxHolder::Init(DX::DeviceResources* res) noexcept
@@ -59,7 +61,9 @@ namespace Pleiades
 		AddSample<Sandbox::GSSubdivisonDemo>();
 		AddSample<Sandbox::GSBillboardsDemo>();
 
-		Set(Sandbox::GSBillboardsDemo::GetName());
+		AddSample<Sandbox::ComputeShader_VecAdd>();
+
+		Set(Sandbox::ComputeShader_VecAdd::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

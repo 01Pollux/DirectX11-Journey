@@ -58,6 +58,7 @@
     <ClInclude Include="sandbox\gs\billboards\effect.hpp" />
     <ClInclude Include="sandbox\gs\billboards\render_states.hpp" />
     <ClInclude Include="sandbox\gs\billboards\billboards.hpp" />
+    <ClInclude Include="sandbox\cs\vec_add.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -96,6 +97,7 @@
     <ClCompile Include="sandbox\gs\subdivison\subdivison.cpp" />
     <ClCompile Include="sandbox\gs\billboards\draw.cpp" />
     <ClCompile Include="sandbox\gs\billboards\billboards.cpp" />
+    <ClCompile Include="sandbox\cs\vec_add.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -133,6 +135,7 @@
     <FxCompile Include="resources\gs\billboards\env_gs.hlsl" />
     <FxCompile Include="resources\gs\billboards\env_ps.hlsl" />
     <FxCompile Include="resources\gs\billboards\env_vs.hlsl" />
+    <FxCompile Include="resources\cs\vec_add_cs.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">
