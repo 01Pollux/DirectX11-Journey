@@ -136,6 +136,7 @@
     <FxCompile Include="resources\gs\billboards\env_ps.hlsl" />
     <FxCompile Include="resources\gs\billboards\env_vs.hlsl" />
     <FxCompile Include="resources\cs\vec_add_cs.hlsl" />
+    <FxCompile Include="resources\cs\blur_cs.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">

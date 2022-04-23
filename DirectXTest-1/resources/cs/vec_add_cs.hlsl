@@ -10,8 +10,8 @@ StructuredBuffer<VecAdd_t> gVecAddB : register(t1);
 RWStructuredBuffer<VecAdd_t> gOutputBuf : register(u0);
 
 [numthreads(32, 1, 1)]
-void main(uint3 dispatch_id : SV_DispatchThreadID)
+void main(int gid : SV_GroupIndex)
 {
-    gOutputBuf[dispatch_id.x].v0 = gVecAddA[dispatch_id.x].v0 + gVecAddB[dispatch_id.x].v0;
-    gOutputBuf[dispatch_id.x].v1 = gVecAddA[dispatch_id.x].v1 + gVecAddB[dispatch_id.x].v1;
+    gOutputBuf[gid].v0 = gVecAddA[gid].v0 + gVecAddB[gid].v0;
+    gOutputBuf[gid].v1 = gVecAddA[gid].v1 + gVecAddB[gid].v1;
 }
