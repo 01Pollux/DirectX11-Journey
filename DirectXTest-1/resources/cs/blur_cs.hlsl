@@ -17,7 +17,7 @@ static const float g_Weights[] =
 groupshared float4 g_BlurredTex[CacheSize];
 
 Texture2D g_TexInput;
-RWTexture2D g_TexOutput;
+RWTexture2D<float4> g_TexOutput;
 
 [numthreads(1, 1, 1)]
 void main(
