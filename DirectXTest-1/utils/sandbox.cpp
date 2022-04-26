@@ -29,6 +29,7 @@
 
 #include "sandbox/cs/vec_add/vec_add.hpp"
 #include "sandbox/cs/blur/blur.hpp"
+#include "sandbox/cs/rand/rand.hpp"
 
 namespace Pleiades
 {
@@ -64,8 +65,9 @@ namespace Pleiades
 
 		AddSample<Sandbox::ComputeShader_VecAdd>();
 		AddSample<Sandbox::BlurredTextureDemo>();
+		AddSample<Sandbox::RandCSLength>();
 
-		Set(Sandbox::BlurredTextureDemo::GetName());
+		Set(Sandbox::RandCSLength::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

@@ -62,6 +62,7 @@
     <ClInclude Include="sandbox\cs\blur\blur.hpp" />
     <ClInclude Include="sandbox\cs\blur\effect.hpp" />
     <ClInclude Include="sandbox\cs\blur\render_states.hpp" />
+    <ClInclude Include="sandbox\cs\rand\rand.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -102,6 +103,7 @@
     <ClCompile Include="sandbox\gs\billboards\billboards.cpp" />
     <ClCompile Include="sandbox\cs\vec_add\vec_add.cpp" />
     <ClCompile Include="sandbox\cs\blur\blur.cpp" />
+    <ClCompile Include="sandbox\cs\rand\rand.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -144,6 +146,8 @@
     <FxCompile Include="resources\cs\blur_horz_cs.hlsl" />
     <FxCompile Include="resources\cs\blur_ps.hlsl" />
     <FxCompile Include="resources\cs\blur_vs.hlsl" />
+    <FxCompile Include="resources\cs\ex1\non_typed.hlsl" />
+    <FxCompile Include="resources\cs\ex1\typed.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">
