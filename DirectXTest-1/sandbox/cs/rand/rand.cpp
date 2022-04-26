@@ -112,7 +112,7 @@ namespace Pleiades::Sandbox
 
 			DX::ThrowIfFailed(
 				D3DReadFileToBlob(
-					L"resources/cs/ex1/non_typed.cso",
+					L"resources/cs/ex1/typed.cso",
 					shader_blob.GetAddressOf()
 				)
 			);
@@ -136,7 +136,7 @@ namespace Pleiades::Sandbox
 			buffer_desc.ByteWidth = static_cast<uint32_t>(values.size() * buffer_desc.StructureByteStride);
 			buffer_desc.Usage = D3D11_USAGE_IMMUTABLE;
 			buffer_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-			buffer_desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+			buffer_desc.MiscFlags = 0;
 
 			D3D11_SUBRESOURCE_DATA buffer_data{};
 			buffer_data.pSysMem = values.data();
@@ -150,10 +150,16 @@ namespace Pleiades::Sandbox
 				)
 			);
 
+			D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc{};
+			srv_desc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+			srv_desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFEREX;
+			srv_desc.BufferEx.NumElements = 64;
+
+
 			DX::ThrowIfFailed(
 				d3ddevice->CreateShaderResourceView(
 					buffer.Get(),
-					nullptr,
+					&srv_desc,
 					m_VecInView.GetAddressOf()
 				)
 			);
@@ -176,7 +182,7 @@ namespace Pleiades::Sandbox
 			);
 
 			D3D11_UNORDERED_ACCESS_VIEW_DESC uav_desc{};
-			uav_desc.Format = DXGI_FORMAT_UNKNOWN;
+			uav_desc.Format = DXGI_FORMAT_R32_FLOAT;
 			uav_desc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
 			uav_desc.Buffer.NumElements = 64;
 

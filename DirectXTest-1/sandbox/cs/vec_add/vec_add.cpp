@@ -107,10 +107,10 @@ namespace Pleiades::Sandbox
 			buffer_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 
 
-			D3D11_SHADER_RESOURCE_VIEW_DESC sv_desc{};
-			sv_desc.Format = DXGI_FORMAT_UNKNOWN;
-			sv_desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFEREX;
-			sv_desc.BufferEx.NumElements = NumVecs;
+			D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc{};
+			srv_desc.Format = DXGI_FORMAT_UNKNOWN;
+			srv_desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFEREX;
+			srv_desc.BufferEx.NumElements = NumVecs;
 
 
 			D3D11_SUBRESOURCE_DATA subres_desc{};
@@ -128,7 +128,7 @@ namespace Pleiades::Sandbox
 			DX::ThrowIfFailed(
 				d3ddevice->CreateShaderResourceView(
 					d3dbuffer.Get(),
-					&sv_desc,
+					&srv_desc,
 					m_VecA.GetAddressOf()
 				)
 			);
@@ -147,7 +147,7 @@ namespace Pleiades::Sandbox
 			DX::ThrowIfFailed(
 				d3ddevice->CreateShaderResourceView(
 					d3dbuffer.Get(),
-					&sv_desc,
+					&srv_desc,
 					m_VecB.GetAddressOf()
 				)
 			);
