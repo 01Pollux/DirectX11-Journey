@@ -27,7 +27,8 @@
 #include "sandbox/gs/subdivison/subdivison.hpp"
 #include "sandbox/gs/billboards/billboards.hpp"
 
-#include "sandbox/cs/vec_add.hpp"
+#include "sandbox/cs/vec_add/vec_add.hpp"
+#include "sandbox/cs/blur/blur.hpp"
 
 namespace Pleiades
 {
@@ -62,8 +63,9 @@ namespace Pleiades
 		AddSample<Sandbox::GSBillboardsDemo>();
 
 		AddSample<Sandbox::ComputeShader_VecAdd>();
+		AddSample<Sandbox::BlurredTextureDemo>();
 
-		Set(Sandbox::ComputeShader_VecAdd::GetName());
+		Set(Sandbox::BlurredTextureDemo::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

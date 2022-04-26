@@ -58,7 +58,10 @@
     <ClInclude Include="sandbox\gs\billboards\effect.hpp" />
     <ClInclude Include="sandbox\gs\billboards\render_states.hpp" />
     <ClInclude Include="sandbox\gs\billboards\billboards.hpp" />
-    <ClInclude Include="sandbox\cs\vec_add.hpp" />
+    <ClInclude Include="sandbox\cs\vec_add\vec_add.hpp" />
+    <ClInclude Include="sandbox\cs\blur\blur.hpp" />
+    <ClInclude Include="sandbox\cs\blur\effect.hpp" />
+    <ClInclude Include="sandbox\cs\blur\render_states.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -97,7 +100,8 @@
     <ClCompile Include="sandbox\gs\subdivison\subdivison.cpp" />
     <ClCompile Include="sandbox\gs\billboards\draw.cpp" />
     <ClCompile Include="sandbox\gs\billboards\billboards.cpp" />
-    <ClCompile Include="sandbox\cs\vec_add.cpp" />
+    <ClCompile Include="sandbox\cs\vec_add\vec_add.cpp" />
+    <ClCompile Include="sandbox\cs\blur\blur.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -136,7 +140,10 @@
     <FxCompile Include="resources\gs\billboards\env_ps.hlsl" />
     <FxCompile Include="resources\gs\billboards\env_vs.hlsl" />
     <FxCompile Include="resources\cs\vec_add_cs.hlsl" />
-    <FxCompile Include="resources\cs\blur_cs.hlsl" />
+    <FxCompile Include="resources\cs\blur_vert_cs.hlsl" />
+    <FxCompile Include="resources\cs\blur_horz_cs.hlsl" />
+    <FxCompile Include="resources\cs\blur_ps.hlsl" />
+    <FxCompile Include="resources\cs\blur_vs.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">
@@ -156,6 +163,7 @@
     <None Include="resources\gs\subdiv\helper.hlsli" />
     <None Include="resources\gs\billboards\env.hlsli" />
     <None Include="resources\gs\billboards\helper.hlsli" />
+    <None Include="resources\cs\env.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="sandbox\from_file\car.txt" />
