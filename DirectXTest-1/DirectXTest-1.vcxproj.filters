@@ -148,6 +148,7 @@
     <FxCompile Include="resources\cs\blur_vs.hlsl" />
     <FxCompile Include="resources\cs\ex1\non_typed.hlsl" />
     <FxCompile Include="resources\cs\ex1\typed.hlsl" />
+    <FxCompile Include="resources\cs\ex1\consume.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">
