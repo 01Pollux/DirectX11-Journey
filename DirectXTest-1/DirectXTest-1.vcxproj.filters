@@ -155,6 +155,10 @@
     <FxCompile Include="resources\tesselation\basic\basic_hs.hlsl" />
     <FxCompile Include="resources\tesselation\basic\basic_ds.hlsl" />
     <FxCompile Include="resources\tesselation\basic\basic_ps.hlsl" />
+    <FxCompile Include="resources\tesselation\bezier\berzier_vs.hlsl" />
+    <FxCompile Include="resources\tesselation\bezier\bezier_ps.hlsl" />
+    <FxCompile Include="resources\tesselation\bezier\bezier_ds.hlsl" />
+    <FxCompile Include="resources\tesselation\bezier\bezier_hs.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">
@@ -176,6 +180,7 @@
     <None Include="resources\gs\billboards\helper.hlsli" />
     <None Include="resources\cs\env.hlsli" />
     <None Include="resources\tesselation\basic\helper.hlsli" />
+    <None Include="resources\tesselation\bezier\helper.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="sandbox\from_file\car.txt" />

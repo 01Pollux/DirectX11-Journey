@@ -3,9 +3,9 @@
 
 [domain("quad")]
 PSInput main(
-	DSPatchInput dsp_input,
+	DSPatchOutput dsp_input,
 	float2 uv : SV_DomainLocation,
-	const OutputPatch<DSConstInput, NUM_CONTROL_POINTS> dsc_input
+	const OutputPatch<DSControlPoints, NUM_CONTROL_POINTS> dsc_input
 )
 {
 	PSInput ps_input;

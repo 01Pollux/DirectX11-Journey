@@ -6,25 +6,15 @@ DSPatchOutput CalcHSPatchConstants(
 	uint patch_id : SV_PrimitiveID
 )
 {
-	float3 center = 0.f;
-	[unroll]
-	for (uint i = 0; i < NUM_CONTROL_POINTS; i++)
-		center += ip[i].PosL;
-	
-	center = mul(float4(center * .25f, 1.f), g_World).xyz;
-	float dx = distance(center, g_EyePosition);
-
-	const float d0 = 20.f, d1 = 100.f, tess_count = 65.f;
-	float tess = max(tess_count * saturate((d1 - dx) / (d1 - d0)), 1.f);
-	
+	uint i;
 	DSPatchOutput patch;
 	
 	[unroll]
 	for (i = 0; i < 4; i++)
-		patch.TessFactor[i] = tess;
+		patch.TessFactor[i] = 25;
 	[unroll]
 	for (i = 0; i < 2; i++)
-		patch.InsideTess[i] = tess;
+		patch.InsideTess[i] = 10;
 
 	return patch;
 }

@@ -20,13 +20,13 @@ struct HSInput
 
 #define NUM_CONTROL_POINTS 4
 
-struct DSPatchInput
+struct DSPatchOutput
 {
 	float TessFactor[4] : SV_TessFactor;
 	float InsideTess[2] : SV_InsideTessFactor;
 };
 
-struct DSConstInput
+struct DSControlPoints
 {
 	float3 PosL : Position;
 };
