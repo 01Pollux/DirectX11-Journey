@@ -31,6 +31,8 @@
 #include "sandbox/cs/blur/blur.hpp"
 #include "sandbox/cs/rand/rand.hpp"
 
+#include "sandbox/tesselation/basic/basic_tess.hpp"
+
 namespace Pleiades
 {
 	void SandboxHolder::Init(DX::DeviceResources* res) noexcept
@@ -67,7 +69,9 @@ namespace Pleiades
 		AddSample<Sandbox::BlurredTextureDemo>();
 		AddSample<Sandbox::RandCSLength>();
 
-		Set(Sandbox::RandCSLength::GetName());
+		AddSample<Sandbox::BasicTesselation>();
+
+		Set(Sandbox::BasicTesselation::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

@@ -63,6 +63,7 @@
     <ClInclude Include="sandbox\cs\blur\effect.hpp" />
     <ClInclude Include="sandbox\cs\blur\render_states.hpp" />
     <ClInclude Include="sandbox\cs\rand\rand.hpp" />
+    <ClInclude Include="sandbox\tesselation\basic\basic_tess.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -104,6 +105,7 @@
     <ClCompile Include="sandbox\cs\vec_add\vec_add.cpp" />
     <ClCompile Include="sandbox\cs\blur\blur.cpp" />
     <ClCompile Include="sandbox\cs\rand\rand.cpp" />
+    <ClCompile Include="sandbox\tesselation\basic\basic_tess.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -149,6 +151,10 @@
     <FxCompile Include="resources\cs\ex1\non_typed.hlsl" />
     <FxCompile Include="resources\cs\ex1\typed.hlsl" />
     <FxCompile Include="resources\cs\ex1\consume.hlsl" />
+    <FxCompile Include="resources\tesselation\basic\basic_vs.hlsl" />
+    <FxCompile Include="resources\tesselation\basic\basic_hs.hlsl" />
+    <FxCompile Include="resources\tesselation\basic\basic_ds.hlsl" />
+    <FxCompile Include="resources\tesselation\basic\basic_ps.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">
@@ -169,6 +175,7 @@
     <None Include="resources\gs\billboards\env.hlsli" />
     <None Include="resources\gs\billboards\helper.hlsli" />
     <None Include="resources\cs\env.hlsli" />
+    <None Include="resources\tesselation\basic\helper.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="sandbox\from_file\car.txt" />
