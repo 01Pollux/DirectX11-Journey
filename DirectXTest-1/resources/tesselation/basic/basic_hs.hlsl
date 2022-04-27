@@ -15,22 +15,20 @@ DSPatchOutput CalcHSPatchConstants(
 	float dx = distance(center, g_EyePosition);
 
 	const float d0 = 20.f, d1 = 100.f, tess_count = 65.f;
-	float tess = max(tess_count * saturate((d1 - dx) / (d1 - d0)), 1.f);
+	float tess = (max(tess_count * saturate((d1 - dx) / (d1 - d0)), 1.f)) / 3.f;
 	
 	DSPatchOutput patch;
 	
 	[unroll]
-	for (i = 0; i < 4; i++)
+	for (i = 0; i < 3; i++)
 		patch.TessFactor[i] = tess;
-	[unroll]
-	for (i = 0; i < 2; i++)
-		patch.InsideTess[i] = tess;
+	patch.InsideTess = tess;
 
 	return patch;
 }
 
-[domain("quad")]
-[partitioning("integer")]
+[domain("tri")]
+[partitioning("fractional_odd")]
 [outputtopology("triangle_cw")]
 [outputcontrolpoints(NUM_CONTROL_POINTS)]
 [patchconstantfunc("CalcHSPatchConstants")]

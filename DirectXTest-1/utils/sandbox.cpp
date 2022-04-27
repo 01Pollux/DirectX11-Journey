@@ -73,7 +73,7 @@ namespace Pleiades
 		AddSample<Sandbox::BasicTesselation>();
 		AddSample<Sandbox::BezierTesselation>();
 
-		Set(Sandbox::BezierTesselation::GetName());
+		Set(Sandbox::BasicTesselation::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

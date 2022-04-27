@@ -20,7 +20,7 @@ namespace Pleiades::Sandbox
 	{
 		auto d3dcontext = GetDeviceResources()->GetD3DDeviceContext();
 
-		d3dcontext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST);
+		d3dcontext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
 
 		uint32_t strides[]{ sizeof(VertexInput_t) };
 		uint32_t offsets[]{ 0 };
@@ -70,8 +70,7 @@ namespace Pleiades::Sandbox
 			VertexInput_t vs_input[]{
 				XMFLOAT3{ -10.f, 0.f, +10.f },
 				XMFLOAT3{ +10.f, 0.f, +10.f },
-				XMFLOAT3{ -10.f, 0.f, -10.f },
-				XMFLOAT3{ +10.f, 0.f, -10.f }
+				XMFLOAT3{ -10.f, 0.f, -10.f }
 			};
 
 			D3D11_BUFFER_DESC buffer_desc{};
