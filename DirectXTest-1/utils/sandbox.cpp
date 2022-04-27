@@ -32,6 +32,7 @@
 #include "sandbox/cs/rand/rand.hpp"
 
 #include "sandbox/tesselation/basic/basic_tess.hpp"
+#include "sandbox/tesselation/bezier/bezier_tess.hpp"
 
 namespace Pleiades
 {
@@ -70,8 +71,9 @@ namespace Pleiades
 		AddSample<Sandbox::RandCSLength>();
 
 		AddSample<Sandbox::BasicTesselation>();
+		AddSample<Sandbox::BezierTesselation>();
 
-		Set(Sandbox::BasicTesselation::GetName());
+		Set(Sandbox::BezierTesselation::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

@@ -11,10 +11,10 @@ DSPatchOutput CalcHSPatchConstants(
 	
 	[unroll]
 	for (i = 0; i < 4; i++)
-		patch.TessFactor[i] = 25;
+		patch.TessFactor[i] = g_TessFactor[i];
 	[unroll]
 	for (i = 0; i < 2; i++)
-		patch.InsideTess[i] = 10;
+		patch.InsideTess[i] = g_InsideTessFactor[i];
 
 	return patch;
 }

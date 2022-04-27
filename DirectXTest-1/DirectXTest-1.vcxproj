@@ -201,6 +201,7 @@
     <ClInclude Include="sandbox\stencilling\mirror\effect.hpp" />
     <ClInclude Include="sandbox\stencilling\mirror\render_states.hpp" />
     <ClInclude Include="sandbox\tesselation\basic\basic_tess.hpp" />
+    <ClInclude Include="sandbox\tesselation\bezier\bezier_tess.hpp" />
     <ClInclude Include="sandbox\waves.hpp" />
     <ClInclude Include="sandbox\blend\blend_waves.hpp" />
     <ClInclude Include="sandbox\textures\box\box_texture.hpp" />
@@ -250,6 +251,7 @@
     <ClCompile Include="sandbox\stencilling\mirror\draw.cpp" />
     <ClCompile Include="sandbox\stencilling\mirror\mirror.cpp" />
     <ClCompile Include="sandbox\tesselation\basic\basic_tess.cpp" />
+    <ClCompile Include="sandbox\tesselation\bezier\bezier_tess.cpp" />
     <ClCompile Include="sandbox\waves.cpp" />
     <ClCompile Include="sandbox\blend\blend_waves.cpp" />
     <ClCompile Include="sandbox\textures\box\box_texture.cpp" />
@@ -717,7 +719,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="resources\tesselation\bezier\berzier_vs.hlsl">
+    <FxCompile Include="resources\tesselation\bezier\bezier_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

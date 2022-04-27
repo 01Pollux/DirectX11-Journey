@@ -64,6 +64,7 @@
     <ClInclude Include="sandbox\cs\blur\render_states.hpp" />
     <ClInclude Include="sandbox\cs\rand\rand.hpp" />
     <ClInclude Include="sandbox\tesselation\basic\basic_tess.hpp" />
+    <ClInclude Include="sandbox\tesselation\bezier\bezier_tess.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -106,6 +107,7 @@
     <ClCompile Include="sandbox\cs\blur\blur.cpp" />
     <ClCompile Include="sandbox\cs\rand\rand.cpp" />
     <ClCompile Include="sandbox\tesselation\basic\basic_tess.cpp" />
+    <ClCompile Include="sandbox\tesselation\bezier\bezier_tess.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -155,7 +157,7 @@
     <FxCompile Include="resources\tesselation\basic\basic_hs.hlsl" />
     <FxCompile Include="resources\tesselation\basic\basic_ds.hlsl" />
     <FxCompile Include="resources\tesselation\basic\basic_ps.hlsl" />
-    <FxCompile Include="resources\tesselation\bezier\berzier_vs.hlsl" />
+    <FxCompile Include="resources\tesselation\bezier\bezier_vs.hlsl" />
     <FxCompile Include="resources\tesselation\bezier\bezier_ps.hlsl" />
     <FxCompile Include="resources\tesselation\bezier\bezier_ds.hlsl" />
     <FxCompile Include="resources\tesselation\bezier\bezier_hs.hlsl" />

@@ -4,6 +4,9 @@ cbuffer WorldConstantBuffers
 	matrix g_World;
 	matrix g_ViewProj;
 	
+	float4 g_TessFactor;
+	float2 g_InsideTessFactor;
+	
 	float3 g_EyePosition;
 };
 
