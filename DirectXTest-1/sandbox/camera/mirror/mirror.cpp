@@ -6,23 +6,32 @@
 #include "DirectXTK/DDSTextureLoader.h"
 
 #include <random>
-#include "mirror.hpp"
 
 namespace Pleiades::Sandbox
 {
-	MirrorSkullWorld::MirrorSkullWorld(DX::DeviceResources* d3dres) :
+	CamMirrorSkullWorld::CamMirrorSkullWorld(DX::DeviceResources* d3dres) :
 		ISandbox(d3dres),
 		m_Effects(d3dres->GetD3DDevice(), GetDefaultTexture(d3dres), GetDefaultWolrdConstants()),
 		m_BlendRenderState(d3dres)
 	{
+		m_Camera.set_position(-0.9f, 1.8, -18.7f);
+		GetDeviceResources()->RegisterDeviceNotify(this);
+		this->OnDeviceWindowSizeChanged();
+
 		InitializeWorldInfo();
 		InitializeForD3D();
 	}
 
-
-	void MirrorSkullWorld::OnFrame(uint64_t)
+	CamMirrorSkullWorld::~CamMirrorSkullWorld()
 	{
-		m_Effects.SetWorldEyePosition({ m_CamPosition[0], m_CamPosition[1], m_CamPosition[2] });
+		GetDeviceResources()->UnregisterDeviceNotify(this);
+	}
+
+
+	void CamMirrorSkullWorld::OnFrame(uint64_t ticks)
+	{
+		m_Camera.update(ticks);
+		m_Effects.SetWorldEyePosition(m_Camera.position());
 
 		DrawWorld();
 		DrawSkull();
@@ -35,15 +44,9 @@ namespace Pleiades::Sandbox
 	}
 
 
-	void MirrorSkullWorld::OnImGuiDraw()
+	void CamMirrorSkullWorld::OnImGuiDraw()
 	{
 		static bool window_open[2]{};
-
-		bool update = ImGui::DragFloat3("Position", m_CamPosition);
-		update |= ImGui::DragFloat3("Rotation", m_CamRotation);
-
-		if (update)
-			UpdateViewProjection();
 
 		ImGui::Checkbox("Skull", &window_open[0]);
 		if (window_open[0])
@@ -92,10 +95,8 @@ namespace Pleiades::Sandbox
 	}
 
 
-	void MirrorSkullWorld::InitializeWorldInfo()
+	void CamMirrorSkullWorld::InitializeWorldInfo()
 	{
-		UpdateViewProjection();
-
 		m_Wall.World = DX::XMMatrixIdentity();
 		m_Mirror.World = DX::XMMatrixIdentity();
 		m_Skull.World = DX::XMMatrixScaling(0.2f, 0.2f, 0.2f) * DX::XMMatrixRotationY(DX::XM_PIDIV2) * DX::XMMatrixTranslation(-2.67f, 0.9f, -3.77f);
@@ -115,7 +116,7 @@ namespace Pleiades::Sandbox
 	}
 
 
-	void MirrorSkullWorld::InitializeForD3D()
+	void CamMirrorSkullWorld::InitializeForD3D()
 	{
 		auto d3ddevice = GetDeviceResources()->GetD3DDevice();
 
@@ -156,7 +157,7 @@ namespace Pleiades::Sandbox
 
 
 
-	GeometryInstance::MeshData_t MirrorSkullWorld::CreateWalls()
+	GeometryInstance::MeshData_t CamMirrorSkullWorld::CreateWalls()
 	{
 		// Create and specify geometry.  For this sample we draw a floor
 		// and a wall with a mirror on it.  We put the floor, wall, and
@@ -218,7 +219,7 @@ namespace Pleiades::Sandbox
 	}
 
 
-	GeometryInstance::MeshData_t MirrorSkullWorld::CreateMirror()
+	GeometryInstance::MeshData_t CamMirrorSkullWorld::CreateMirror()
 	{
 		// Create and specify geometry.  For this sample we draw a floor
 		// and a wall with a mirror on it.  We put the floor, wall, and
@@ -253,7 +254,7 @@ namespace Pleiades::Sandbox
 	}
 
 
-	auto MirrorSkullWorld::GetDefaultWolrdConstants() ->
+	auto CamMirrorSkullWorld::GetDefaultWolrdConstants() ->
 		EffectManager::WorldConstantBuffer
 	{
 		EffectManager::WorldConstantBuffer info{};
@@ -269,7 +270,7 @@ namespace Pleiades::Sandbox
 	}
 
 
-	auto MirrorSkullWorld::GetDefaultTexture(DX::DeviceResources* d3dres) ->
+	auto CamMirrorSkullWorld::GetDefaultTexture(DX::DeviceResources* d3dres) ->
 		EffectManager::NonNumericConstants
 	{
 		auto d3ddevice = d3dres->GetD3DDevice();
@@ -286,5 +287,15 @@ namespace Pleiades::Sandbox
 		);
 
 		return info;
+	}
+
+
+	void CamMirrorSkullWorld::OnDeviceWindowSizeChanged()
+	{
+		m_Camera.set_lens(
+			DX::XM_PIDIV4,
+			GetDeviceResources()->GetAspectRatio(),
+			1.f, 10000.f
+		);
 	}
 }

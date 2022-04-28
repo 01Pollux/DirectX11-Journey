@@ -34,6 +34,8 @@
 #include "sandbox/tesselation/basic/basic_tess.hpp"
 #include "sandbox/tesselation/bezier/bezier_tess.hpp"
 
+#include "sandbox/camera/mirror/mirror.hpp"
+
 namespace Pleiades
 {
 	void SandboxHolder::Init(DX::DeviceResources* res) noexcept
@@ -73,7 +75,9 @@ namespace Pleiades
 		AddSample<Sandbox::BasicTesselation>();
 		AddSample<Sandbox::BezierTesselation>();
 
-		Set(Sandbox::BasicTesselation::GetName());
+		AddSample<Sandbox::CamMirrorSkullWorld>();
+
+		Set(Sandbox::CamMirrorSkullWorld::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

@@ -183,6 +183,10 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="directx\Camera.hpp" />
+    <ClInclude Include="sandbox\camera\mirror\effect.hpp" />
+    <ClInclude Include="sandbox\camera\mirror\mirror.hpp" />
+    <ClInclude Include="sandbox\camera\mirror\render_states.hpp" />
     <ClInclude Include="sandbox\cs\rand\rand.hpp" />
     <ClInclude Include="directx\DeviceResources.hpp" />
     <ClInclude Include="sandbox\blend\effect.hpp" />
@@ -236,6 +240,9 @@
     <ClInclude Include="utils\StepTimer.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="directx\Camera.cpp" />
+    <ClCompile Include="sandbox\camera\mirror\draw.cpp" />
+    <ClCompile Include="sandbox\camera\mirror\mirror.cpp" />
     <ClCompile Include="sandbox\cs\rand\rand.cpp" />
     <ClCompile Include="directx\DeviceResources.cpp" />
     <ClCompile Include="imgui\imgui_impl_dx11.cpp" />
