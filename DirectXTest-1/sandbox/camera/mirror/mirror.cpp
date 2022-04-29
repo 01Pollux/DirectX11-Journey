@@ -12,19 +12,13 @@ namespace Pleiades::Sandbox
 	CamMirrorSkullWorld::CamMirrorSkullWorld(DX::DeviceResources* d3dres) :
 		ISandbox(d3dres),
 		m_Effects(d3dres->GetD3DDevice(), GetDefaultTexture(d3dres), GetDefaultWolrdConstants()),
-		m_BlendRenderState(d3dres)
+		m_BlendRenderState(d3dres),
+		m_Camera(d3dres)
 	{
 		m_Camera.set_position(-0.9f, 1.8, -18.7f);
-		GetDeviceResources()->RegisterDeviceNotify(this);
-		this->OnDeviceWindowSizeChanged();
 
 		InitializeWorldInfo();
 		InitializeForD3D();
-	}
-
-	CamMirrorSkullWorld::~CamMirrorSkullWorld()
-	{
-		GetDeviceResources()->UnregisterDeviceNotify(this);
 	}
 
 
@@ -287,15 +281,5 @@ namespace Pleiades::Sandbox
 		);
 
 		return info;
-	}
-
-
-	void CamMirrorSkullWorld::OnDeviceWindowSizeChanged()
-	{
-		m_Camera.set_lens(
-			DX::XM_PIDIV4,
-			GetDeviceResources()->GetAspectRatio(),
-			1.f, 10000.f
-		);
 	}
 }

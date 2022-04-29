@@ -4,13 +4,22 @@
 
 namespace DX
 {
+	class DeviceResources;
 	using namespace DirectX;
 
-	class Camera
+	class Camera : public IDeviceNotify
 	{
 		using XMMatrix = XMMATRIX;
 		using XMVector = XMVECTOR;
 		using XMFloat3 = XMFLOAT3;
+
+	public:
+		Camera(DeviceResources* d3dres, float fovy = DX::XM_PIDIV4, float near_z = 1.f, float far_z = 1'000.f);
+		Camera(const Camera&) = delete; Camera& operator=(const Camera&) = delete;
+		Camera(Camera&&) = delete;		Camera& operator=(Camera&&) = delete;
+		~Camera();
+
+		void OnDeviceWindowSizeChanged() override;
 
 	public:
 		enum class MoveDir
@@ -42,6 +51,7 @@ namespace DX
 		template<MoveDir direction>
 		void walk(float dist)
 		{
+			m_ViewDirty = true;
 			XMVector dir;
 			if constexpr (direction == MoveDir::X)
 				dir = XMLoadFloat3(&m_Right);
@@ -64,22 +74,31 @@ namespace DX
 		template<MoveDir rotation>
 		void rotate(float angle)
 		{
-			XMMatrix rot;
-			if constexpr (rotation == MoveDir::X)
-				rot = XMMatrixRotationX(angle);
-			else if constexpr (rotation == MoveDir::Y)
-				rot = XMMatrixRotationY(angle);
-			else
-				rot = XMMatrixRotationZ(angle);
+			m_ViewDirty = true;
 
-			XMStoreFloat3(
-				&m_Right,
-				XMVector3Transform(XMLoadFloat3(&m_Right), rot)
-			);
+			XMVector rotvec;
+			if constexpr (rotation == MoveDir::X)
+				rotvec = XMVectorSet(angle, 0.f, 0.f, 0.f);
+			else if constexpr (rotation == MoveDir::Y)
+				rotvec = XMVectorSet(0.f, angle, 0.f, 0.f);
+			else
+				rotvec = XMVectorSet(0.f, 0.f, angle, 0.f);
+
+			XMMatrix rot = XMMatrixRotationRollPitchYawFromVector(rotvec);
+
+			if constexpr (rotation != MoveDir::X)
+			{
+				XMStoreFloat3(
+					&m_Right,
+					XMVector3Transform(XMLoadFloat3(&m_Right), rot)
+				);
+			}
+			
 			XMStoreFloat3(
 				&m_Look,
 				XMVector3Transform(XMLoadFloat3(&m_Look), rot)
 			);
+			
 			XMStoreFloat3(
 				&m_Up,
 				XMVector3Transform(XMLoadFloat3(&m_Up), rot)
@@ -115,6 +134,7 @@ namespace DX
 		void set_position(const XMFloat3& position) noexcept
 		{
 			m_Position = position;
+			m_ViewDirty = true;
 		}
 		
 		void set_position(float x, float y, float z) noexcept
@@ -190,8 +210,7 @@ namespace DX
 		}
 
 	private:
-			void update_viewmatrix();
-
+		void update_viewmatrix();
 
 	private:
 		XMMatrix m_View = XMMatrixIdentity(),
@@ -200,9 +219,12 @@ namespace DX
 		XMFloat3 m_Position{},
 			m_Right{ 1.f, 0.f, 0.f }, m_Look{ 0.f, 0.f, 1.f }, m_Up{ 0.f, 1.f, 0.f };
 
-		float m_NearZ, m_NearZWindowHeight;
-		float m_FarZ, m_FarZWindowHeight;
-		float m_AspectRatio;
-		float m_FovY;
+		float m_NearZ{}, m_NearZWindowHeight{};
+		float m_FarZ{}, m_FarZWindowHeight{};
+		float m_AspectRatio{};
+		float m_FovY{};
+
+		DeviceResources* m_d3dRes;
+		bool m_ViewDirty{};
 	};
 }

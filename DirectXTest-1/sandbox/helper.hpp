@@ -53,7 +53,7 @@ namespace Pleiades::Sandbox
 
 	struct GeoInfo_t
 	{
-		Material Material;
+		Material Material{};
 		DX::XMMATRIX World{ DX::XMMatrixIdentity() };
 
 		template<typename _DevieRes, typename _EffectMgr>

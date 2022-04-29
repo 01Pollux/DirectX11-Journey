@@ -9,14 +9,13 @@
 
 namespace Pleiades::Sandbox
 {
-	class CamMirrorSkullWorld : public ISandbox, public DX::IDeviceNotify
+	class CamMirrorSkullWorld : public ISandbox
 	{
 	public:
 		using EffectManager = CamStencilMirrorDemo::EffectManager;
 		using BlendRenderState = CamStencilMirrorDemo::BlendRenderState;
 
 		CamMirrorSkullWorld(DX::DeviceResources* d3dres);
-		~CamMirrorSkullWorld();
 
 		void OnFrame(uint64_t frame_time) override;
 		void OnImGuiDraw() override;
@@ -25,8 +24,6 @@ namespace Pleiades::Sandbox
 		{
 			return "Camera (Mirror + skull + world)";
 		}
-
-		void OnDeviceWindowSizeChanged() override;
 
 	private:
 		void InitializeWorldInfo();
