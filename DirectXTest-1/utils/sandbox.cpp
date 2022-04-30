@@ -35,6 +35,7 @@
 #include "sandbox/tesselation/bezier/bezier_tess.hpp"
 
 #include "sandbox/camera/mirror/mirror.hpp"
+#include "sandbox/frustum/instancing_culling/instancing_culling.hpp"
 
 namespace Pleiades
 {
@@ -75,9 +76,10 @@ namespace Pleiades
 		AddSample<Sandbox::BasicTesselation>();
 		AddSample<Sandbox::BezierTesselation>();
 
-		AddSample<Sandbox::CamMirrorSkullWorld>();
+		AddSample<Sandbox::InstancedFrustum>();
 
 		Set(Sandbox::CamMirrorSkullWorld::GetName());
+		Set(Sandbox::InstancedFrustum::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

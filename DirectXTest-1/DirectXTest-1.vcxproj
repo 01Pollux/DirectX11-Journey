@@ -39,7 +39,7 @@
     <PlatformToolset>v143</PlatformToolset>
     <PreferredToolArchitecture>x64</PreferredToolArchitecture>
     <CharacterSet>Unicode</CharacterSet>
-    <EnableASAN>false</EnableASAN>
+    <EnableASAN>true</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -86,6 +86,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnabled>false</VcpkgEnabled>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -183,7 +186,30 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DirectXTK\Audio.h" />
+    <ClInclude Include="DirectXTK\BufferHelpers.h" />
+    <ClInclude Include="DirectXTK\CommonStates.h" />
+    <ClInclude Include="DirectXTK\DDSTextureLoader.h" />
+    <ClInclude Include="DirectXTK\DirectXHelpers.h" />
+    <ClInclude Include="DirectXTK\Effects.h" />
+    <ClInclude Include="DirectXTK\GamePad.h" />
+    <ClInclude Include="DirectXTK\GeometricPrimitive.h" />
+    <ClInclude Include="DirectXTK\GraphicsMemory.h" />
+    <ClInclude Include="DirectXTK\Keyboard.h" />
+    <ClInclude Include="DirectXTK\Model.h" />
+    <ClInclude Include="DirectXTK\Mouse.h" />
+    <ClInclude Include="DirectXTK\PostProcess.h" />
+    <ClInclude Include="DirectXTK\PrimitiveBatch.h" />
+    <ClInclude Include="DirectXTK\ScreenGrab.h" />
+    <ClInclude Include="DirectXTK\SimpleMath.h" />
+    <ClInclude Include="DirectXTK\SpriteBatch.h" />
+    <ClInclude Include="DirectXTK\SpriteFont.h" />
+    <ClInclude Include="DirectXTK\VertexTypes.h" />
+    <ClInclude Include="DirectXTK\WICTextureLoader.h" />
+    <ClInclude Include="DirectXTK\XboxDDSTextureLoader.h" />
     <ClInclude Include="directx\Camera.hpp" />
+    <ClInclude Include="sandbox\frustum\instancing_culling\effect.hpp" />
+    <ClInclude Include="sandbox\frustum\instancing_culling\instancing_culling.hpp" />
     <ClInclude Include="sandbox\camera\mirror\effect.hpp" />
     <ClInclude Include="sandbox\camera\mirror\mirror.hpp" />
     <ClInclude Include="sandbox\camera\mirror\render_states.hpp" />
@@ -241,6 +267,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="directx\Camera.cpp" />
+    <ClCompile Include="sandbox\frustum\instancing_culling\instancing_culling.cpp" />
     <ClCompile Include="sandbox\camera\mirror\draw.cpp" />
     <ClCompile Include="sandbox\camera\mirror\mirror.cpp" />
     <ClCompile Include="sandbox\cs\rand\rand.cpp" />
@@ -251,6 +278,7 @@
     </ClCompile>
     <ClCompile Include="sandbox\cs\blur\blur.cpp" />
     <ClCompile Include="sandbox\cs\vec_add\vec_add.cpp" />
+    <ClCompile Include="sandbox\frustum\instancing_culling\render.cpp" />
     <ClCompile Include="sandbox\gs\billboards\draw.cpp" />
     <ClCompile Include="sandbox\gs\billboards\billboards.cpp" />
     <ClCompile Include="sandbox\gs\subdivison\draw.cpp" />
@@ -301,6 +329,9 @@
     <Manifest Include="settings.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DirectXTK\DirectXTK_Desktop_2022_Win10.vcxproj">
+      <Project>{e0b52ae7-e160-4d32-bf3f-910b785e5a8e}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\ImGui\ImGui.vcxproj">
       <Project>{c0ff640d-2c14-8dbe-f595-301e616989ef}</Project>
     </ProjectReference>
@@ -409,6 +440,34 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="resources\frustum\frustum_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).cso </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).cso </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).cso </ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="resources\frustum\frustum_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).cso </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)%(Filename).cso </ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)%(Filename).cso </ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="resources\gs\billboards\env_gs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
@@ -780,7 +839,10 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="DirectXTK\SimpleMath.inl" />
     <None Include="resources\cs\env.hlsli" />
+    <None Include="resources\frustum\helper.hlsli" />
+    <None Include="resources\frustum\lights.hlsli" />
     <None Include="resources\gs\billboards\env.hlsli" />
     <None Include="resources\gs\billboards\helper.hlsli" />
     <None Include="resources\gs\subdiv\env.hlsli" />

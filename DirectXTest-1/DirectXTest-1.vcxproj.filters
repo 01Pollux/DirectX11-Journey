@@ -69,6 +69,29 @@
     <ClInclude Include="sandbox\camera\mirror\effect.hpp" />
     <ClInclude Include="sandbox\camera\mirror\mirror.hpp" />
     <ClInclude Include="sandbox\camera\mirror\render_states.hpp" />
+    <ClInclude Include="sandbox\frustum\instancing_culling\instancing_culling.hpp" />
+    <ClInclude Include="sandbox\frustum\instancing_culling\effect.hpp" />
+    <ClInclude Include="DirectXTK\Audio.h" />
+    <ClInclude Include="DirectXTK\BufferHelpers.h" />
+    <ClInclude Include="DirectXTK\CommonStates.h" />
+    <ClInclude Include="DirectXTK\DDSTextureLoader.h" />
+    <ClInclude Include="DirectXTK\DirectXHelpers.h" />
+    <ClInclude Include="DirectXTK\Effects.h" />
+    <ClInclude Include="DirectXTK\GamePad.h" />
+    <ClInclude Include="DirectXTK\GeometricPrimitive.h" />
+    <ClInclude Include="DirectXTK\GraphicsMemory.h" />
+    <ClInclude Include="DirectXTK\Keyboard.h" />
+    <ClInclude Include="DirectXTK\Model.h" />
+    <ClInclude Include="DirectXTK\Mouse.h" />
+    <ClInclude Include="DirectXTK\PostProcess.h" />
+    <ClInclude Include="DirectXTK\PrimitiveBatch.h" />
+    <ClInclude Include="DirectXTK\ScreenGrab.h" />
+    <ClInclude Include="DirectXTK\SimpleMath.h" />
+    <ClInclude Include="DirectXTK\SpriteBatch.h" />
+    <ClInclude Include="DirectXTK\SpriteFont.h" />
+    <ClInclude Include="DirectXTK\VertexTypes.h" />
+    <ClInclude Include="DirectXTK\WICTextureLoader.h" />
+    <ClInclude Include="DirectXTK\XboxDDSTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -115,6 +138,8 @@
     <ClCompile Include="directx\Camera.cpp" />
     <ClCompile Include="sandbox\camera\mirror\draw.cpp" />
     <ClCompile Include="sandbox\camera\mirror\mirror.cpp" />
+    <ClCompile Include="sandbox\frustum\instancing_culling\instancing_culling.cpp" />
+    <ClCompile Include="sandbox\frustum\instancing_culling\render.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -168,6 +193,8 @@
     <FxCompile Include="resources\tesselation\bezier\bezier_ps.hlsl" />
     <FxCompile Include="resources\tesselation\bezier\bezier_ds.hlsl" />
     <FxCompile Include="resources\tesselation\bezier\bezier_hs.hlsl" />
+    <FxCompile Include="resources\frustum\frustum_ps.hlsl" />
+    <FxCompile Include="resources\frustum\frustum_vs.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">
@@ -190,6 +217,9 @@
     <None Include="resources\cs\env.hlsli" />
     <None Include="resources\tesselation\basic\helper.hlsli" />
     <None Include="resources\tesselation\bezier\helper.hlsli" />
+    <None Include="resources\frustum\helper.hlsli" />
+    <None Include="resources\frustum\lights.hlsli" />
+    <None Include="DirectXTK\SimpleMath.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="sandbox\from_file\car.txt" />
