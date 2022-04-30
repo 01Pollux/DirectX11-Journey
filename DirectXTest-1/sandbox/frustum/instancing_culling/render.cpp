@@ -39,7 +39,11 @@ namespace Pleiades::Sandbox
 		d3dcontext->PSSetShader(m_d3dPixelShader.Get(), nullptr, 0);
 
 		m_EffectManager.Bind(d3dcontext);
+
 		m_EffectManager.SetMaterial(m_SkullMat);
+		m_EffectManager.SetWorldEyePosition(m_Camera.position());
+		m_EffectManager.SetViewProj(m_Camera.get_viewprojection());
+
 		m_EffectManager.Update(d3dcontext);
 	}
 

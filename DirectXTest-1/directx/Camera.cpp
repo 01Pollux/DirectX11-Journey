@@ -24,6 +24,7 @@ namespace DX
         m_Projection = XMMatrixPerspectiveLH(
             m_FovY, m_d3dRes->GetAspectRatio(), m_NearZ, m_FarZ
         );
+        m_TViewProjection = XMMatrixTranspose(XMMatrixMultiply(get_view(), get_projection()));
     }
 
 
@@ -98,5 +99,7 @@ namespace DX
             &m_Right,
             XMVector3Cross(up, look)
         );
-	}
+
+        m_TViewProjection = XMMatrixTranspose(XMMatrixMultiply(get_view(), get_projection()));
+    }
 }

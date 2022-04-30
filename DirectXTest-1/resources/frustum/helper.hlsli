@@ -14,7 +14,7 @@ struct VSInput
 	float3 Position : LocalPosition;
 	float3 Normal : Normal;
 	
-	row_major float4x4 World : World;
+	matrix World : World;
 	float4 Color : Color;
 	
 	uint InstId : SV_InstanceID;

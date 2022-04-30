@@ -14,9 +14,17 @@ namespace Pleiades::Sandbox
 		m_EffectManager(d3dres->GetD3DDevice()),
 		m_Camera(d3dres)
 	{
+		m_Camera.set_position(145.f, 145.f, -15.f);
+
 		InitializeInstancedGround();
 		InitializeBuffers();
 		InitializeShaders();
+
+		auto& light = m_EffectManager.Buffer().Light;
+		light.Ambient = DX::XMVectorSet(0.2f, 0.2f, 0.2f, 1.0f);
+		light.Diffuse = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
+		light.Specular = DX::XMVectorSet(0.5f, 0.5f, 0.5f, 1.0f);
+		light.Direction = DX::XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
 
 		m_SkullMat.Ambient = DX::XMVectorSet(0.4f, 0.4f, 0.4f, 1.0f);
 		m_SkullMat.Diffuse = DX::XMVectorSet(0.8f, 0.8f, 0.8f, 1.0f);
@@ -49,7 +57,7 @@ namespace Pleiades::Sandbox
 				for (size_t k = 0; k < count; k++)
 				{
 					auto& inst = m_InstancedWorld[i * count * count + j * count + k];
-					inst.World = DX::XMMatrixTranslation(x + i * dx, y + j * dy, z + k * dz);
+					inst.World = DX::XMMatrixTranspose(DX::XMMatrixTranslation(x + j * dx, y + i * dy, z + k * dz));
 					inst.Color = DX::XMFLOAT4(rand_f(engine), rand_f(engine), rand_f(engine), 1.f);
 				}
 			}
@@ -144,7 +152,7 @@ namespace Pleiades::Sandbox
 					.SemanticName = "Normal",			
 					.Format = DXGI_FORMAT_R32G32B32_FLOAT,		
 					.InputSlot = 0,
-					.AlignedByteOffset = 12,
+					.AlignedByteOffset = sizeof(float[3]),
 					.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
 					.InstanceDataStepRate = 0 
 				},
@@ -162,7 +170,7 @@ namespace Pleiades::Sandbox
 					.SemanticIndex = 1,
 					.Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
 					.InputSlot = 1,
-					.AlignedByteOffset = 16,
+					.AlignedByteOffset = sizeof(float[4]),
 					.InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA,
 					.InstanceDataStepRate = 1
 				},
@@ -171,7 +179,7 @@ namespace Pleiades::Sandbox
 					.SemanticIndex = 2,
 					.Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
 					.InputSlot = 1,
-					.AlignedByteOffset = 32,
+					.AlignedByteOffset = sizeof(float[4]) * 2,
 					.InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA,
 					.InstanceDataStepRate = 1
 				},
@@ -180,7 +188,7 @@ namespace Pleiades::Sandbox
 					.SemanticIndex = 3,
 					.Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
 					.InputSlot = 1,
-					.AlignedByteOffset = 48,
+					.AlignedByteOffset = sizeof(float[4]) * 3,
 					.InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA,
 					.InstanceDataStepRate = 1
 				},
@@ -188,7 +196,7 @@ namespace Pleiades::Sandbox
 					.SemanticName = "Color",	
 					.Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
 					.InputSlot = 1,
-					.AlignedByteOffset = 64,
+					.AlignedByteOffset = sizeof(float[4]) * 4,
 					.InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA,
 					.InstanceDataStepRate = 1
 				}

@@ -40,22 +40,24 @@ namespace Pleiades::Sandbox::InstFrustumDemo
 			);
 		}
 
+		void SetViewProj(const DX::XMMATRIX& view_proj)
+		{
+			m_Buffer.ViewProj = view_proj;
+		}
+
 		void SetWorldEyePosition(const DX::XMFLOAT3& position)
 		{
 			m_Buffer.EyePosition = position;
-			m_DirtyFlags[0] = true;
 		}
 		
 		void SetMaterial(const Material& mat)
 		{
 			m_Buffer.Material = mat;
-			m_DirtyFlags[0] = true;
 		}
 
 		void SetLight(const DirectionalLight& light)
 		{
 			m_Buffer.Light = light;
-			m_DirtyFlags[0] = true;
 		}
 
 		void Bind(ID3D11DeviceContext* d3dcontext)
@@ -70,18 +72,14 @@ namespace Pleiades::Sandbox::InstFrustumDemo
 
 		void Update(ID3D11DeviceContext* d3dcontext)
 		{
-			if (m_DirtyFlags[0])
-			{
-				m_DirtyFlags[0] = false;
-				d3dcontext->UpdateSubresource(
-					m_d3dBuffer.Get(),
-					0,
-					nullptr,
-					&m_Buffer,
-					sizeof(m_Buffer),
-					0
-				);
-			}
+			d3dcontext->UpdateSubresource(
+				m_d3dBuffer.Get(),
+				0,
+				nullptr,
+				&m_Buffer,
+				sizeof(m_Buffer),
+				0
+			);
 		}
 
 		[[nodiscard]]
@@ -92,8 +90,6 @@ namespace Pleiades::Sandbox::InstFrustumDemo
 
 	private:
 		WorldConstantBuffer m_Buffer;
-
 		DX::ComPtr<ID3D11Buffer> m_d3dBuffer;
-		std::bitset<1> m_DirtyFlags;
 	};
 }

@@ -76,9 +76,9 @@ namespace Pleiades
 		AddSample<Sandbox::BasicTesselation>();
 		AddSample<Sandbox::BezierTesselation>();
 
+		AddSample<Sandbox::CamMirrorSkullWorld>();
 		AddSample<Sandbox::InstancedFrustum>();
 
-		Set(Sandbox::CamMirrorSkullWorld::GetName());
 		Set(Sandbox::InstancedFrustum::GetName());
 	}
 

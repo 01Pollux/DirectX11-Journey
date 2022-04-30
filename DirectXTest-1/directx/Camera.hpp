@@ -46,6 +46,7 @@ namespace DX
 			m_Projection = XMMatrixPerspectiveLH(
 				m_FovY, m_AspectRatio, m_NearZ, m_FarZ
 			);
+			m_TViewProjection = XMMatrixTranspose(XMMatrixMultiply(get_view(), get_projection()));
 		}
 
 		template<MoveDir direction>
@@ -119,9 +120,9 @@ namespace DX
 			return m_Projection;
 		}
 		[[nodiscard]]
-		XMMatrix get_viewprojection() const noexcept
+		const XMMatrix& get_viewprojection() const noexcept
 		{
-			return XMMatrixMultiply(get_view(), get_projection());
+			return m_TViewProjection;
 		}
 
 	public:
@@ -214,7 +215,8 @@ namespace DX
 
 	private:
 		XMMatrix m_View = XMMatrixIdentity(),
-			m_Projection = XMMatrixIdentity();
+			m_Projection = XMMatrixIdentity(),
+			m_TViewProjection = XMMatrixIdentity();
 
 		XMFloat3 m_Position{},
 			m_Right{ 1.f, 0.f, 0.f }, m_Look{ 0.f, 0.f, 1.f }, m_Up{ 0.f, 1.f, 0.f };
