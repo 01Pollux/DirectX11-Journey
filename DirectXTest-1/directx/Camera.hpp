@@ -210,6 +210,16 @@ namespace DX
 			return 2.f * atanf(tanf(width / near_z()));
 		}
 
+		void set_move_speed(float speed) noexcept
+		{
+			m_MoveSpeed = speed;
+		}
+
+		void set_rotation_speed(float speed) noexcept
+		{
+			m_RotationSpeed = speed;
+		}
+
 	private:
 		void update_viewmatrix();
 
@@ -225,6 +235,7 @@ namespace DX
 		float m_FarZ{}, m_FarZWindowHeight{};
 		float m_AspectRatio{};
 		float m_FovY{};
+		float m_MoveSpeed = 10.f, m_RotationSpeed = 0.75f;
 
 		DeviceResources* m_d3dRes;
 		bool m_ViewDirty{};

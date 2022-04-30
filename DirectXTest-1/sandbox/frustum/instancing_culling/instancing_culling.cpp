@@ -15,6 +15,7 @@ namespace Pleiades::Sandbox
 		m_Camera(d3dres)
 	{
 		m_Camera.set_position(145.f, 145.f, -15.f);
+		m_Camera.set_move_speed(30.f);
 
 		InitializeInstancedGround();
 		InitializeBuffers();

@@ -30,43 +30,42 @@ namespace DX
 
     void Camera::update(uint64_t ticks)
     {
-        constexpr float move_scale = 10.f, rotation_scale = 0.8f, strafe_scale = 10.f;
         float delta_time = static_cast<float>(Pleiades::StepTimer::TicksToSeconds(ticks));
 
         if (GetAsyncKeyState(VK_ADD) & 0x8000)
-            this->walk<MoveDir::Y>(move_scale * delta_time);
+            this->walk<MoveDir::Y>(m_MoveSpeed * delta_time);
 
         if (GetAsyncKeyState(VK_SUBTRACT) & 0x8000)
-            this->walk<MoveDir::Y>(-move_scale * delta_time);
+            this->walk<MoveDir::Y>(-m_MoveSpeed * delta_time);
 
 
         if (GetAsyncKeyState('A') & 0x8000)
-            this->walk<MoveDir::X>(-strafe_scale * delta_time);
+            this->walk<MoveDir::X>(-m_MoveSpeed * delta_time);
 
         if (GetAsyncKeyState('D') & 0x8000)
-            this->walk<MoveDir::X>(strafe_scale * delta_time);
+            this->walk<MoveDir::X>(m_MoveSpeed * delta_time);
 
 
         if (GetAsyncKeyState('W') & 0x8000)
-            this->walk<MoveDir::Z>(strafe_scale * delta_time);
+            this->walk<MoveDir::Z>(m_MoveSpeed * delta_time);
 
         if (GetAsyncKeyState('S') & 0x8000)
-            this->walk<MoveDir::Z>(-strafe_scale * delta_time);
+            this->walk<MoveDir::Z>(-m_MoveSpeed * delta_time);
 
 
 
         if (GetAsyncKeyState(VK_NUMPAD4) & 0x8000)
-            this->rotate<MoveDir::Yaw>(-rotation_scale * delta_time);
+            this->rotate<MoveDir::Yaw>(-m_RotationSpeed * delta_time);
 
         if (GetAsyncKeyState(VK_NUMPAD6) & 0x8000)
-            this->rotate<MoveDir::Yaw>(rotation_scale * delta_time);
+            this->rotate<MoveDir::Yaw>(m_RotationSpeed * delta_time);
 
 
         if (GetAsyncKeyState(VK_NUMPAD8) & 0x8000)
-            this->rotate<MoveDir::X>(rotation_scale * delta_time);
+            this->rotate<MoveDir::X>(m_RotationSpeed * delta_time);
 
         if (GetAsyncKeyState(VK_NUMPAD2) & 0x8000)
-            this->rotate<MoveDir::X>(-rotation_scale * delta_time);
+            this->rotate<MoveDir::X>(-m_RotationSpeed * delta_time);
 
         if (m_ViewDirty)
             update_viewmatrix();
