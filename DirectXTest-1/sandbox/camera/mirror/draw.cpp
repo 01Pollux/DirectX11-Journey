@@ -14,7 +14,7 @@ namespace Pleiades::Sandbox
 		m_Effects.Bind(d3dcontext);
 
 		m_WallGeometry.Bind(d3dcontext);
-		m_Wall.Bind(d3dres, m_Effects, DX::XMMatrixTranspose(m_Camera.get_viewprojection()));
+		m_Wall.Bind(d3dres, m_Effects, DX::XMMatrixTranspose(m_Camera.get_tviewprojection()));
 
 		m_WallGeometry.Draw(d3dcontext);
 	}
@@ -29,7 +29,7 @@ namespace Pleiades::Sandbox
 		m_Effects.Bind(d3dcontext);
 
 		m_SkullGeometry.Bind(d3dcontext);
-		m_Skull.Bind(d3dres, m_Effects, DX::XMMatrixTranspose(m_Camera.get_viewprojection()));
+		m_Skull.Bind(d3dres, m_Effects, DX::XMMatrixTranspose(m_Camera.get_tviewprojection()));
 
 		m_SkullGeometry.Draw(d3dcontext);
 	}
@@ -92,7 +92,7 @@ namespace Pleiades::Sandbox
 		m_Effects.Bind(d3dcontext);
 
 		m_MirrorGeometry.Bind(d3dcontext);
-		m_Mirror.Bind(d3dres, m_Effects, DX::XMMatrixTranspose(m_Camera.get_viewprojection()));
+		m_Mirror.Bind(d3dres, m_Effects, DX::XMMatrixTranspose(m_Camera.get_tviewprojection()));
 
 		m_MirrorGeometry.Draw(d3dcontext);
 

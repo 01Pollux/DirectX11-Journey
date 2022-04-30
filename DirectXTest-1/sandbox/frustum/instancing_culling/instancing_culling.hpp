@@ -39,6 +39,7 @@ namespace Pleiades::Sandbox
 		EffectManager_t m_EffectManager;
 
 		Material m_SkullMat;
+		DX::BoundingBox m_SkullAABB;
 
 		uint32_t m_IndexCount{}, m_InstanceCount{};
 		std::vector<InstancedData> m_InstancedWorld;
@@ -47,5 +48,7 @@ namespace Pleiades::Sandbox
 		DX::ComPtr<ID3D11VertexShader> m_d3dVertexShader;
 		DX::ComPtr<ID3D11InputLayout> m_d3dInputLayout;
 		DX::ComPtr<ID3D11PixelShader> m_d3dPixelShader;
+
+		bool m_FrustumCulling{ true };
 	};
 }

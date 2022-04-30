@@ -3,6 +3,7 @@
 #include "instancing_culling.hpp"
 
 #include "sandbox/geometry_factory.hpp"
+#include "imgui/imgui.hpp"
 
 namespace Pleiades::Sandbox
 {
@@ -17,7 +18,7 @@ namespace Pleiades::Sandbox
 
 	void InstancedFrustum::OnImGuiDraw()
 	{
-
+		ImGui::Checkbox("Cull", &m_FrustumCulling);
 	}
 
 
@@ -42,7 +43,7 @@ namespace Pleiades::Sandbox
 
 		m_EffectManager.SetMaterial(m_SkullMat);
 		m_EffectManager.SetWorldEyePosition(m_Camera.position());
-		m_EffectManager.SetViewProj(m_Camera.get_viewprojection());
+		m_EffectManager.SetViewProj(m_Camera.get_tviewprojection());
 
 		m_EffectManager.Update(d3dcontext);
 	}
@@ -51,29 +52,45 @@ namespace Pleiades::Sandbox
 	void InstancedFrustum::WriteInstances()
 	{
 		auto d3dcontext = GetDeviceResources()->GetD3DDeviceContext();
+
+		D3D11_MAPPED_SUBRESOURCE subres_data;
+		DX::ThrowIfFailed(
+			d3dcontext->Map(
+				m_d3dInstWorldVB.Get(),
+				0,
+				D3D11_MAP_WRITE_DISCARD,
+				0,
+				&subres_data
+			)
+		);
+
+		InstancedData* instanced_data = reinterpret_cast<InstancedData*>(subres_data.pData);
 		m_InstanceCount = 0;
 
-		if (false)
+		if (m_FrustumCulling)
 		{
+			DX::XMMATRIX inv_view = DX::XMMatrixInverse(nullptr, m_Camera.get_view());
+			DX::BoundingFrustum local_frustum;
 
+			for (const auto& inst : m_InstancedWorld)
+			{
+				DX::XMMATRIX to_local = DX::XMMatrixMultiply(inv_view, DX::XMMatrixInverse(nullptr, DX::XMMatrixTranspose(inst.World)));
+				
+				DX::XMVECTOR scale, rotation, translation;
+				DX::XMMatrixDecompose(&scale, &rotation, &translation, to_local);
+
+				m_Camera.get_frustum().Transform(local_frustum, to_local);
+				if (local_frustum.Contains(m_SkullAABB) != DX::ContainmentType::DISJOINT)
+					instanced_data[m_InstanceCount++] = inst;
+			}
 		}
 		else
 		{
-			D3D11_MAPPED_SUBRESOURCE subres_data;
-			DX::ThrowIfFailed(
-				d3dcontext->Map(
-					m_d3dInstWorldVB.Get(),
-					0,
-					D3D11_MAP_WRITE_DISCARD,
-					0,
-					&subres_data
-				)
-			);
-
 			m_InstanceCount = static_cast<uint32_t>(m_InstancedWorld.size());
-			std::copy_n(m_InstancedWorld.data(), m_InstanceCount, reinterpret_cast<InstancedData*>(subres_data.pData));
-			d3dcontext->Unmap(m_d3dInstWorldVB.Get(), 0);
+			std::copy_n(m_InstancedWorld.data(), m_InstanceCount, instanced_data);
 		}
+
+		d3dcontext->Unmap(m_d3dInstWorldVB.Get(), 0);
 	}
 
 

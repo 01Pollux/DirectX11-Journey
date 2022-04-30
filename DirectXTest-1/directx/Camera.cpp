@@ -21,10 +21,13 @@ namespace DX
     void Camera::OnDeviceWindowSizeChanged()
     {
         m_AspectRatio = m_d3dRes->GetAspectRatio();
+        
         m_Projection = XMMatrixPerspectiveLH(
-            m_FovY, m_d3dRes->GetAspectRatio(), m_NearZ, m_FarZ
+            m_FovY, m_AspectRatio, m_NearZ, m_FarZ
         );
+
         m_TViewProjection = XMMatrixTranspose(XMMatrixMultiply(get_view(), get_projection()));
+        BoundingFrustum::CreateFromMatrix(m_Frustum, get_projection());
     }
 
 
@@ -100,5 +103,6 @@ namespace DX
         );
 
         m_TViewProjection = XMMatrixTranspose(XMMatrixMultiply(get_view(), get_projection()));
+        BoundingFrustum::CreateFromMatrix(m_Frustum, get_projection());
     }
 }

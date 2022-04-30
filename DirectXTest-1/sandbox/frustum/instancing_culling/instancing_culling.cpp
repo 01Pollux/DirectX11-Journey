@@ -117,6 +117,10 @@ namespace Pleiades::Sandbox
 				m_IndexBuffer.GetAddressOf()
 			)
 		);
+
+
+		DX::XMFLOAT3* first_point = &mesh.vertices[0].position;
+		DX::BoundingBox::CreateFromPoints(m_SkullAABB, mesh.vertices.size(), first_point, sizeof(mesh.vertices[0]));
 	}
 
 

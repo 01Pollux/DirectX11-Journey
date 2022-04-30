@@ -136,8 +136,8 @@ void Game::OnWindowSizeChanged(int width, int height)
 void Game::GetDefaultSize(int& width, int& height) const noexcept
 {
 	// TODO: Change to desired default window size (note minimum size is 320x200).
-	width = m_DeviceResources->GetWindowSize()[0];
-	height = m_DeviceResources->GetWindowSize()[1];
+	width = m_DeviceResources->GetOutputSize().right - m_DeviceResources->GetOutputSize().left;
+	height = m_DeviceResources->GetOutputSize().bottom - m_DeviceResources->GetOutputSize().top;
 }
 
 void Game::ToggleFullscreen(bool state) noexcept

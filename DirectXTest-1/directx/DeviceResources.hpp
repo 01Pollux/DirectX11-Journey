@@ -58,9 +58,7 @@ namespace DX
 
 		// Device Accessors.
 		RECT GetOutputSize() const noexcept					{ return m_outputSize; }
-		auto GetWindowSize() const noexcept					{ return m_windowSize; }
-		void SetWindowSize(uint32_t w, uint32_t h) noexcept { m_windowSize[0] = w; m_windowSize[1] = h; }
-		float GetAspectRatio() const noexcept				{ return static_cast<float>(m_windowSize[1]) / m_windowSize[0]; }
+		float GetAspectRatio() const noexcept				{ return m_screenViewport.Height / m_screenViewport.Width; }
 		
         // Direct3D Accessors.
         auto                    GetD3DDevice() const noexcept           { return m_d3dDevice.Get(); }
@@ -125,7 +123,6 @@ namespace DX
 		HWND                                            m_window;
 		D3D_FEATURE_LEVEL                               m_d3dFeatureLevel;
 		RECT                                            m_outputSize;
-		uint32_t				                        m_windowSize[2]{ 1060, 800 };
 
 		// HDR Support
 		DXGI_COLOR_SPACE_TYPE                           m_colorSpace;

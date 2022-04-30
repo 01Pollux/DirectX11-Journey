@@ -67,7 +67,6 @@ namespace Pleiades::Sandbox
 
 	void ResolutionCChanger_ImGui::OnImGuiDraw()
 	{
-		const auto& output_size = GetDeviceResources()->GetOutputSize();
 		static bool is_fullscreen = Game::Get()->IsFullscreen();
 
 		if (ImGui::Checkbox("Fullscreen", &is_fullscreen))
@@ -78,12 +77,9 @@ namespace Pleiades::Sandbox
 			for (auto& desc : m_DXGIModes)
 			{
 				if (ImGui::Selectable(
-					std::format("[{} x {}] (Refresh rate: {})", desc.Width, desc.Height, desc.RefreshRate.Numerator / desc.RefreshRate.Denominator).c_str(),
-					(output_size.right - output_size.left) == static_cast<int>(desc.Width) &&
-					(output_size.bottom - output_size.top) == static_cast<int>(desc.Height)
+					std::format("[{} x {}] (Refresh rate: {})", desc.Width, desc.Height, desc.RefreshRate.Numerator / desc.RefreshRate.Denominator).c_str()
 				))
 				{
-					GetDeviceResources()->SetWindowSize(desc.Width, desc.Height);
 					SetWindowPos(
 						GetDeviceResources()->GetWindow(),
 						HWND_TOP, 

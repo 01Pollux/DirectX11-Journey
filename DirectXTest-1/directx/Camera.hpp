@@ -1,6 +1,7 @@
 #pragma once
 
 #include <DirectXMath.h>
+#include <DirectXCollision.h>
 
 namespace DX
 {
@@ -46,7 +47,9 @@ namespace DX
 			m_Projection = XMMatrixPerspectiveLH(
 				m_FovY, m_AspectRatio, m_NearZ, m_FarZ
 			);
+
 			m_TViewProjection = XMMatrixTranspose(XMMatrixMultiply(get_view(), get_projection()));
+			BoundingFrustum::CreateFromMatrix(m_Frustum, get_projection());
 		}
 
 		template<MoveDir direction>
@@ -114,15 +117,23 @@ namespace DX
 		{
 			return m_View;
 		}
+		
 		[[nodiscard]]
 		const XMMatrix& get_projection() const noexcept
 		{
 			return m_Projection;
 		}
+		
 		[[nodiscard]]
-		const XMMatrix& get_viewprojection() const noexcept
+		const XMMatrix& get_tviewprojection() const noexcept
 		{
 			return m_TViewProjection;
+		}
+
+		[[nodiscard]]
+		const BoundingFrustum& get_frustum() const noexcept
+		{
+			return m_Frustum;
 		}
 
 	public:
@@ -230,6 +241,8 @@ namespace DX
 
 		XMFloat3 m_Position{},
 			m_Right{ 1.f, 0.f, 0.f }, m_Look{ 0.f, 0.f, 1.f }, m_Up{ 0.f, 1.f, 0.f };
+
+		BoundingFrustum m_Frustum;
 
 		float m_NearZ{}, m_NearZWindowHeight{};
 		float m_FarZ{}, m_FarZWindowHeight{};
