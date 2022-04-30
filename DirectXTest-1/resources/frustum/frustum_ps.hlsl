@@ -17,7 +17,7 @@ float4 main(PSInput ps_input) : SV_TARGET
 		lit_color
 	);
 	
-	float4 out_color = lit_color.Ambient + lit_color.Diffuse + lit_color.Specular;
+	float4 out_color = ps_input.Color * (lit_color.Ambient + lit_color.Diffuse + lit_color.Specular);
 	out_color.a = g_Material.Diffuse.a;
 	
 	return out_color;
