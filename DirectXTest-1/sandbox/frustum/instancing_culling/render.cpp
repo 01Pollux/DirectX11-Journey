@@ -76,9 +76,6 @@ namespace Pleiades::Sandbox
 			{
 				DX::XMMATRIX to_local = DX::XMMatrixMultiply(inv_view, DX::XMMatrixInverse(nullptr, DX::XMMatrixTranspose(inst.World)));
 				
-				DX::XMVECTOR scale, rotation, translation;
-				DX::XMMatrixDecompose(&scale, &rotation, &translation, to_local);
-
 				m_Camera.get_frustum().Transform(local_frustum, to_local);
 				if (local_frustum.Contains(m_SkullAABB) != DX::ContainmentType::DISJOINT)
 					instanced_data[m_InstanceCount++] = inst;
