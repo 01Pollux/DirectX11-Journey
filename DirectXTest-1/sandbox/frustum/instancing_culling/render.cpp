@@ -19,6 +19,19 @@ namespace Pleiades::Sandbox
 	void InstancedFrustum::OnImGuiDraw()
 	{
 		ImGui::Checkbox("Cull", &m_FrustumCulling);
+
+		const char* types[]{ "AABB", "OBB", "Sphere" };
+		int type = int(m_SkullBoundings.index());
+
+		if (ImGui::Combo("Type", &type, types, int(std::size(types))))
+		{
+			switch (type)
+			{
+			case 0: MakeAABB(); break;
+			case 1: MakeOBB(); break;
+			case 2: MakeSphere(); break;
+			}
+		}
 	}
 
 
@@ -69,17 +82,12 @@ namespace Pleiades::Sandbox
 
 		if (m_FrustumCulling)
 		{
-			DX::XMMATRIX inv_view = DX::XMMatrixInverse(nullptr, m_Camera.get_view());
-			DX::BoundingFrustum local_frustum;
-
-			for (const auto& inst : m_InstancedWorld)
-			{
-				DX::XMMATRIX to_local = DX::XMMatrixMultiply(inv_view, DX::XMMatrixInverse(nullptr, DX::XMMatrixTranspose(inst.World)));
-				
-				m_Camera.get_frustum().Transform(local_frustum, to_local);
-				if (local_frustum.Contains(m_SkullAABB) != DX::ContainmentType::DISJOINT)
-					instanced_data[m_InstanceCount++] = inst;
-			}
+			if (std::holds_alternative<DX::BoundingBox>(m_SkullBoundings))
+				this->ProcessAABB(instanced_data);
+			else if (std::holds_alternative<DX::BoundingOrientedBox>(m_SkullBoundings))
+				this->ProcessOBB(instanced_data);
+			else
+				this->ProcessSphere(instanced_data);
 		}
 		else
 		{
@@ -102,5 +110,57 @@ namespace Pleiades::Sandbox
 			0,
 			0
 		);
+	}
+
+
+	void InstancedFrustum::ProcessAABB(InstancedData* instanced_data)
+	{
+		auto& aabb_frustum = std::get<DX::BoundingBox>(m_SkullBoundings);
+
+		DX::XMMATRIX inv_view = DX::XMMatrixInverse(nullptr, m_Camera.get_view());
+		DX::BoundingFrustum local_frustum;
+
+		for (const auto& inst : m_InstancedWorld)
+		{
+			DX::XMMATRIX to_local = DX::XMMatrixMultiply(inv_view, DX::XMMatrixInverse(nullptr, DX::XMMatrixTranspose(inst.World)));
+
+			m_Camera.get_frustum().Transform(local_frustum, to_local);
+			if (local_frustum.Contains(aabb_frustum) != DX::ContainmentType::DISJOINT)
+				instanced_data[m_InstanceCount++] = inst;
+		}
+	}
+
+	void InstancedFrustum::ProcessOBB(InstancedData* instanced_data)
+	{
+		auto& obb_frustum = std::get<DX::BoundingOrientedBox>(m_SkullBoundings);
+
+		DX::XMMATRIX inv_view = DX::XMMatrixInverse(nullptr, m_Camera.get_view());
+		DX::BoundingFrustum local_frustum;
+
+		for (const auto& inst : m_InstancedWorld)
+		{
+			DX::XMMATRIX to_local = DX::XMMatrixMultiply(inv_view, DX::XMMatrixInverse(nullptr, DX::XMMatrixTranspose(inst.World)));
+
+			m_Camera.get_frustum().Transform(local_frustum, to_local);
+			if (local_frustum.Contains(obb_frustum) != DX::ContainmentType::DISJOINT)
+				instanced_data[m_InstanceCount++] = inst;
+		}
+	}
+
+	void InstancedFrustum::ProcessSphere(InstancedData* instanced_data)
+	{
+		auto& obb_frustum = std::get<DX::BoundingSphere>(m_SkullBoundings);
+
+		DX::XMMATRIX inv_view = DX::XMMatrixInverse(nullptr, m_Camera.get_view());
+		DX::BoundingFrustum local_frustum;
+
+		for (const auto& inst : m_InstancedWorld)
+		{
+			DX::XMMATRIX to_local = DX::XMMatrixMultiply(inv_view, DX::XMMatrixInverse(nullptr, DX::XMMatrixTranspose(inst.World)));
+
+			m_Camera.get_frustum().Transform(local_frustum, to_local);
+			if (local_frustum.Contains(obb_frustum) != DX::ContainmentType::DISJOINT)
+				instanced_data[m_InstanceCount++] = inst;
+		}
 	}
 }

@@ -65,6 +65,7 @@ namespace Pleiades::Sandbox
 		}
 	}
 
+
 	void InstancedFrustum::InitializeBuffers()
 	{
 		auto d3ddevice = GetDeviceResources()->GetD3DDevice();
@@ -118,9 +119,8 @@ namespace Pleiades::Sandbox
 			)
 		);
 
-
-		DX::XMFLOAT3* first_point = &mesh.vertices[0].position;
-		DX::BoundingBox::CreateFromPoints(m_SkullAABB, mesh.vertices.size(), first_point, sizeof(mesh.vertices[0]));
+		m_SkullPositions = std::move(mesh.vertices);
+		this->MakeAABB();
 	}
 
 
@@ -232,5 +232,39 @@ namespace Pleiades::Sandbox
 				)
 			);
 		}
+	}
+
+
+	void InstancedFrustum::MakeAABB()
+	{
+		DX::XMFLOAT3* first_point = &m_SkullPositions[0].position;
+		DX::BoundingBox::CreateFromPoints(
+			m_SkullBoundings.emplace<DX::BoundingBox>(),
+			m_SkullPositions.size(),
+			first_point,
+			sizeof(m_SkullPositions[0])
+		);
+	}
+
+	void InstancedFrustum::MakeOBB()
+	{
+		DX::XMFLOAT3* first_point = &m_SkullPositions[0].position;
+		DX::BoundingOrientedBox::CreateFromPoints(
+			m_SkullBoundings.emplace<DX::BoundingOrientedBox>(),
+			m_SkullPositions.size(),
+			first_point,
+			sizeof(m_SkullPositions[0])
+		);
+	}
+
+	void InstancedFrustum::MakeSphere()
+	{
+		DX::XMFLOAT3* first_point = &m_SkullPositions[0].position;
+		DX::BoundingSphere::CreateFromPoints(
+			m_SkullBoundings.emplace<DX::BoundingSphere>(),
+			m_SkullPositions.size(),
+			first_point,
+			sizeof(m_SkullPositions[0])
+		);
 	}
 }

@@ -3,6 +3,8 @@
 #include "directx/Camera.hpp"
 #include "effect.hpp"
 
+#include <variant>
+
 namespace Pleiades::Sandbox
 {
 	class InstancedFrustum : public ISandbox
@@ -34,12 +36,25 @@ namespace Pleiades::Sandbox
 		void WriteInstances();
 		void Draw();
 
+		void MakeAABB();
+		void MakeOBB();
+		void MakeSphere();
+
+		void ProcessAABB(InstancedData* instanced_data);
+		void ProcessOBB(InstancedData* instanced_data);
+		void ProcessSphere(InstancedData* instanced_data);
+
 	private:
 		DX::Camera m_Camera;
 		EffectManager_t m_EffectManager;
 
 		Material m_SkullMat;
-		DX::BoundingBox m_SkullAABB;
+		std::variant<
+			DX::BoundingBox, 
+			DX::BoundingOrientedBox, 
+			DX::BoundingSphere
+		> m_SkullBoundings;
+		std::vector<DX::VertexPositionNormalTexture> m_SkullPositions;
 
 		uint32_t m_IndexCount{}, m_InstanceCount{};
 		std::vector<InstancedData> m_InstancedWorld;
