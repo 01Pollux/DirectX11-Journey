@@ -221,6 +221,8 @@
     <ClInclude Include="sandbox\cs\blur\effect.hpp" />
     <ClInclude Include="sandbox\cs\blur\render_states.hpp" />
     <ClInclude Include="sandbox\cs\vec_add\vec_add.hpp" />
+    <ClInclude Include="sandbox\frustum\pick\effect.hpp" />
+    <ClInclude Include="sandbox\frustum\pick\pick.hpp" />
     <ClInclude Include="sandbox\gs\billboards\effect.hpp" />
     <ClInclude Include="sandbox\gs\billboards\render_states.hpp" />
     <ClInclude Include="sandbox\gs\billboards\billboards.hpp" />
@@ -279,6 +281,8 @@
     <ClCompile Include="sandbox\cs\blur\blur.cpp" />
     <ClCompile Include="sandbox\cs\vec_add\vec_add.cpp" />
     <ClCompile Include="sandbox\frustum\instancing_culling\render.cpp" />
+    <ClCompile Include="sandbox\frustum\pick\pick.cpp" />
+    <ClCompile Include="sandbox\frustum\pick\render.cpp" />
     <ClCompile Include="sandbox\gs\billboards\draw.cpp" />
     <ClCompile Include="sandbox\gs\billboards\billboards.cpp" />
     <ClCompile Include="sandbox\gs\subdivison\draw.cpp" />
@@ -709,6 +713,20 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="resources\pick\pick_ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="resources\pick\pick_vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="resources\stencil\env_ps.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
@@ -854,6 +872,8 @@
     <None Include="resources\lights\helper.hlsli" />
     <None Include="resources\lights\light_test.hlsli" />
     <None Include="resources\lights\skull_demo.hlsli" />
+    <None Include="resources\pick\helper.hlsli" />
+    <None Include="resources\pick\lights.hlsli" />
     <None Include="resources\stencil\env.hlsli" />
     <None Include="resources\stencil\helper.hlsli" />
     <None Include="resources\tesselation\basic\helper.hlsli" />

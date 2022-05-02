@@ -92,6 +92,8 @@
     <ClInclude Include="DirectXTK\VertexTypes.h" />
     <ClInclude Include="DirectXTK\WICTextureLoader.h" />
     <ClInclude Include="DirectXTK\XboxDDSTextureLoader.h" />
+    <ClInclude Include="sandbox\frustum\pick\effect.hpp" />
+    <ClInclude Include="sandbox\frustum\pick\pick.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -140,6 +142,8 @@
     <ClCompile Include="sandbox\camera\mirror\mirror.cpp" />
     <ClCompile Include="sandbox\frustum\instancing_culling\instancing_culling.cpp" />
     <ClCompile Include="sandbox\frustum\instancing_culling\render.cpp" />
+    <ClCompile Include="sandbox\frustum\pick\pick.cpp" />
+    <ClCompile Include="sandbox\frustum\pick\render.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -195,6 +199,8 @@
     <FxCompile Include="resources\tesselation\bezier\bezier_hs.hlsl" />
     <FxCompile Include="resources\frustum\frustum_ps.hlsl" />
     <FxCompile Include="resources\frustum\frustum_vs.hlsl" />
+    <FxCompile Include="resources\pick\pick_ps.hlsl" />
+    <FxCompile Include="resources\pick\pick_vs.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">
@@ -220,6 +226,8 @@
     <None Include="resources\frustum\helper.hlsli" />
     <None Include="resources\frustum\lights.hlsli" />
     <None Include="DirectXTK\SimpleMath.inl" />
+    <None Include="resources\pick\helper.hlsli" />
+    <None Include="resources\pick\lights.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="sandbox\from_file\car.txt" />

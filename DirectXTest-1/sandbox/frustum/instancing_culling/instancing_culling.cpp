@@ -149,7 +149,7 @@ namespace Pleiades::Sandbox
 					.SemanticName = "LocalPosition",	
 					.Format = DXGI_FORMAT_R32G32B32_FLOAT,		
 					.InputSlot = 0,
-					.AlignedByteOffset = 0,
+					.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT,
 					.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA, 
 					.InstanceDataStepRate = 0 
 				},
@@ -157,7 +157,7 @@ namespace Pleiades::Sandbox
 					.SemanticName = "Normal",			
 					.Format = DXGI_FORMAT_R32G32B32_FLOAT,		
 					.InputSlot = 0,
-					.AlignedByteOffset = sizeof(float[3]),
+					.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT,
 					.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
 					.InstanceDataStepRate = 0 
 				},
@@ -166,7 +166,7 @@ namespace Pleiades::Sandbox
 					.SemanticIndex = 0,
 					.Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
 					.InputSlot = 1,
-					.AlignedByteOffset = 0,
+					.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT,
 					.InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA,
 					.InstanceDataStepRate = 1
 				},
@@ -175,7 +175,7 @@ namespace Pleiades::Sandbox
 					.SemanticIndex = 1,
 					.Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
 					.InputSlot = 1,
-					.AlignedByteOffset = sizeof(float[4]),
+					.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT,
 					.InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA,
 					.InstanceDataStepRate = 1
 				},
@@ -184,7 +184,7 @@ namespace Pleiades::Sandbox
 					.SemanticIndex = 2,
 					.Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
 					.InputSlot = 1,
-					.AlignedByteOffset = sizeof(float[4]) * 2,
+					.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT,
 					.InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA,
 					.InstanceDataStepRate = 1
 				},
@@ -193,7 +193,7 @@ namespace Pleiades::Sandbox
 					.SemanticIndex = 3,
 					.Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
 					.InputSlot = 1,
-					.AlignedByteOffset = sizeof(float[4]) * 3,
+					.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT,
 					.InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA,
 					.InstanceDataStepRate = 1
 				},
@@ -201,7 +201,7 @@ namespace Pleiades::Sandbox
 					.SemanticName = "Color",	
 					.Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
 					.InputSlot = 1,
-					.AlignedByteOffset = sizeof(float[4]) * 4,
+					.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT,
 					.InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA,
 					.InstanceDataStepRate = 1
 				}

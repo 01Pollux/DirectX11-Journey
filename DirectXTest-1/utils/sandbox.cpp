@@ -36,6 +36,7 @@
 
 #include "sandbox/camera/mirror/mirror.hpp"
 #include "sandbox/frustum/instancing_culling/instancing_culling.hpp"
+#include "sandbox/frustum/pick/pick.hpp"
 
 namespace Pleiades
 {
@@ -78,8 +79,9 @@ namespace Pleiades
 
 		AddSample<Sandbox::CamMirrorSkullWorld>();
 		AddSample<Sandbox::InstancedFrustum>();
+		AddSample<Sandbox::PickFromMouse>();
 
-		Set(Sandbox::InstancedFrustum::GetName());
+		Set(Sandbox::PickFromMouse::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()
