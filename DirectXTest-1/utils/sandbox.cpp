@@ -38,6 +38,8 @@
 #include "sandbox/frustum/instancing_culling/instancing_culling.hpp"
 #include "sandbox/frustum/pick/pick.hpp"
 
+#include "sandbox/cubemap/skybox/skybox.hpp"
+
 namespace Pleiades
 {
 	void SandboxHolder::Init(DX::DeviceResources* res) noexcept
@@ -81,7 +83,9 @@ namespace Pleiades
 		AddSample<Sandbox::InstancedFrustum>();
 		AddSample<Sandbox::PickFromMouse>();
 
-		Set(Sandbox::PickFromMouse::GetName());
+		AddSample<Sandbox::SkyboxCubeMap>();
+
+		Set(Sandbox::SkyboxCubeMap::GetName());
 	}
 
 	void SandboxHolder::OnImGuiDraw()

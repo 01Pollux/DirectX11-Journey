@@ -94,6 +94,11 @@
     <ClInclude Include="DirectXTK\XboxDDSTextureLoader.h" />
     <ClInclude Include="sandbox\frustum\pick\effect.hpp" />
     <ClInclude Include="sandbox\frustum\pick\pick.hpp" />
+    <ClInclude Include="sandbox\cubemap\skybox\sky.hpp" />
+    <ClInclude Include="sandbox\render\renderable.hpp" />
+    <ClInclude Include="sandbox\render\cbuffer.hpp" />
+    <ClInclude Include="sandbox\cubemap\skybox\skybox.hpp" />
+    <ClInclude Include="sandbox\cubemap\skybox\cbuffers.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils\pch.cpp" />
@@ -144,6 +149,9 @@
     <ClCompile Include="sandbox\frustum\instancing_culling\render.cpp" />
     <ClCompile Include="sandbox\frustum\pick\pick.cpp" />
     <ClCompile Include="sandbox\frustum\pick\render.cpp" />
+    <ClCompile Include="sandbox\cubemap\skybox\sky.cpp" />
+    <ClCompile Include="sandbox\render\renderable.cpp" />
+    <ClCompile Include="sandbox\cubemap\skybox\skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -201,6 +209,8 @@
     <FxCompile Include="resources\frustum\frustum_vs.hlsl" />
     <FxCompile Include="resources\pick\pick_ps.hlsl" />
     <FxCompile Include="resources\pick\pick_vs.hlsl" />
+    <FxCompile Include="resources\skybox\skybox_vs.hlsl" />
+    <FxCompile Include="resources\skybox\skybox_ps.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sandbox\test_house\Scene.fbx">
@@ -228,6 +238,7 @@
     <None Include="DirectXTK\SimpleMath.inl" />
     <None Include="resources\pick\helper.hlsli" />
     <None Include="resources\pick\lights.hlsli" />
+    <None Include="resources\skybox\skybox.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="sandbox\from_file\car.txt" />
