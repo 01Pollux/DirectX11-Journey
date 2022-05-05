@@ -13,7 +13,8 @@ namespace Pleiades::Sandbox
 
 		m_Camera(d3dres),
 		m_CBuffers(d3dres)
-	{}
+	{
+	}
 
 
 	void SkyboxCubeMap::OnFrame(uint64_t ticks)

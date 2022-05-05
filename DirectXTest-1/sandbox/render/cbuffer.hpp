@@ -114,7 +114,7 @@ namespace Pleiades::Sandbox
 					continue;
 				}
 
-				buffer.BufferDirty = true;
+				buffer.BufferDirty = false;
 				D3D11_MAPPED_SUBRESOURCE subres_data{};
 
 				DX::ThrowIfFailed(

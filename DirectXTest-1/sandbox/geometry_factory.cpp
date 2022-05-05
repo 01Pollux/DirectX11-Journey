@@ -465,7 +465,7 @@ namespace Pleiades
 			DX::XMFLOAT2{ 0.f, 0.f }
 		);
 
-		for (uint32_t i = 0; i < stacks; i++)
+		for (uint32_t i = 1; i < stacks; i++)
 		{
 			float phi = i * phi_step;
 			float sin_phi, cos_phi;
@@ -507,7 +507,7 @@ namespace Pleiades
 		mesh.indices.clear();
 		mesh.indices.reserve((static_cast<size_t>(slices) * stacks + slices) * 6);
 
-		for (uint16_t i = 0; i < slices; i++)
+		for (uint16_t i = 1; i <= slices; i++)
 		{
 			mesh.indices.push_back(static_cast<uint16_t>(0));
 			mesh.indices.push_back(static_cast<uint16_t>(i + 1));
@@ -515,7 +515,7 @@ namespace Pleiades
 		}
 
 		size_t base_i = 1, ring_count = slices + 1;
-		for (uint16_t i = 0; i < stacks; i++)
+		for (uint16_t i = 0; i < stacks - 2; i++)
 		{
 			for (uint16_t j = 0; j < slices; j++)
 			{

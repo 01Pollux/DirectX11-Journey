@@ -11,10 +11,10 @@ namespace Pleiades::Sandbox::SkyboxCubeMapDemo
 {
 	Skybox::Skybox(
 		DX::Camera* camera,
-		DX::DeviceResources* d3dres, 
+		DX::DeviceResources* d3dres,
 		const wchar_t* cubetexture_path,
 		float radius
-	) : 
+	) :
 		IRenderable(camera, d3dres, GeometryFactory::CreateSphere(30, 30, radius))
 	{
 		this->CreateBuffers();
@@ -23,7 +23,7 @@ namespace Pleiades::Sandbox::SkyboxCubeMapDemo
 
 		this->SetDrawInfo(
 			DrawInfoIndexed_t{
-				.IndexCount = uint32_t(m_MeshInfo.indices.size())
+				.IndexCount = uint32_t(m_MeshInfo.indices.size()),
 			}
 		);
 
@@ -76,20 +76,37 @@ namespace Pleiades::Sandbox::SkyboxCubeMapDemo
 		
 		d3dcontext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+		d3dcontext->OMSetDepthStencilState(
+			m_d3dLessEqualDDS.Get(),
+			0
+		);
+
 		UpdateWorld(cbuffer);
 		cbuffer.Update();
 	}
 
 
+	void Skybox::EndDraw(RenderConstantBuffer_t& cbuffer)
+	{
+		auto d3dcontext = GetDeviceResources()->GetD3DDeviceContext();
+
+		d3dcontext->OMSetDepthStencilState(
+			nullptr,
+			0
+		);
+	}
+
+
 	void Skybox::UpdateWorld(RenderConstantBuffer_t& cbuffer)
 	{
-		cbuffer.Data<WorldConstantBuffers_t>(0)->WorldViewProj = 
-			DX::XMMatrixMultiply(
-				DX::XMMatrixTranspose(
-					DX::XMMatrixTranslationFromVector(DX::XMLoadFloat3(&GetCamera()->position()))
-				),
-				GetCamera()->get_tviewprojection()
-			);
+		const auto& pos = GetCamera()->position();
+
+		const auto& world = DX::XMMatrixTranslationFromVector(DX::XMLoadFloat3(&GetCamera()->position()));
+		const auto& view = GetCamera()->get_view();
+		const auto& projection = GetCamera()->get_projection();
+
+		cbuffer.Data<WorldConstantBuffers_t>(0)->WorldViewProj = DX::XMMatrixTranspose(world * view * projection);
+
 		cbuffer.MarkDirty(0);
 	}
 
@@ -232,6 +249,17 @@ namespace Pleiades::Sandbox::SkyboxCubeMapDemo
 			d3ddevice->CreateSamplerState(
 				&sampler_desc,
 				m_d3dSampler_Sky.GetAddressOf()
+			)
+		);
+
+
+		CD3D11_DEPTH_STENCIL_DESC dss_desc(D3D11_DEFAULT);
+		dss_desc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+
+		DX::ThrowIfFailed(
+			d3ddevice->CreateDepthStencilState(
+				&dss_desc,
+				m_d3dLessEqualDDS.GetAddressOf()
 			)
 		);
 	}

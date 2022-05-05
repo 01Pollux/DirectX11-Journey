@@ -24,6 +24,7 @@ namespace Pleiades::Sandbox::SkyboxCubeMapDemo
 
 	protected:
 		void BeginDraw(RenderConstantBuffer_t& cbuffer) override;
+		void EndDraw(RenderConstantBuffer_t& cbuffer) override;
 
 	private:
 		void CreateBuffers();
@@ -44,5 +45,7 @@ namespace Pleiades::Sandbox::SkyboxCubeMapDemo
 		
 		DX::ComPtr<ID3D11ShaderResourceView> m_d3dSRV_SkyBox;
 		DX::ComPtr<ID3D11SamplerState>		 m_d3dSampler_Sky;
+
+		DX::ComPtr<ID3D11DepthStencilState>  m_d3dLessEqualDDS;
 	};
 }
